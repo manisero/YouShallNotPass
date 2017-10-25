@@ -4,6 +4,10 @@ Validation
 Validation classes
 ---
 
+TODO
+
+- consider having ValidationType attribute instead of Type property
+
 - Validation // Abstract
 ```
 {
