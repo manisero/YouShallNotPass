@@ -6,6 +6,7 @@ Validation classes
 
 TODO
 
+- consider renaming to ValidationRule
 - consider having ValidationType attribute instead of Type property
 
 - Validation // Abstract
@@ -211,6 +212,8 @@ TODO: Is SimpleValidationError needed?
 TODO
 ---
 
+- move interfaces to "Core" folder
+- group interfaces by validation type (Simple / Complex) not by type (Validation / Validator / etc.)
 - passing custom context to Validators
   - object or strongly typed (TContext)?
 - custom data in validation errors?
