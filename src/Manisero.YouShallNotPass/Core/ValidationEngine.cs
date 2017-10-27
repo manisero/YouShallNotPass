@@ -6,26 +6,30 @@ namespace Manisero.YouShallNotPass.Core
     {
         // TODO: Consider extracting ValidationEngineBuilder (for registrations) building ValidationEngine (for validations)
 
-        void RegisterRule<TRule, TValue, TError>(Func<IValidator<TRule, TValue, TError>> validatorFactory);
+        void RegisterRule<TRule, TValue, TError>(Func<IValidator<TRule, TValue, TError>> validatorFactory)
+            where TError : class;
 
-        void RegisterGenericRule<TRule, TError>(Func<IGenericValidator<TRule, TError>> validatorFactory);
+        void RegisterGenericRule<TRule, TError>(Func<IGenericValidator<TRule, TError>> validatorFactory)
+            where TError : class;
 
-        ValidationError Validate(object value, object rule);
+        ValidationResult Validate(object value, object rule);
     }
 
     public class ValidationEngine : IValidationEngine
     {
         public void RegisterRule<TRule, TValue, TError>(Func<IValidator<TRule, TValue, TError>> validatorFactory)
+            where TError : class
         {
             throw new NotImplementedException();
         }
 
         public void RegisterGenericRule<TRule, TError>(Func<IGenericValidator<TRule, TError>> validatorFactory)
+            where TError : class
         {
             throw new NotImplementedException();
         }
 
-        public ValidationError Validate(object value, object rule)
+        public ValidationResult Validate(object value, object rule)
         {
             throw new NotImplementedException();
         }

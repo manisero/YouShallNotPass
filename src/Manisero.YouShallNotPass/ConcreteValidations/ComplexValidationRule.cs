@@ -14,9 +14,9 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
 
     public class ComplexValidationError
     {
-        public IDictionary<string, IValidationError> MemberValidationErrors { get; set; }
+        public IDictionary<string, IValidationResult> MemberValidationErrors { get; set; }
 
-        public IValidationError OverallValidationError { get; set; }
+        public IValidationResult OverallValidationResult { get; set; }
     }
 
     public class ComplexValidator : IGenericValidator<ComplexValidationRule, ComplexValidationError>
@@ -26,7 +26,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
             var invalid = false;
             var error = new ComplexValidationError
             {
-                MemberValidationErrors = new Dictionary<string, IValidationError>()
+                MemberValidationErrors = new Dictionary<string, IValidationResult>()
             };
 
             foreach (var memberRule in rule.MemberRules)
@@ -36,21 +36,21 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
                 // TODO: Cache property getter
                 var propertyValue = typeof(TValue).GetProperty(propertyName).GetValue(value);
 
-                var memberError = context.Engine.Validate(propertyValue, memberRule);
+                var memberResult = context.Engine.Validate(propertyValue, memberRule);
 
-                if (memberError != null)
+                if (memberResult.HasError())
                 {
                     invalid = true;
-                    error.MemberValidationErrors[propertyName] = memberError;
+                    error.MemberValidationErrors[propertyName] = memberResult;
                 }
             }
 
-            var overallError = context.Engine.Validate(value, rule.OverallRule);
+            var overallResult = context.Engine.Validate(value, rule.OverallRule);
 
-            if (overallError != null)
+            if (overallResult.HasError())
             {
                 invalid = true;
-                error.OverallValidationError = overallError;
+                error.OverallValidationResult = overallResult;
             }
             
             return invalid
