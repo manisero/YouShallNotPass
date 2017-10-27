@@ -2,7 +2,7 @@
 
 namespace Manisero.YouShallNotPass.Core.ComplexValidation
 {
-    public interface IComplexValidationError
+    public interface IComplexValidationError : IValidationError
     {
         IDictionary<string, IValidationError> MemberValidationErrors { get; }
 

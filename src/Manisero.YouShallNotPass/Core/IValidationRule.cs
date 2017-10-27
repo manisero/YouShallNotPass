@@ -1,11 +1,11 @@
 ﻿namespace Manisero.YouShallNotPass.Core
 {
-    public interface IValidation
+    public interface IValidationRule
     {
         int Type { get; }
     }
 
-    public interface IValidation<TConfig> : IValidation
+    public interface IValidationRule<TConfig> : IValidationRule
     {
         TConfig Config { get; }
     }

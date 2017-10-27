@@ -4,7 +4,7 @@ using Manisero.YouShallNotPass.Core.SimpleValidation;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class MinValidation<TValue> : ISimpleValidation<MinValidationConfig<TValue>>
+    public class MinValidationRule<TValue> : ISimpleValidationRule<MinValidationConfig<TValue>>
     {
         public int Type => (int)ValidationType.Min;
 
@@ -16,7 +16,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
         public TValue MinValue { get; set; }
     }
 
-    public class MinValidator<TValue> : ISimpleValidator<MinValidation<TValue>, TValue, MinValidationConfig<TValue>>
+    public class MinValidator<TValue> : ISimpleValidator<MinValidationRule<TValue>, TValue, MinValidationConfig<TValue>>
         where TValue : IComparable
     {
         public ISimpleValidationError Validate(TValue value, MinValidationConfig<TValue> config)

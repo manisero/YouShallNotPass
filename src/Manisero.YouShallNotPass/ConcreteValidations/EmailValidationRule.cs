@@ -3,14 +3,14 @@ using Manisero.YouShallNotPass.Core.SimpleValidation;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class EmailValidation : ISimpleValidation<EmptyValidationConfig>
+    public class EmailValidationRule : ISimpleValidationRule<EmptyValidationConfig>
     {
         public int Type => (int)ValidationType.Email;
 
-        public EmptyValidationConfig Config => throw new System.NotImplementedException();
+        public EmptyValidationConfig Config => EmptyValidationConfig.Default;
     }
 
-    public class EmailValidator : ISimpleValidator<EmailValidation, string, EmptyValidationConfig>
+    public class EmailValidator : ISimpleValidator<EmailValidationRule, string, EmptyValidationConfig>
     {
         public ISimpleValidationError Validate(string value, EmptyValidationConfig config)
         {

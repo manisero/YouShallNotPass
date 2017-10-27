@@ -12,18 +12,18 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
 
     public class SampleComplexValidation
     {
-        public static ComplexValidation Sample = new ComplexValidation
+        public static ComplexValidationRule Sample = new ComplexValidationRule
         {
-            MemberValidations = new Dictionary<string, IValidation>
+            MemberValidations = new Dictionary<string, IValidationRule>
             {
-                [nameof(SampleComplexType.Id)] = new MinValidation<int>
+                [nameof(SampleComplexType.Id)] = new MinValidationRule<int>
                 {
                     Config = new MinValidationConfig<int>
                     {
                         MinValue = 1
                     }
                 },
-                [nameof(SampleComplexType.Email)] = new EmailValidation()
+                [nameof(SampleComplexType.Email)] = new EmailValidationRule()
             }
         };
     }
