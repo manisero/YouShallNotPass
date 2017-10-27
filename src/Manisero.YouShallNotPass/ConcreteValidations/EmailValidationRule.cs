@@ -20,7 +20,8 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
 
         private bool IsEmail(string value)
         {
-            throw new System.NotImplementedException();
+            // TODO: Provide some serious implementation
+            return value.Split('@').Length == 2;
         }
     }
 }

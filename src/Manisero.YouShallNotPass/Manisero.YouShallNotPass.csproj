@@ -43,7 +43,7 @@
     <Compile Include="ConcreteValidations\ComplexValidationRule.cs" />
     <Compile Include="ConcreteValidations\EmailValidationRule.cs" />
     <Compile Include="ConcreteValidations\MinValidationRule.cs" />
-    <Compile Include="ConcreteValidations\SampleComplexValidation.cs" />
+    <Compile Include="Sample.cs" />
     <Compile Include="Core\EmptyValidationError.cs" />
     <Compile Include="Core\IValidator.cs" />
     <Compile Include="Core\ValidationContext.cs" />

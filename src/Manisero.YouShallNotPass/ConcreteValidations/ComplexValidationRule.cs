@@ -5,9 +5,10 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
 {
     public class ComplexValidationRule
     {
-        public IDictionary<string, object> MemberRules { get; set; }
+        // TODO: Try to avoid object types as rules
 
-        // TODO: Consider adding TValue type parameter (ComplexValidationRule<TValue>) and having IValidationRule<TValue> here:
+        public IDictionary<string, object> MemberRules { get; set; }
+        
         public object OverallRule { get; set; }
     }
 
@@ -18,9 +19,9 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
         public IValidationError OverallValidationError { get; set; }
     }
 
-    public class ComplexValidator<TValue> : IValidator<ComplexValidationRule, TValue, ComplexValidationError>
+    public class ComplexValidator : IGenericValidator<ComplexValidationRule, ComplexValidationError>
     {
-        public ComplexValidationError Validate(TValue value, ComplexValidationRule rule, ValidationContext context)
+        public ComplexValidationError Validate<TValue>(TValue value, ComplexValidationRule rule, ValidationContext context)
         {
             var invalid = false;
             var error = new ComplexValidationError

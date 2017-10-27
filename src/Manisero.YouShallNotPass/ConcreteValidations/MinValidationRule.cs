@@ -3,17 +3,18 @@ using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class MinValidationRule<TValue>
+    public class MinValidationRule
     {
-        public TValue MinValue { get; set; }
+        public int MinValue { get; set; }
     }
 
-    public class MinValidator<TValue> : IValidator<MinValidationRule<TValue>, TValue, EmptyValidationError>
-        where TValue : IComparable
+    public class MinValidator : IGenericValidator<MinValidationRule, EmptyValidationError>
     {
-        public EmptyValidationError Validate(TValue value, MinValidationRule<TValue> rule, ValidationContext context)
+        public EmptyValidationError Validate<TValue>(TValue value, MinValidationRule rule, ValidationContext context)
         {
-            if (value.CompareTo(rule.MinValue) < 0)
+            var valueAsInt = Convert.ToInt32(value);
+
+            if (valueAsInt < rule.MinValue)
             {
                 return EmptyValidationError.Some;
             }
