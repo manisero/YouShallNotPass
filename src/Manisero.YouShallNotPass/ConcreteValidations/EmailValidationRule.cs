@@ -6,7 +6,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
     {
     }
 
-    public class EmailValidator : IValidator<EmailValidationRule, string, EmptyValidationError>
+    public class EmailValidator : IValidator<string, EmailValidationRule, EmptyValidationError>
     {
         public EmptyValidationError Validate(string value, EmailValidationRule rule, ValidationContext context)
         {
