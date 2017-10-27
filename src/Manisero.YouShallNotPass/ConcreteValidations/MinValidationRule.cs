@@ -1,27 +1,19 @@
 ﻿using System;
-using Manisero.YouShallNotPass.Core;
 using Manisero.YouShallNotPass.Core.SimpleValidation;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class MinValidationRule<TValue> : ISimpleValidationRule<MinValidationConfig<TValue>>
-    {
-        public int Type => (int)ValidationType.Min;
-
-        public MinValidationConfig<TValue> Config { get; set; }
-    }
-
-    public class MinValidationConfig<TValue>
+    public class MinValidationRule<TValue>
     {
         public TValue MinValue { get; set; }
     }
 
-    public class MinValidator<TValue> : ISimpleValidator<MinValidationRule<TValue>, TValue, MinValidationConfig<TValue>>
+    public class MinValidator<TValue> : ISimpleValidator<MinValidationRule<TValue>, TValue>
         where TValue : IComparable
     {
-        public ISimpleValidationError Validate(TValue value, MinValidationConfig<TValue> config)
+        public ISimpleValidationError Validate(TValue value, MinValidationRule<TValue> rule)
         {
-            if (value.CompareTo(config.MinValue) < 0)
+            if (value.CompareTo(rule.MinValue) < 0)
             {
                 return new SimpleValidationError();
             }

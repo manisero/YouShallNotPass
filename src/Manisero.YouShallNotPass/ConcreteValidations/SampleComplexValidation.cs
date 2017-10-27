@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Manisero.YouShallNotPass.Core;
-using Manisero.YouShallNotPass.Core.ComplexValidation;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
@@ -14,14 +12,11 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
     {
         public static ComplexValidationRule Sample = new ComplexValidationRule
         {
-            MemberValidations = new Dictionary<string, IValidationRule>
+            MemberValidations = new Dictionary<string, object>
             {
                 [nameof(SampleComplexType.Id)] = new MinValidationRule<int>
                 {
-                    Config = new MinValidationConfig<int>
-                    {
-                        MinValue = 1
-                    }
+                    MinValue = 1
                 },
                 [nameof(SampleComplexType.Email)] = new EmailValidationRule()
             }

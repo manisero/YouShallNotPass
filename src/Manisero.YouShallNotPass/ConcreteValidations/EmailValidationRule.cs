@@ -1,18 +1,14 @@
-﻿using Manisero.YouShallNotPass.Core;
-using Manisero.YouShallNotPass.Core.SimpleValidation;
+﻿using Manisero.YouShallNotPass.Core.SimpleValidation;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class EmailValidationRule : ISimpleValidationRule<EmptyValidationConfig>
+    public class EmailValidationRule
     {
-        public int Type => (int)ValidationType.Email;
-
-        public EmptyValidationConfig Config => EmptyValidationConfig.Default;
     }
 
-    public class EmailValidator : ISimpleValidator<EmailValidationRule, string, EmptyValidationConfig>
+    public class EmailValidator : ISimpleValidator<EmailValidationRule, string>
     {
-        public ISimpleValidationError Validate(string value, EmptyValidationConfig config)
+        public ISimpleValidationError Validate(string value, EmailValidationRule rule)
         {
             if (!IsEmail(value))
             {

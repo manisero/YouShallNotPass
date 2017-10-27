@@ -1,9 +1,8 @@
 ﻿namespace Manisero.YouShallNotPass.Core
 {
-    public interface IValidator<TRule, TValue, TConfig, TError>
-        where TRule : IValidationRule<TConfig>
+    public interface IValidator<TRule, TValue, TError>
         where TError : IValidationError
     {
-        TError Validate(TValue value, TConfig config);
+        TError Validate(TValue value, TRule rule);
     }
 }
