@@ -1,5 +1,5 @@
 ﻿using System;
-using Manisero.YouShallNotPass.Core.SimpleValidation;
+using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
@@ -8,17 +8,17 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
         public TValue MinValue { get; set; }
     }
 
-    public class MinValidator<TValue> : ISimpleValidator<MinValidationRule<TValue>, TValue>
+    public class MinValidator<TValue> : IValidator<MinValidationRule<TValue>, TValue, EmptyValidationError>
         where TValue : IComparable
     {
-        public ISimpleValidationError Validate(TValue value, MinValidationRule<TValue> rule)
+        public EmptyValidationError Validate(TValue value, MinValidationRule<TValue> rule, ValidationContext context)
         {
             if (value.CompareTo(rule.MinValue) < 0)
             {
-                return new SimpleValidationError();
+                return EmptyValidationError.Some;
             }
-
-            return null;
+            
+            return EmptyValidationError.None;
         }
     }
 }

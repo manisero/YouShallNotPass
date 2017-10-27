@@ -44,11 +44,12 @@
     <Compile Include="ConcreteValidations\EmailValidationRule.cs" />
     <Compile Include="ConcreteValidations\MinValidationRule.cs" />
     <Compile Include="ConcreteValidations\SampleComplexValidation.cs" />
-    <Compile Include="Core\IValidationError.cs" />
+    <Compile Include="Core\EmptyValidationError.cs" />
     <Compile Include="Core\IValidator.cs" />
+    <Compile Include="Core\ValidationContext.cs" />
+    <Compile Include="Core\ValidationEngine.cs" />
+    <Compile Include="Core\ValidationError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\SimpleValidation\SimpleValidationError.cs" />
-    <Compile Include="Core\SimpleValidation\ISimpleValidator.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

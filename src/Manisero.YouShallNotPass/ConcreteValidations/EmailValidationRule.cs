@@ -1,4 +1,4 @@
-﻿using Manisero.YouShallNotPass.Core.SimpleValidation;
+﻿using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
@@ -6,16 +6,16 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
     {
     }
 
-    public class EmailValidator : ISimpleValidator<EmailValidationRule, string>
+    public class EmailValidator : IValidator<EmailValidationRule, string, EmptyValidationError>
     {
-        public ISimpleValidationError Validate(string value, EmailValidationRule rule)
+        public EmptyValidationError Validate(string value, EmailValidationRule rule, ValidationContext context)
         {
             if (!IsEmail(value))
             {
-                return new SimpleValidationError();
+                return EmptyValidationError.Some;
             }
 
-            return null;
+            return EmptyValidationError.None;
         }
 
         private bool IsEmail(string value)

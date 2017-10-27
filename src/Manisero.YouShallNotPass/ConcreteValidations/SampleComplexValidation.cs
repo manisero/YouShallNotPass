@@ -12,7 +12,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
     {
         public static ComplexValidationRule Sample = new ComplexValidationRule
         {
-            MemberValidations = new Dictionary<string, object>
+            MemberRules = new Dictionary<string, object>
             {
                 [nameof(SampleComplexType.Id)] = new MinValidationRule<int>
                 {
