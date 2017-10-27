@@ -1,7 +1,4 @@
-﻿using Manisero.YouShallNotPass.ValidationErrors;
-using Manisero.YouShallNotPass.Validations;
-
-namespace Manisero.YouShallNotPass.Validators
+﻿namespace Manisero.YouShallNotPass.Core.ComplexValidation
 {
     public class ComplexValidator<TValue> : IValidator<IComplexValidation, TValue, EmptyValidationConfig, IComplexValidationError>
     {

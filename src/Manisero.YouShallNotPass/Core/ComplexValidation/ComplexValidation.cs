@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Manisero.YouShallNotPass.Validations
+namespace Manisero.YouShallNotPass.Core.ComplexValidation
 {
     public interface IComplexValidation : IValidation<EmptyValidationConfig>
     {

@@ -1,7 +1,6 @@
-﻿using Manisero.YouShallNotPass.ValidationErrors;
-using Manisero.YouShallNotPass.Validations;
-using Manisero.YouShallNotPass.Validators;
-using System;
+﻿using System;
+using Manisero.YouShallNotPass.Core;
+using Manisero.YouShallNotPass.Core.SimpleValidation;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {

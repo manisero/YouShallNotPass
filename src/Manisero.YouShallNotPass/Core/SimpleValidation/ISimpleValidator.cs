@@ -1,6 +1,4 @@
-﻿using Manisero.YouShallNotPass.ValidationErrors;
-
-namespace Manisero.YouShallNotPass.Validators
+﻿namespace Manisero.YouShallNotPass.Core.SimpleValidation
 {
     public interface ISimpleValidator<TValidation, TValue, TConfig> : IValidator<TValidation, TValue, TConfig, ISimpleValidationError>
         where TValidation : IValidation<TConfig>

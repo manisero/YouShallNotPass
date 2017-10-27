@@ -1,4 +1,4 @@
-﻿namespace Manisero.YouShallNotPass
+﻿namespace Manisero.YouShallNotPass.Core
 {
     public interface IValidation
     {

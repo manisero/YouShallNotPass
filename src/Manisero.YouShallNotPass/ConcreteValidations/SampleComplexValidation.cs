@@ -1,5 +1,6 @@
-﻿using Manisero.YouShallNotPass.Validations;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Manisero.YouShallNotPass.Core;
+using Manisero.YouShallNotPass.Core.ComplexValidation;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {

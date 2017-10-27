@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Manisero.YouShallNotPass.ValidationErrors
+namespace Manisero.YouShallNotPass.Core.ComplexValidation
 {
     public interface IComplexValidationError
     {

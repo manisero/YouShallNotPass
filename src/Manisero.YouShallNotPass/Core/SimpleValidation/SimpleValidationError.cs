@@ -1,4 +1,4 @@
-﻿namespace Manisero.YouShallNotPass.ValidationErrors
+﻿namespace Manisero.YouShallNotPass.Core.SimpleValidation
 {
     public interface ISimpleValidationError : IValidationError
     {
