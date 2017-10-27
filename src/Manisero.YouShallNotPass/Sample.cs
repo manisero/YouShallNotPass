@@ -34,9 +34,9 @@ namespace Manisero.YouShallNotPass
         {
             var engine = new ValidationEngine();
 
-            engine.RegisterGenericRule(() => new ComplexValidator());
-            engine.RegisterGenericRule(() => new MinValidator());
-            engine.RegisterRule(() => new EmailValidator());
+            engine.RegisterGenericRule(new ComplexValidator());
+            engine.RegisterGenericRule(new MinValidator());
+            engine.RegisterRule(new EmailValidator());
             
             engine.Validate(SampleItem, Rule);
         }

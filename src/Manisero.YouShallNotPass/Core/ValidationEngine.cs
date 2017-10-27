@@ -34,4 +34,19 @@ namespace Manisero.YouShallNotPass.Core
             throw new NotImplementedException();
         }
     }
+
+    public static class ValidationEngineExtensions
+    {
+        public static void RegisterRule<TRule, TValue, TError>(
+            this IValidationEngine engine,
+            IValidator<TRule, TValue, TError> validator)
+            where TError : class
+            => engine.RegisterRule(() => validator);
+
+        public static void RegisterGenericRule<TRule, TError>(
+            this IValidationEngine engine,
+            IGenericValidator<TRule, TError> validator)
+            where TError : class
+            => engine.RegisterGenericRule(() => validator);
+    }
 }
