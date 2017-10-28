@@ -4,10 +4,10 @@ namespace Manisero.YouShallNotPass.Core
 {
     public interface IValidationEngineBuilder
     {
-        IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(Func<IValidator<TValue, TRule, TError>> validatorFactory)
+        IValidationEngineBuilder RegisterValidator<TValue, TRule, TError>(Func<IValidator<TValue, TRule, TError>> validatorFactory)
             where TError : class;
         
-        IValidationEngineBuilder RegisterAsyncValidator<TRule, TValue, TError>(Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
+        IValidationEngineBuilder RegisterAsyncValidator<TValue, TRule, TError>(Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
             where TError : class;
 
         /// <summary>Will try to register as both <see cref="IValidator{TValue,TRule,TError}"/> and <see cref="IAsyncValidator{TValue,TRule,TError}"/>.</summary>
@@ -19,13 +19,13 @@ namespace Manisero.YouShallNotPass.Core
 
     public class ValidationEngineBuilder : IValidationEngineBuilder
     {
-        public IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(Func<IValidator<TValue, TRule, TError>> validatorFactory)
+        public IValidationEngineBuilder RegisterValidator<TValue, TRule, TError>(Func<IValidator<TValue, TRule, TError>> validatorFactory)
             where TError : class
         {
             throw new NotImplementedException();
         }
 
-        public IValidationEngineBuilder RegisterAsyncValidator<TRule, TValue, TError>(Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
+        public IValidationEngineBuilder RegisterAsyncValidator<TValue, TRule, TError>(Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
             where TError : class
         {
             throw new NotImplementedException();
@@ -47,13 +47,13 @@ namespace Manisero.YouShallNotPass.Core
 
     public static class ValidationEngineBuilderExtensions
     {
-        public static IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(
+        public static IValidationEngineBuilder RegisterValidator<TValue, TRule, TError>(
             this IValidationEngineBuilder builder,
             IValidator<TValue, TRule, TError> validator)
             where TError : class
             => builder.RegisterValidator(() => validator);
 
-        public static IValidationEngineBuilder RegisterAsyncValidator<TRule, TValue, TError>(
+        public static IValidationEngineBuilder RegisterAsyncValidator<TValue, TRule, TError>(
             this IValidationEngineBuilder builder,
             IAsyncValidator<TValue, TRule, TError> validator)
             where TError : class
