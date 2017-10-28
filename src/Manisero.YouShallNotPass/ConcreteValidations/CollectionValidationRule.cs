@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
@@ -15,7 +16,8 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
         public IDictionary<int, IValidationResult> ItemValidationResults { get; set; }
     }
 
-    public class CollectionValidator : IValidator<IEnumerable, CollectionValidationRule, CollectionValidationError>
+    public class CollectionValidator : IValidator<IEnumerable, CollectionValidationRule, CollectionValidationError>,
+                                       IAsyncValidator<IEnumerable, CollectionValidationRule, CollectionValidationError>
     {
         public CollectionValidationError Validate(IEnumerable value, CollectionValidationRule rule, ValidationContext context)
         {
@@ -43,6 +45,11 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
             return invalid
                 ? error
                 : null;
+        }
+
+        public Task<CollectionValidationError> ValidateAsync(IEnumerable value, CollectionValidationRule rule, ValidationContext context)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

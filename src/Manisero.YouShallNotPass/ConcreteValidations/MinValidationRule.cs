@@ -14,12 +14,9 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
     {
         public EmptyValidationError Validate(TValue value, MinValidationRule<TValue> rule, ValidationContext context)
         {
-            if (value.CompareTo(rule.MinValue) < 0)
-            {
-                return EmptyValidationError.Some;
-            }
-
-            return EmptyValidationError.None;
+            return value.CompareTo(rule.MinValue) < 0
+                ? EmptyValidationError.Some
+                : EmptyValidationError.None;
         }
     }
 }

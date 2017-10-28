@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
@@ -21,9 +22,12 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
         public IValidationResult OverallValidationError { get; set; }
     }
 
-    public class ComplexValidator : IValidator<object, ComplexValidationRule, ComplexValidationError>
+    public class ComplexValidator : IValidator<object, ComplexValidationRule, ComplexValidationError>,
+                                    IAsyncValidator<object, ComplexValidationRule, ComplexValidationError>
     {
-        // TODO: Consider avoiding boxing
+        // TODO: Implement async
+
+        // TODO: Consider avoiding boxing (object value)
         public ComplexValidationError Validate(object value, ComplexValidationRule rule, ValidationContext context)
         {
             var invalid = false;
@@ -59,6 +63,11 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
             return invalid
                 ? error
                 : null;
+        }
+
+        public Task<ComplexValidationError> ValidateAsync(object value, ComplexValidationRule rule, ValidationContext context)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

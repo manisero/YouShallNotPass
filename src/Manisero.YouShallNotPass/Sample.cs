@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Manisero.YouShallNotPass.ConcreteValidations;
 using Manisero.YouShallNotPass.Core;
 
@@ -42,10 +43,10 @@ namespace Manisero.YouShallNotPass
         {
             var builder = new ValidationEngineBuilder();
 
-            builder.RegisterValidator(new ComplexValidator())
-                   .RegisterValidator(new CollectionValidator())
+            builder.RegisterValidator<ComplexValidationRule, object, ComplexValidationError, ComplexValidator>(new ComplexValidator())
+                   .RegisterValidator<CollectionValidationRule, IEnumerable, CollectionValidationError, CollectionValidator>(new CollectionValidator())
                    .RegisterValidator(typeof(MinValidator<>), type => new object()) // TODO: Return proper validator
-                   .RegisterValidator(new EmailValidator());
+                   .RegisterValidator<EmailValidationRule, string, EmptyValidationError, EmailValidator>(new EmailValidator());
 
             var engine = builder.Build();
             engine.Validate(SampleItem, Rule);
