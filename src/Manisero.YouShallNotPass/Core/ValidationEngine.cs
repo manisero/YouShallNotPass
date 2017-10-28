@@ -6,25 +6,24 @@ namespace Manisero.YouShallNotPass.Core
     {
         // TODO: Consider extracting ValidationEngineBuilder (for registrations) building ValidationEngine (for validations)
 
-        void RegisterRule<TRule, TValue, TError>(Func<IValidator<TRule, TValue, TError>> validatorFactory)
+        void RegisterValidator<TRule, TValue, TError>(Func<IValidator<TRule, TValue, TError>> validatorFactory)
             where TError : class;
-
-        void RegisterGenericRule<TRule, TError>(Func<IGenericValidator<TRule, TError>> validatorFactory)
-            where TError : class;
+        
+        /// <param name="validatorFactory">concrete validator type => validator</param>
+        void RegisterValidator(Type validatorType, Func<Type, object> validatorFactory);
 
         ValidationResult Validate(object value, object rule);
     }
 
     public class ValidationEngine : IValidationEngine
     {
-        public void RegisterRule<TRule, TValue, TError>(Func<IValidator<TRule, TValue, TError>> validatorFactory)
+        public void RegisterValidator<TRule, TValue, TError>(Func<IValidator<TRule, TValue, TError>> validatorFactory)
             where TError : class
         {
             throw new NotImplementedException();
         }
 
-        public void RegisterGenericRule<TRule, TError>(Func<IGenericValidator<TRule, TError>> validatorFactory)
-            where TError : class
+        public void RegisterValidator(Type validatorType, Func<Type, object> validatorFactory)
         {
             throw new NotImplementedException();
         }
@@ -37,16 +36,10 @@ namespace Manisero.YouShallNotPass.Core
 
     public static class ValidationEngineExtensions
     {
-        public static void RegisterRule<TRule, TValue, TError>(
+        public static void RegisterValidator<TRule, TValue, TError>(
             this IValidationEngine engine,
             IValidator<TRule, TValue, TError> validator)
             where TError : class
-            => engine.RegisterRule(() => validator);
-
-        public static void RegisterGenericRule<TRule, TError>(
-            this IValidationEngine engine,
-            IGenericValidator<TRule, TError> validator)
-            where TError : class
-            => engine.RegisterGenericRule(() => validator);
+            => engine.RegisterValidator(() => validator);
     }
 }

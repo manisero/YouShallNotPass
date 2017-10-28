@@ -3,22 +3,22 @@ using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class MinValidationRule
+    public class MinValidationRule<TValue>
+        where TValue : IComparable<TValue>
     {
-        public int MinValue { get; set; }
+        public TValue MinValue { get; set; }
     }
 
-    public class MinValidator : IGenericValidator<MinValidationRule, EmptyValidationError>
+    public class MinValidator<TValue> : IValidator<IComparable<TValue>, MinValidationRule<TValue>, EmptyValidationError>
+        where TValue : IComparable<TValue>
     {
-        public EmptyValidationError Validate<TValue>(TValue value, MinValidationRule rule, ValidationContext context)
+        public EmptyValidationError Validate(IComparable<TValue> value, MinValidationRule<TValue> rule, ValidationContext context)
         {
-            var valueAsInt = Convert.ToInt32(value);
-
-            if (valueAsInt < rule.MinValue)
+            if (value.CompareTo(rule.MinValue) < 0)
             {
                 return EmptyValidationError.Some;
             }
-            
+
             return EmptyValidationError.None;
         }
     }

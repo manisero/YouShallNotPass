@@ -17,14 +17,14 @@ namespace Manisero.YouShallNotPass
         {
             MemberRules = new Dictionary<string, object>
             {
-                [nameof(SampleType.Id)] = new MinValidationRule
+                [nameof(SampleType.Id)] = new MinValidationRule<int>
                 {
                     MinValue = 1
                 },
                 [nameof(SampleType.Email)] = new EmailValidationRule(),
                 [nameof(SampleType.ChildIds)] = new CollectionValidationRule
                 {
-                    ItemRule = new MinValidationRule
+                    ItemRule = new MinValidationRule<int>
                     {
                         MinValue = 1
                     }
@@ -42,9 +42,10 @@ namespace Manisero.YouShallNotPass
         {
             var engine = new ValidationEngine();
 
-            engine.RegisterGenericRule(new ComplexValidator());
-            engine.RegisterGenericRule(new MinValidator());
-            engine.RegisterRule(new EmailValidator());
+            engine.RegisterValidator(new ComplexValidator());
+            engine.RegisterValidator(new CollectionValidator());
+            engine.RegisterValidator(typeof(MinValidator<>), type => new object()); // TODO: Return proper validator
+            engine.RegisterValidator(new EmailValidator());
             
             engine.Validate(SampleItem, Rule);
         }

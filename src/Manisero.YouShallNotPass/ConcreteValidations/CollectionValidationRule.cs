@@ -15,7 +15,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
         public IDictionary<int, IValidationResult> ItemValidationResults { get; set; }
     }
 
-    public class EachValidator : IValidator<IEnumerable, CollectionValidationRule, CollectionValidationError>
+    public class CollectionValidator : IValidator<IEnumerable, CollectionValidationRule, CollectionValidationError>
     {
         public CollectionValidationError Validate(IEnumerable value, CollectionValidationRule rule, ValidationContext context)
         {

@@ -21,9 +21,10 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
         public IValidationResult OverallValidationError { get; set; }
     }
 
-    public class ComplexValidator : IGenericValidator<ComplexValidationRule, ComplexValidationError>
+    public class ComplexValidator : IValidator<object, ComplexValidationRule, ComplexValidationError>
     {
-        public ComplexValidationError Validate<TValue>(TValue value, ComplexValidationRule rule, ValidationContext context)
+        // TODO: Consider avoiding boxing
+        public ComplexValidationError Validate(object value, ComplexValidationRule rule, ValidationContext context)
         {
             var invalid = false;
             var error = new ComplexValidationError // TODO: Avoid this up-front allocation
@@ -36,7 +37,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
                 var propertyName = memberRule.Key;
 
                 // TODO: Cache property getter
-                var propertyValue = typeof(TValue).GetProperty(propertyName).GetValue(value);
+                var propertyValue = value.GetType().GetProperty(propertyName).GetValue(value);
 
                 var memberResult = context.Engine.Validate(propertyValue, memberRule);
 
