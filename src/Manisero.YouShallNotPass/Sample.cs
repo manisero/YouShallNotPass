@@ -8,6 +8,7 @@ namespace Manisero.YouShallNotPass
     {
         public int Id { get; set; }
         public string Email { get; set; }
+        public ICollection<int> ChildIds { get; set; }
     }
 
     public class Sample
@@ -20,7 +21,14 @@ namespace Manisero.YouShallNotPass
                 {
                     MinValue = 1
                 },
-                [nameof(SampleType.Email)] = new EmailValidationRule()
+                [nameof(SampleType.Email)] = new EmailValidationRule(),
+                [nameof(SampleType.ChildIds)] = new CollectionValidationRule
+                {
+                    ItemRule = new MinValidationRule
+                    {
+                        MinValue = 1
+                    }
+                }
             }
         };
 

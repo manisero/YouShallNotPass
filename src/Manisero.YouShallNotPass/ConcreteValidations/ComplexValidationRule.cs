@@ -7,6 +7,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
     {
         // TODO: Try to avoid object types as rules
 
+        /// <summary>property name -> rule</summary>
         public IDictionary<string, object> MemberRules { get; set; }
         
         public object OverallRule { get; set; }
@@ -14,9 +15,10 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
 
     public class ComplexValidationError
     {
+        /// <summary>property name (only invalid properties) -> validation result</summary>
         public IDictionary<string, IValidationResult> MemberValidationErrors { get; set; }
 
-        public IValidationResult OverallValidationResult { get; set; }
+        public IValidationResult OverallValidationError { get; set; }
     }
 
     public class ComplexValidator : IGenericValidator<ComplexValidationRule, ComplexValidationError>
@@ -24,7 +26,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
         public ComplexValidationError Validate<TValue>(TValue value, ComplexValidationRule rule, ValidationContext context)
         {
             var invalid = false;
-            var error = new ComplexValidationError
+            var error = new ComplexValidationError // TODO: Avoid this up-front allocation
             {
                 MemberValidationErrors = new Dictionary<string, IValidationResult>()
             };
@@ -41,7 +43,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
                 if (memberResult.HasError())
                 {
                     invalid = true;
-                    error.MemberValidationErrors[propertyName] = memberResult;
+                    error.MemberValidationErrors.Add(propertyName, memberResult);
                 }
             }
 
@@ -50,7 +52,7 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
             if (overallResult.HasError())
             {
                 invalid = true;
-                error.OverallValidationResult = overallResult;
+                error.OverallValidationError = overallResult;
             }
             
             return invalid
