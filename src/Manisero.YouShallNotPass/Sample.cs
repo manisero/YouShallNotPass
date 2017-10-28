@@ -40,13 +40,14 @@ namespace Manisero.YouShallNotPass
 
         public void Run()
         {
-            var engine = new ValidationEngine();
+            var builder = new ValidationEngineBuilder();
 
-            engine.RegisterValidator(new ComplexValidator());
-            engine.RegisterValidator(new CollectionValidator());
-            engine.RegisterValidator(typeof(MinValidator<>), type => new object()); // TODO: Return proper validator
-            engine.RegisterValidator(new EmailValidator());
-            
+            builder.RegisterValidator(new ComplexValidator())
+                   .RegisterValidator(new CollectionValidator())
+                   .RegisterValidator(typeof(MinValidator<>), type => new object()) // TODO: Return proper validator
+                   .RegisterValidator(new EmailValidator());
+
+            var engine = builder.Build();
             engine.Validate(SampleItem, Rule);
         }
     }
