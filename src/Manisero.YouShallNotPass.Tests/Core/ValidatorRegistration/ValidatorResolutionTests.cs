@@ -55,12 +55,14 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
             result.Should().Be(validator);
         }
 
-        private IValidatorResolver BuildRegistry(Action<IValidatorsRegistryBuilder> registerValidators)
+        private ValidatorResolver BuildRegistry(Action<IValidatorsRegistryBuilder> registerValidators)
         {
             var builder = new ValidatorsRegistryBuilder();
             registerValidators(builder);
 
-            return builder.Build();
+            var registry = builder.Build();
+
+            return new ValidatorResolver(registry);
         }
     }
 }

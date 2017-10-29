@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
+﻿using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Extensions;
 
 namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
@@ -14,18 +12,11 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 
     public class ValidatorResolver : IValidatorResolver
     {
-        private readonly IDictionary<ValidatorKey, IValidator> _validators;
-        private readonly IDictionary<ValidatorKey, Func<IValidator>> _validatorFactories;
-        private readonly IDictionary<Type, Func<Type, IValidator>> _genericValidatorFactories;
+        private readonly ValidatorsRegistry _validatorsRegistry;
 
-        public ValidatorResolver(
-            IDictionary<ValidatorKey, IValidator> validators,
-            IDictionary<ValidatorKey, Func<IValidator>> validatorFactories,
-            IDictionary<Type, Func<Type, IValidator>> genericValidatorFactories)
+        public ValidatorResolver(ValidatorsRegistry validatorsRegistry)
         {
-            _validators = validators;
-            _validatorFactories = validatorFactories;
-            _genericValidatorFactories = genericValidatorFactories;
+            _validatorsRegistry = validatorsRegistry;
         }
 
         public IValidator<TValue, TRule, TError> TryResolve<TValue, TRule, TError>()
@@ -41,7 +32,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            var validator = _validators.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
+            var validator = _validatorsRegistry.ValidatorInstances.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
 
             if (validator == null)
             {
@@ -55,7 +46,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            var validatorFactory = _validatorFactories.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
+            var validatorFactory = _validatorsRegistry.ValidatorFactories.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
 
             if (validatorFactory == null)
             {
@@ -72,7 +63,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             // TODO: Cache result
 
             // TODO: Get rid of loop (build appropriate dictionary up-front)
-            foreach (var validatorDefinitionToFactory in _genericValidatorFactories)
+            foreach (var validatorDefinitionToFactory in _validatorsRegistry.GenericValidatorFactories)
             {
                 var validatorTypeDefinition = validatorDefinitionToFactory.Key;
                 var validatorDefinitionImplementation = validatorTypeDefinition.GetGenericInterfaceDefinitionImplementation(typeof(IValidator<,,>));

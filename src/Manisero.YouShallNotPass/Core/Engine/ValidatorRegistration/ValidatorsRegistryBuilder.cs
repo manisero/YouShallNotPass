@@ -32,12 +32,12 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         /// <param name="validatorFactory">concrete validator type => validator</param>
         void RegisterGenericValidatorFactory(Type validatorTypeDefinition, Func<Type, IValidator> validatorFactory);
 
-        IValidatorResolver Build();
+        ValidatorsRegistry Build();
     }
 
     public class ValidatorsRegistryBuilder : IValidatorsRegistryBuilder
     {
-        private readonly IDictionary<ValidatorKey, IValidator> _validators = new Dictionary<ValidatorKey, IValidator>();
+        private readonly IDictionary<ValidatorKey, IValidator> _validatorInstances = new Dictionary<ValidatorKey, IValidator>();
         private readonly IDictionary<ValidatorKey, Func<IValidator>> _validatorFactories = new Dictionary<ValidatorKey, Func<IValidator>>();
         private readonly IDictionary<Type, Func<Type, IValidator>> _genericValidatorFactories = new Dictionary<Type, Func<Type, IValidator>>();
 
@@ -46,7 +46,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            _validators.Add(ValidatorKey.Create<TValue, TRule>(), validator);
+            _validatorInstances.Add(ValidatorKey.Create<TValue, TRule>(), validator);
         }
 
         public void RegisterAsyncValidator<TValue, TRule, TError>(
@@ -92,11 +92,14 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             // TODO: Else, throw exception?
         }
 
-        public IValidatorResolver Build()
+        public ValidatorsRegistry Build()
         {
-            return new ValidatorResolver(_validators,
-                                          _validatorFactories,
-                                          _genericValidatorFactories);
+            return new ValidatorsRegistry
+            {
+                ValidatorInstances = _validatorInstances,
+                ValidatorFactories = _validatorFactories,
+                GenericValidatorFactories = _genericValidatorFactories
+            };
         }
     }
 }
