@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
@@ -14,6 +15,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
             public int Id { get; set; }
             public string Email { get; set; }
             public ICollection<int> ChildIds { get; set; }
+            public int? Age { get; set; }
         }
 
         private static readonly ComplexValidationRule<Item> Rule = new ComplexValidationRule<Item>
@@ -31,30 +33,57 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
                     {
                         MinValue = 1
                     }
-                }
+                },
+                [nameof(Item.Age)] = new RequiredValidationRule<int?>()
             }
         };
 
-        private static readonly Item SampleItem = new Item
+        [Fact]
+        public void valid_item___no_error()
         {
-            Id = 1,
-            Email = "a@a.com",
-            ChildIds = new[] {1, 2, 3}
-        };
+            var engine = BuildEngine();
+            
+            var item = new Item
+            {
+                Id = 1,
+                Email = "a@a.com",
+                ChildIds = new[] {1, 2, 3},
+                Age = 3
+            };
+
+            var result = engine.Validate(item, Rule);
+
+            result.HasError().Should().BeFalse();
+        }
 
         [Fact]
-        public void run()
+        public void invalid_item___error()
+        {
+            var engine = BuildEngine();
+
+            var item = new Item
+            {
+                Id = 0,
+                Email = "a",
+                ChildIds = new[] { -1, 0, 1 },
+                Age = null
+            };
+
+            var result = engine.Validate(item, Rule);
+
+            result.HasError().Should().BeTrue();
+        }
+
+        private IValidationEngine BuildEngine()
         {
             var builder = new ValidationEngineBuilder();
+            builder.RegisterGenericValidator(typeof(RequiredValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterGenericValidator(typeof(ComplexValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterGenericValidator(typeof(CollectionValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterGenericValidator(typeof(MinValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterValidator(new EmailValidator());
 
-            var engine = builder.Build();
-            var result = engine.Validate(SampleItem, Rule);
-
-            // TODO: Assert
+            return builder.Build();
         }
     }
 }

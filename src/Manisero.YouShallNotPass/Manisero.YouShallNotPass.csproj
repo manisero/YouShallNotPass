@@ -57,6 +57,7 @@
     <Compile Include="Core\Engine\ValidationEngine.cs" />
     <Compile Include="Core\Engine\ValidationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validations\RequiredValidationRule.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -27,7 +27,7 @@ namespace Manisero.YouShallNotPass.Extensions
 
         public static bool ImplementsGenericDefinition(this Type type, Type definition)
         {
-            return type.GetGenericTypeDefinition() == definition;
+            return type.IsGenericType && type.GetGenericTypeDefinition() == definition;
         }
 
         public static bool ImplementsGenericInterfaceDefinition(this Type type, Type interfaceDefinition)
