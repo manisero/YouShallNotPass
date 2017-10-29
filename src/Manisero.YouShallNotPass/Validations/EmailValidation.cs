@@ -1,6 +1,7 @@
-﻿using Manisero.YouShallNotPass.Core;
+﻿using Manisero.YouShallNotPass.Core.Engine;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
-namespace Manisero.YouShallNotPass.ConcreteValidations
+namespace Manisero.YouShallNotPass.Validations
 {
     public class EmailValidationRule : IValidationRule<EmptyValidationError>
     {

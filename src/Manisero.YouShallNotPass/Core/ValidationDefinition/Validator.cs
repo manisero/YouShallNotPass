@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Manisero.YouShallNotPass.Core.Engine;
 
-namespace Manisero.YouShallNotPass.Core
+namespace Manisero.YouShallNotPass.Core.ValidationDefinition
 {
     public interface IValidator<TValue, TRule, TError>
         where TRule : IValidationRule<TError>

@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Manisero.YouShallNotPass.Core;
+using Manisero.YouShallNotPass.Core.Engine;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
-namespace Manisero.YouShallNotPass.ConcreteValidations
+namespace Manisero.YouShallNotPass.Validations
 {
     public class CollectionValidationRule : IValidationRule<CollectionValidationError>
     {

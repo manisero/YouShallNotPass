@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using Manisero.YouShallNotPass.ConcreteValidations;
-using Manisero.YouShallNotPass.Core;
+using Manisero.YouShallNotPass.Core.Engine;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
+using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Tests.SampleUsage

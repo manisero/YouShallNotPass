@@ -1,4 +1,4 @@
-﻿namespace Manisero.YouShallNotPass.Core
+﻿namespace Manisero.YouShallNotPass.Core.ValidationDefinition
 {
     public interface IValidationRule
     {

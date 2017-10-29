@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Extensions;
 
-namespace Manisero.YouShallNotPass.Core
+namespace Manisero.YouShallNotPass.Core.Engine
 {
     public interface IValidationEngine
     {

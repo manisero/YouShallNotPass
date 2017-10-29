@@ -40,19 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConcreteValidations\ComplexValidationRule.cs" />
-    <Compile Include="ConcreteValidations\CollectionValidationRule.cs" />
-    <Compile Include="ConcreteValidations\EmailValidationRule.cs" />
-    <Compile Include="ConcreteValidations\MinValidationRule.cs" />
-    <Compile Include="Core\ValidationEngineBuilder.cs" />
-    <Compile Include="Core\ValidationRule.cs" />
+    <Compile Include="Validations\ComplexValidation.cs" />
+    <Compile Include="Validations\CollectionValidation.cs" />
+    <Compile Include="Validations\EmailValidation.cs" />
+    <Compile Include="Validations\MinValidation.cs" />
+    <Compile Include="Core\Engine\ValidationEngineBuilder.cs" />
+    <Compile Include="Core\ValidationDefinition\ValidationRule.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Sample.cs" />
-    <Compile Include="Core\EmptyValidationError.cs" />
-    <Compile Include="Core\Validator.cs" />
-    <Compile Include="Core\ValidationContext.cs" />
-    <Compile Include="Core\ValidationEngine.cs" />
-    <Compile Include="Core\ValidationResult.cs" />
+    <Compile Include="Core\ValidationDefinition\EmptyValidationError.cs" />
+    <Compile Include="Core\ValidationDefinition\Validator.cs" />
+    <Compile Include="Core\Engine\ValidationContext.cs" />
+    <Compile Include="Core\Engine\ValidationEngine.cs" />
+    <Compile Include="Core\Engine\ValidationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
