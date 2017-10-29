@@ -8,16 +8,23 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
 {
     public class ComplexUsage
     {
-        public static ComplexValidationRule Rule = new ComplexValidationRule
+        private class Item
+        {
+            public int Id { get; set; }
+            public string Email { get; set; }
+            public ICollection<int> ChildIds { get; set; }
+        }
+
+        private static readonly ComplexValidationRule Rule = new ComplexValidationRule
         {
             MemberRules = new Dictionary<string, IValidationRule>
             {
-                [nameof(SampleType.Id)] = new MinValidationRule<int>
+                [nameof(Item.Id)] = new MinValidationRule<int>
                 {
                     MinValue = 1
                 },
-                [nameof(SampleType.Email)] = new EmailValidationRule(),
-                [nameof(SampleType.ChildIds)] = new CollectionValidationRule
+                [nameof(Item.Email)] = new EmailValidationRule(),
+                [nameof(Item.ChildIds)] = new CollectionValidationRule
                 {
                     ItemRule = new MinValidationRule<int>
                     {
@@ -27,7 +34,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
             }
         };
 
-        public static SampleType SampleItem = new SampleType
+        private static readonly Item SampleItem = new Item
         {
             Id = 1,
             Email = "a@a.com"
@@ -37,13 +44,13 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         public void run()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterValidator(() => new ComplexValidator())
-                   .RegisterValidator(new CollectionValidator())
-                   .RegisterValidator(typeof(MinValidator<>), type => new object()) // TODO: Return proper validator
-                   .RegisterValidator(new EmailValidator());
+            builder.RegisterValidator(new ComplexValidator());
+            builder.RegisterValidator(new CollectionValidator());
+            builder.RegisterValidator(typeof(MinValidator<>), type => new object()); // TODO: Return proper validator
+            builder.RegisterValidator(new EmailValidator());
 
             var engine = builder.Build();
-            engine.Validate(SampleItem, Rule);
+            var result = engine.Validate(SampleItem, Rule);
 
             // TODO: Assert
         }

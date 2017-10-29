@@ -62,8 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleUsage\ComplexUsage2.cs" />
     <Compile Include="SampleUsage\SimpleUsage.cs" />
-    <Compile Include="SampleUsage\SampleType.cs" />
     <Compile Include="SampleUsage\ComplexUsage.cs" />
   </ItemGroup>
   <ItemGroup>
