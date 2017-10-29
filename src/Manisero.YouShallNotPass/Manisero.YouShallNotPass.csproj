@@ -40,9 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Engine\RuleMetadataProvider.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorsRegistry.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorsRegistryBuilder.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorResolver.cs" />
+    <Compile Include="Core\ValidationDefinition\ValidatesNullAttribute.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Validations\ComplexValidation.cs" />
     <Compile Include="Validations\CollectionValidation.cs" />

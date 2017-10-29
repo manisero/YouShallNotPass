@@ -18,21 +18,34 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
     public class ValidationEngine : IValidationEngine
     {
+        private readonly IRuleMetadataProvider _ruleMetadataProvider;
         private readonly IValidatorResolver _validatorResolver;
 
         private readonly Lazy<MethodInfo> _validateGenericMethod = new Lazy<MethodInfo>(() => typeof(ValidationEngine).GetMethod(nameof(ValidateGeneric),
                                                                                                                                  BindingFlags.Instance | BindingFlags.NonPublic));
 
         public ValidationEngine(
+            IRuleMetadataProvider ruleMetadataProvider,
             IValidatorResolver validatorResolver)
         {
+            _ruleMetadataProvider = ruleMetadataProvider;
             _validatorResolver = validatorResolver;
         }
 
         public ValidationResult Validate(object value, IValidationRule rule)
         {
             // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
-            
+
+            var validatesNull = _ruleMetadataProvider.ValidatesNull(rule);
+
+            if (value == null && !validatesNull)
+            {
+                return new ValidationResult
+                {
+                    Rule = rule
+                };
+            }
+
             var ruleType = rule.GetType();
             var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
             var valueType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TValueTypeParameterPosition];

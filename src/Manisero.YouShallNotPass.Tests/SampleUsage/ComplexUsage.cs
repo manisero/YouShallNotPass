@@ -14,6 +14,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         {
             public int Id { get; set; }
             public string Email { get; set; }
+            public string SecondEmail { get; set; }
             public ICollection<int> ChildIds { get; set; }
             public int? Age { get; set; }
         }
@@ -27,6 +28,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
                     MinValue = 1
                 },
                 [nameof(Item.Email)] = new EmailValidationRule(),
+                [nameof(Item.SecondEmail)] = new EmailValidationRule(),
                 [nameof(Item.ChildIds)] = new CollectionValidationRule<int>
                 {
                     ItemRule = new MinValidationRule<int>
@@ -47,6 +49,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
             {
                 Id = 1,
                 Email = "a@a.com",
+                SecondEmail = null,
                 ChildIds = new[] {1, 2, 3},
                 Age = 3
             };
@@ -65,6 +68,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
             {
                 Id = 0,
                 Email = "a",
+                SecondEmail = "b",
                 ChildIds = new[] { -1, 0, 1 },
                 Age = null
             };

@@ -3,6 +3,7 @@ using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations
 {
+    [ValidatesNull]
     public class RequiredValidationRule<TValue> : IValidationRule<TValue, EmptyValidationError>
     {
     }

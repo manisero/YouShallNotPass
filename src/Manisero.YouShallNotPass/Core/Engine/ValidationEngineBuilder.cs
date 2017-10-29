@@ -88,10 +88,12 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         public IValidationEngine Build()
         {
-            var registry = _validatorsRegistryBuilder.Build();
-            var resolver = new ValidatorResolver(registry);
+            var ruleMetadataProvider = new RuleMetadataProvider();
 
-            return new ValidationEngine(resolver);
+            var validatorsRegistry = _validatorsRegistryBuilder.Build();
+            var validatorResolver = new ValidatorResolver(validatorsRegistry);
+            
+            return new ValidationEngine(ruleMetadataProvider, validatorResolver);
         }
     }
 }
