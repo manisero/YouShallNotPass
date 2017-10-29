@@ -14,13 +14,16 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 
     public class ValidatorsRegistry : IValidatorsRegistry
     {
-        private readonly IDictionary<ValidatorKey, Func<object>> _validatorFactories;
-        private readonly IDictionary<Type, Func<Type, object>> _genericValidatorFactories;
+        private readonly IDictionary<ValidatorKey, IValidator> _validators;
+        private readonly IDictionary<ValidatorKey, Func<IValidator>> _validatorFactories;
+        private readonly IDictionary<Type, Func<Type, IValidator>> _genericValidatorFactories;
 
         public ValidatorsRegistry(
-            IDictionary<ValidatorKey, Func<object>> validatorFactories,
-            IDictionary<Type, Func<Type, object>> genericValidatorFactories)
+            IDictionary<ValidatorKey, IValidator> validators,
+            IDictionary<ValidatorKey, Func<IValidator>> validatorFactories,
+            IDictionary<Type, Func<Type, IValidator>> genericValidatorFactories)
         {
+            _validators = validators;
             _validatorFactories = validatorFactories;
             _genericValidatorFactories = genericValidatorFactories;
         }
@@ -29,8 +32,23 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            return TryGetValidatorFromFactory<TValue, TRule, TError>() ??
+            return TryGetValidatorInstance<TValue, TRule, TError>() ??
+                   TryGetValidatorFromFactory<TValue, TRule, TError>() ??
                    TryGetGenericValidator<TValue, TRule, TError>();
+        }
+
+        private IValidator<TValue, TRule, TError> TryGetValidatorInstance<TValue, TRule, TError>()
+            where TRule : IValidationRule<TError>
+            where TError : class
+        {
+            var validator = _validators.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
+
+            if (validator == null)
+            {
+                return null;
+            }
+
+            return (IValidator<TValue, TRule, TError>)validator;
         }
 
         private IValidator<TValue, TRule, TError> TryGetValidatorFromFactory<TValue, TRule, TError>()

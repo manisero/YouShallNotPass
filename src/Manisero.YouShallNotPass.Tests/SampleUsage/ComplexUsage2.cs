@@ -27,7 +27,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         public void valid_item___no_error()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterGenericValidator(typeof(ComplexValidator<>), Activator.CreateInstance);
+            builder.RegisterGenericValidator(typeof(ComplexValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterValidator(new EmailValidator());
 
             var engine = builder.Build();
@@ -46,7 +46,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         public void invalid_item___error()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterGenericValidator(typeof(ComplexValidator<>), Activator.CreateInstance);
+            builder.RegisterGenericValidator(typeof(ComplexValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterValidator(new EmailValidator());
 
             var engine = builder.Build();

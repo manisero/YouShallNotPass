@@ -30,22 +30,23 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         /// <summary>Will try to register as both <see cref="IValidator{TValue,TRule,TError}"/> and <see cref="IAsyncValidator{TValue,TRule,TError}"/>.</summary>
         /// <param name="validatorTypeDefinition">Generic validator type definition (a.k.a. open generic type).</param>
         /// <param name="validatorFactory">concrete validator type => validator</param>
-        void RegisterGenericValidatorFactory(Type validatorTypeDefinition, Func<Type, object> validatorFactory);
+        void RegisterGenericValidatorFactory(Type validatorTypeDefinition, Func<Type, IValidator> validatorFactory);
 
         IValidatorsRegistry Build();
     }
 
     public class ValidatorsRegistryBuilder : IValidatorsRegistryBuilder
     {
-        private readonly IDictionary<ValidatorKey, Func<object>> _validatorFactories = new Dictionary<ValidatorKey, Func<object>>();
-        private readonly IDictionary<Type, Func<Type, object>> _genericValidatorFactories = new Dictionary<Type, Func<Type, object>>();
+        private readonly IDictionary<ValidatorKey, IValidator> _validators = new Dictionary<ValidatorKey, IValidator>();
+        private readonly IDictionary<ValidatorKey, Func<IValidator>> _validatorFactories = new Dictionary<ValidatorKey, Func<IValidator>>();
+        private readonly IDictionary<Type, Func<Type, IValidator>> _genericValidatorFactories = new Dictionary<Type, Func<Type, IValidator>>();
 
         public void RegisterValidator<TValue, TRule, TError>(
             IValidator<TValue, TRule, TError> validator)
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            throw new NotImplementedException();
+            _validators.Add(ValidatorKey.Create<TValue, TRule>(), validator);
         }
 
         public void RegisterAsyncValidator<TValue, TRule, TError>(
@@ -72,7 +73,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             throw new NotImplementedException();
         }
 
-        public void RegisterGenericValidatorFactory(Type validatorTypeDefinition, Func<Type, object> validatorFactory)
+        public void RegisterGenericValidatorFactory(Type validatorTypeDefinition, Func<Type, IValidator> validatorFactory)
         {
             if (!validatorTypeDefinition.IsGenericTypeDefinition)
             {
@@ -93,7 +94,8 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 
         public IValidatorsRegistry Build()
         {
-            return new ValidatorsRegistry(_validatorFactories,
+            return new ValidatorsRegistry(_validators,
+                                          _validatorFactories,
                                           _genericValidatorFactories);
         }
     }

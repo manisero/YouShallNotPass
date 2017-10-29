@@ -45,9 +45,9 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         public void run()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterGenericValidator(typeof(ComplexValidator<>), Activator.CreateInstance);
+            builder.RegisterGenericValidator(typeof(ComplexValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterValidator(new CollectionValidator());
-            builder.RegisterGenericValidator(typeof(MinValidator<>), Activator.CreateInstance);
+            builder.RegisterGenericValidator(typeof(MinValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterValidator(new EmailValidator());
 
             var engine = builder.Build();

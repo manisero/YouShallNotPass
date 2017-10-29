@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\ValidatorRegistration\ValidatorResolutionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleUsage\ComplexUsage2.cs" />
     <Compile Include="SampleUsage\SimpleUsage.cs" />
