@@ -212,6 +212,7 @@ TODO: Is SimpleValidationError needed?
 TODO
 ---
 
+- while caching results in classes, care for thread safety
 - passing custom context to Validators
   - object or strongly typed (TContext)?
   - rather Context type with dynamic or Dictionary<string, object> field inside

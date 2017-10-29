@@ -88,7 +88,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         public IValidationEngine Build()
         {
-            var ruleMetadataProvider = new RuleMetadataProvider();
+            var ruleMetadataProvider = new ValidationRuleMetadataProvider();
 
             var validatorsRegistry = _validatorsRegistryBuilder.Build();
             var validatorResolver = new ValidatorResolver(validatorsRegistry);
