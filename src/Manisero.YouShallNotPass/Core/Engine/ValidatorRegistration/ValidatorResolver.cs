@@ -78,7 +78,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
                 return null;
             }
             
-            var validatorType = registration.Value.ValidatorTypeDefinition.MakeGenericType(typeof(TValue));
+            var validatorType = registration.Value.ValidatorOpenGenericType.MakeGenericType(typeof(TValue));
 
             return (IValidator<TRule, TValue, TError>)registration.Value.Factory(validatorType);
         }

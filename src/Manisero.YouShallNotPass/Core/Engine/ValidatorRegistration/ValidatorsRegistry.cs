@@ -8,7 +8,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
     {
         public struct GenericValidatorRegistration
         {
-            public Type ValidatorTypeDefinition { get; set; }
+            public Type ValidatorOpenGenericType { get; set; }
             public Func<Type, IValidator> Factory { get; set; }
         }
 

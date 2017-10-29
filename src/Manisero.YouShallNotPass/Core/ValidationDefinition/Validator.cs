@@ -23,6 +23,6 @@ namespace Manisero.YouShallNotPass.Core.ValidationDefinition
 
     public static class ValidatorInterfaceConstants
     {
-        public const int TRuleTypeParamterPosition = 0;
+        public const int TRuleTypeParameterPosition = 0;
     }
 }

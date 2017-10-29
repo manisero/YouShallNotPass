@@ -36,7 +36,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             var valueType = value.GetType();
             var ruleType = rule.GetType();
             var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
-            var errorType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TErrorTypeParamterPosition];
+            var errorType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
 
             try
             {
