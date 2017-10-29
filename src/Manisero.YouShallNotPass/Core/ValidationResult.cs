@@ -2,13 +2,13 @@
 {
     public interface IValidationResult
     {
-        object Rule { get; }
+        IValidationRule Rule { get; }
         object Error { get; }
     }
 
     public class ValidationResult : IValidationResult
     {
-        public object Rule { get; set; }
+        public IValidationRule Rule { get; set; }
         public object Error { get; set; }
     }
 

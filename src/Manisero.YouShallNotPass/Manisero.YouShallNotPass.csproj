@@ -46,6 +46,7 @@
     <Compile Include="ConcreteValidations\MinValidationRule.cs" />
     <Compile Include="Core\ValidationEngineBuilder.cs" />
     <Compile Include="Core\ValidationRule.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Sample.cs" />
     <Compile Include="Core\EmptyValidationError.cs" />
     <Compile Include="Core\Validator.cs" />

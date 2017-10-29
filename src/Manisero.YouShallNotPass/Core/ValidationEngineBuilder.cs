@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Manisero.YouShallNotPass.Core
 {
@@ -21,11 +22,45 @@ namespace Manisero.YouShallNotPass.Core
 
     public class ValidationEngineBuilder : IValidationEngineBuilder
     {
+        public struct ValidatorKey
+        {
+            public Type ValueType { get; }
+            public Type RuleType { get; }
+
+            public ValidatorKey(Type valueType, Type ruleType)
+            {
+                ValueType = valueType;
+                RuleType = ruleType;
+            }
+
+            public bool Equals(ValidatorKey other)
+            {
+                return ValueType == other.ValueType && RuleType == other.RuleType;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                return obj is ValidatorKey && Equals((ValidatorKey) obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (ValueType.GetHashCode() * 397) ^ RuleType.GetHashCode();
+                }
+            }
+        }
+
+        private readonly IDictionary<ValidatorKey, Func<object>> _validatorsRegistry = new Dictionary<ValidatorKey, Func<object>>();
+
         public IValidationEngineBuilder RegisterValidator<TValue, TRule, TError>(Func<IValidator<TValue, TRule, TError>> validatorFactory)
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            throw new NotImplementedException();
+            _validatorsRegistry.Add(new ValidatorKey(typeof(TValue), typeof(TRule)), validatorFactory);
+            return this;
         }
 
         public IValidationEngineBuilder RegisterAsyncValidator<TValue, TRule, TError>(Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
