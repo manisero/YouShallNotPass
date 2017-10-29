@@ -17,15 +17,15 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
     public class ValidationEngine : IValidationEngine
     {
-        private readonly IValidatorsRegistry _validatorsRegistry;
+        private readonly IValidatorResolver _validatorResolver;
 
         private readonly Lazy<MethodInfo> _validateGenericMethod = new Lazy<MethodInfo>(() => typeof(ValidationEngine).GetMethod(nameof(ValidateGeneric),
                                                                                                                                  BindingFlags.Instance | BindingFlags.NonPublic));
 
         public ValidationEngine(
-            IValidatorsRegistry validatorsRegistry)
+            IValidatorResolver validatorResolver)
         {
-            _validatorsRegistry = validatorsRegistry;
+            _validatorResolver = validatorResolver;
         }
 
         public ValidationResult Validate(object value, IValidationRule rule)
@@ -61,7 +61,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            var validator = _validatorsRegistry.TryGetValidator<TValue, TRule, TError>();
+            var validator = _validatorResolver.TryResolve<TValue, TRule, TError>();
 
             if (validator == null)
             {

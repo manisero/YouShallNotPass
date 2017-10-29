@@ -5,20 +5,20 @@ using Manisero.YouShallNotPass.Extensions;
 
 namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 {
-    public interface IValidatorsRegistry
+    public interface IValidatorResolver
     {
-        IValidator<TValue, TRule, TError> TryGetValidator<TValue, TRule, TError>()
+        IValidator<TValue, TRule, TError> TryResolve<TValue, TRule, TError>()
             where TRule : IValidationRule<TError>
             where TError : class;
     }
 
-    public class ValidatorsRegistry : IValidatorsRegistry
+    public class ValidatorResolver : IValidatorResolver
     {
         private readonly IDictionary<ValidatorKey, IValidator> _validators;
         private readonly IDictionary<ValidatorKey, Func<IValidator>> _validatorFactories;
         private readonly IDictionary<Type, Func<Type, IValidator>> _genericValidatorFactories;
 
-        public ValidatorsRegistry(
+        public ValidatorResolver(
             IDictionary<ValidatorKey, IValidator> validators,
             IDictionary<ValidatorKey, Func<IValidator>> validatorFactories,
             IDictionary<Type, Func<Type, IValidator>> genericValidatorFactories)
@@ -28,7 +28,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             _genericValidatorFactories = genericValidatorFactories;
         }
 
-        public IValidator<TValue, TRule, TError> TryGetValidator<TValue, TRule, TError>()
+        public IValidator<TValue, TRule, TError> TryResolve<TValue, TRule, TError>()
             where TRule : IValidationRule<TError>
             where TError : class
         {

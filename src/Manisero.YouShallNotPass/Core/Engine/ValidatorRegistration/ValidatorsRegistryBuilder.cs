@@ -32,7 +32,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         /// <param name="validatorFactory">concrete validator type => validator</param>
         void RegisterGenericValidatorFactory(Type validatorTypeDefinition, Func<Type, IValidator> validatorFactory);
 
-        IValidatorsRegistry Build();
+        IValidatorResolver Build();
     }
 
     public class ValidatorsRegistryBuilder : IValidatorsRegistryBuilder
@@ -92,9 +92,9 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             // TODO: Else, throw exception?
         }
 
-        public IValidatorsRegistry Build()
+        public IValidatorResolver Build()
         {
-            return new ValidatorsRegistry(_validators,
+            return new ValidatorResolver(_validators,
                                           _validatorFactories,
                                           _genericValidatorFactories);
         }
