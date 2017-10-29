@@ -51,7 +51,6 @@
     <Compile Include="Core\Engine\ValidationEngineBuilder.cs" />
     <Compile Include="Core\ValidationDefinition\ValidationRule.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
-    <Compile Include="Sample.cs" />
     <Compile Include="Core\ValidationDefinition\EmptyValidationError.cs" />
     <Compile Include="Core\ValidationDefinition\Validator.cs" />
     <Compile Include="Core\Engine\ValidationContext.cs" />
