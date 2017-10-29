@@ -80,7 +80,7 @@ namespace Manisero.YouShallNotPass.Core
 
         public IValidationEngine Build()
         {
-            throw new NotImplementedException();
+            return new ValidationEngine(_validatorsRegistry);
         }
     }
 
