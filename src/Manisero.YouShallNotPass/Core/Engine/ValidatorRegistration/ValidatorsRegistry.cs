@@ -6,8 +6,20 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 {
     public class ValidatorsRegistry
     {
+        public struct GenericValidatorRegistration
+        {
+            public Type ValidatorTypeDefinition { get; set; }
+            public Func<Type, IValidator> Factory { get; set; }
+        }
+
         public IDictionary<ValidatorKey, IValidator> ValidatorInstances { get; set; }
+
         public IDictionary<ValidatorKey, Func<IValidator>> ValidatorFactories { get; set; }
-        public IDictionary<Type, Func<Type, IValidator>> GenericValidatorFactories { get; set; }
+
+        /// <summary>rule type -> registration</summary>
+        public IDictionary<Type, GenericValidatorRegistration> GenericValidatorOfNongenericRuleFactories { get; set; }
+
+        /// <summary>rule generic type definition -> registration</summary>
+        public IDictionary<Type, GenericValidatorRegistration> GenericValidatorOfGenericRuleFactories { get; set; }
     }
 }

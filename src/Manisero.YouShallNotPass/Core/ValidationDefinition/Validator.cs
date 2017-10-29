@@ -20,4 +20,9 @@ namespace Manisero.YouShallNotPass.Core.ValidationDefinition
     {
         Task<TError> ValidateAsync(TValue value, TRule rule, ValidationContext context);
     }
+
+    public static class ValidatorInterfaceConstants
+    {
+        public const int TRuleTypeParamterPosition = 1;
+    }
 }

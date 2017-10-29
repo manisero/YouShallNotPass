@@ -25,7 +25,8 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         {
             return TryGetValidatorInstance<TValue, TRule, TError>() ??
                    TryGetValidatorFromFactory<TValue, TRule, TError>() ??
-                   TryGetGenericValidator<TValue, TRule, TError>();
+                   TryGetGenericValidatorOfNongenericRule<TValue, TRule, TError>() ??
+                   TryGetGenericValidatorOfGenericRule<TValue, TRule, TError>();
         }
 
         private IValidator<TValue, TRule, TError> TryGetValidatorInstance<TValue, TRule, TError>()
@@ -56,28 +57,54 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             return (IValidator<TValue, TRule, TError>)validatorFactory();
         }
 
-        private IValidator<TValue, TRule, TError> TryGetGenericValidator<TValue, TRule, TError>()
+        private IValidator<TValue, TRule, TError> TryGetGenericValidatorOfNongenericRule<TValue, TRule, TError>()
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            // TODO: Cache result
+            // TODO: Make this as fast as possible (e.g. cache factory / validatorType) (but don't cache validator returned by factory)
 
-            // TODO: Get rid of loop (build appropriate dictionary up-front)
-            foreach (var validatorDefinitionToFactory in _validatorsRegistry.GenericValidatorFactories)
+            if (typeof(TRule).IsGenericType)
             {
-                var validatorTypeDefinition = validatorDefinitionToFactory.Key;
-                var validatorDefinitionImplementation = validatorTypeDefinition.GetGenericInterfaceDefinitionImplementation(typeof(IValidator<,,>));
-
-                if (validatorDefinitionImplementation.GenericTypeArguments[1] == typeof(TRule))
-                {
-                    var validatorType = validatorTypeDefinition.MakeGenericType(typeof(TValue));
-                    var factory = validatorDefinitionToFactory.Value;
-
-                    return (IValidator<TValue, TRule, TError>)factory(validatorType);
-                }
+                // TODO: Consider not calling this method in this case
+                return null;
             }
 
-            return null;
+            var registration = _validatorsRegistry.GenericValidatorOfNongenericRuleFactories.GetValueOrNull(typeof(TRule));
+
+            if (registration == null)
+            {
+                return null;
+            }
+            
+            var validatorType = registration.Value.ValidatorTypeDefinition.MakeGenericType(typeof(TValue));
+
+            return (IValidator<TValue, TRule, TError>)registration.Value.Factory(validatorType);
+        }
+
+        private IValidator<TValue, TRule, TError> TryGetGenericValidatorOfGenericRule<TValue, TRule, TError>()
+            where TRule : IValidationRule<TError>
+            where TError : class
+        {
+            // TODO: Make this as fast as possible (e.g. cache factory / validatorType) (but don't cache validator returned by factory)
+
+            if (!typeof(TRule).IsGenericType)
+            {
+                // TODO: Consider not calling this method in this case
+                return null;
+            }
+
+            var ruleGenericDefinition = typeof(TRule).GetGenericTypeDefinition();
+
+            var registration = _validatorsRegistry.GenericValidatorOfGenericRuleFactories.GetValueOrNull(ruleGenericDefinition);
+
+            if (registration == null)
+            {
+                return null;
+            }
+            
+            var validatorType = registration.Value.ValidatorTypeDefinition.MakeGenericType(typeof(TValue));
+
+            return (IValidator<TValue, TRule, TError>)registration.Value.Factory(validatorType);
         }
     }
 }

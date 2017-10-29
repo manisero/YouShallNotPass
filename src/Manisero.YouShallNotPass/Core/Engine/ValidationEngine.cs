@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
@@ -34,8 +35,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             var valueType = value.GetType();
             var ruleType = rule.GetType();
-            var ruleDefinitionImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<>));
-            var errorType = ruleDefinitionImplementation.GetGenericArguments()[0];
+            var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<>));
+            var errorType = iRuleImplementation.GetGenericArguments()[0];
 
             try
             {
@@ -48,7 +49,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
             }
             catch (TargetInvocationException exception)
             {
-                throw exception.InnerException;
+                ExceptionDispatchInfo.Capture(exception.InnerException).Throw();
+                throw;
             }
         }
 

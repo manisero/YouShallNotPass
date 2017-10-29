@@ -38,7 +38,8 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         private static readonly Item SampleItem = new Item
         {
             Id = 1,
-            Email = "a@a.com"
+            Email = "a@a.com",
+            ChildIds = new[] {1, 2, 3}
         };
 
         [Fact]
