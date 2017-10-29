@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorKey.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorsRegistry.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Validations\ComplexValidation.cs" />
     <Compile Include="Validations\CollectionValidation.cs" />
     <Compile Include="Validations\EmailValidation.cs" />

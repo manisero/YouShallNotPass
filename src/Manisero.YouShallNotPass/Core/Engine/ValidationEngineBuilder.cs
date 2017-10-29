@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
+using Manisero.YouShallNotPass.Extensions;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
@@ -16,8 +17,9 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TError : class;
 
         /// <summary>Will try to register as both <see cref="IValidator{TValue,TRule,TError}"/> and <see cref="IAsyncValidator{TValue,TRule,TError}"/>.</summary>
+        /// <param name="validatorTypeDefinition">Generic validator type definition (a.k.a. open generic type).</param>
         /// <param name="validatorFactory">concrete validator type => validator</param>
-        IValidationEngineBuilder RegisterValidator(Type validatorType, Func<Type, object> validatorFactory);
+        IValidationEngineBuilder RegisterGenericValidator(Type validatorTypeDefinition, Func<Type, object> validatorFactory);
 
         IValidationEngine Build();
     }
@@ -25,6 +27,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
     public class ValidationEngineBuilder : IValidationEngineBuilder
     {
         private readonly IDictionary<ValidatorKey, Func<object>> _validatorFactories = new Dictionary<ValidatorKey, Func<object>>();
+        private readonly IDictionary<Type, Func<Type, object>> _genericValidatorFactories = new Dictionary<Type, Func<Type, object>>();
 
         public IValidationEngineBuilder RegisterValidator<TValue, TRule, TError>(Func<IValidator<TValue, TRule, TError>> validatorFactory)
             where TRule : IValidationRule<TError>
@@ -40,18 +43,31 @@ namespace Manisero.YouShallNotPass.Core.Engine
         {
             throw new NotImplementedException();
         }
-
-        public IValidationEngineBuilder RegisterValidator(Type validatorType, Func<Type, object> validatorFactory)
+        
+        public IValidationEngineBuilder RegisterGenericValidator(Type validatorTypeDefinition, Func<Type, object> validatorFactory)
         {
-            // TODO: If validatorType implements IValidator, register as IValidator
-            // TODO: Also, if validatorType implements IAsyncValidator, register as IAsyncValidator
+            if (!validatorTypeDefinition.IsGenericTypeDefinition)
+            {
+                throw new ArgumentException($"{nameof(validatorTypeDefinition)} is not a generic type definition (a.k.a. open generic type). Use standard registration method for it.", nameof(validatorTypeDefinition));
+            }
 
-            throw new NotImplementedException();
+            // TODO: Validate that validatorTypeDefinition has only one generic type parameter (TValue)
+            // TODO: Valdate that there is only one generic validator of given rule
+
+            if (validatorTypeDefinition.ImplementsGenericInterfaceDefinition(typeof(IValidator<,,>)))
+            {
+                _genericValidatorFactories.Add(validatorTypeDefinition, validatorFactory);
+            }
+
+            // TODO: Also, if validatorTypeDefinition implements IAsyncValidator, register as IAsyncValidator
+            // TODO: Else, throw exception?
+
+            return this;
         }
 
         public IValidationEngine Build()
         {
-            var validatorsRegistry = new ValidatorsRegistry(_validatorFactories);
+            var validatorsRegistry = new ValidatorsRegistry(_validatorFactories, _genericValidatorFactories);
 
             return new ValidationEngine(validatorsRegistry);
         }

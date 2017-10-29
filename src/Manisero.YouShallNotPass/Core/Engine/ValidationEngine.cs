@@ -61,7 +61,13 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            var validator = _validatorsRegistry.GetValidator<TValue, TRule, TError>();
+            var validator = _validatorsRegistry.TryGetValidator<TValue, TRule, TError>();
+
+            if (validator == null)
+            {
+                throw new InvalidOperationException($"Unable to find validator validating value '{typeof(TValue)}' against rule '{typeof(TRule)}'.");
+            }
+
             var error = validator.Validate(value, rule, null); // TODO: Pass context
 
             return new ValidationResult

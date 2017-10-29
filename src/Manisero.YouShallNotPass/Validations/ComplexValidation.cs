@@ -21,11 +21,10 @@ namespace Manisero.YouShallNotPass.Validations
         public IValidationResult OverallValidationError { get; set; }
     }
 
-    public class ComplexValidator : IValidator<object, ComplexValidationRule, ComplexValidationError>,
-                                    IAsyncValidator<object, ComplexValidationRule, ComplexValidationError>
+    public class ComplexValidator<TItem> : IValidator<TItem, ComplexValidationRule, ComplexValidationError>,
+                                           IAsyncValidator<TItem, ComplexValidationRule, ComplexValidationError>
     {
-        // TODO: Consider avoiding boxing (object value)
-        public ComplexValidationError Validate(object value, ComplexValidationRule rule, ValidationContext context)
+        public ComplexValidationError Validate(TItem value, ComplexValidationRule rule, ValidationContext context)
         {
             var invalid = false;
             var error = new ComplexValidationError // TODO: Avoid this up-front allocation
@@ -40,7 +39,7 @@ namespace Manisero.YouShallNotPass.Validations
 
                 // TODO: Cache property getter
                 var propertyValue = value.GetType().GetProperty(propertyName).GetValue(value);
-                
+
                 var memberResult = context.Engine.Validate(propertyValue, propertyRule);
 
                 if (memberResult.HasError())
@@ -50,20 +49,23 @@ namespace Manisero.YouShallNotPass.Validations
                 }
             }
 
-            var overallResult = context.Engine.Validate(value, rule.OverallRule);
-
-            if (overallResult.HasError())
+            if (rule.OverallRule != null)
             {
-                invalid = true;
-                error.OverallValidationError = overallResult;
+                var overallResult = context.Engine.Validate(value, rule.OverallRule);
+
+                if (overallResult.HasError())
+                {
+                    invalid = true;
+                    error.OverallValidationError = overallResult;
+                }
             }
-            
+
             return invalid
                 ? error
                 : null;
         }
 
-        public Task<ComplexValidationError> ValidateAsync(object value, ComplexValidationRule rule, ValidationContext context)
+        public Task<ComplexValidationError> ValidateAsync(TItem value, ComplexValidationRule rule, ValidationContext context)
         {
             throw new System.NotImplementedException();
         }

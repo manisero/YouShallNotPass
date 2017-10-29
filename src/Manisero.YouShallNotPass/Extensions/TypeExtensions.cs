@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Manisero.YouShallNotPass.Extensions
 {
@@ -17,6 +18,7 @@ namespace Manisero.YouShallNotPass.Extensions
             {
                 if (@interface.ImplementsGenericDefinition(interfaceDefinition))
                 {
+                    // TODO: type can implement the same interface multiple times
                     return @interface;
                 }
             }
@@ -26,7 +28,12 @@ namespace Manisero.YouShallNotPass.Extensions
 
         public static bool ImplementsGenericDefinition(this Type type, Type definition)
         {
-            return type.IsConstructedGenericType && type.GetGenericTypeDefinition() == definition;
+            return type.GetGenericTypeDefinition() == definition;
+        }
+
+        public static bool ImplementsGenericInterfaceDefinition(this Type type, Type interfaceDefinition)
+        {
+            return type.GetGenericInterfaceDefinitionImplementation(interfaceDefinition) != null;
         }
     }
 }
