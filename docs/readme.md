@@ -212,9 +212,10 @@ TODO: Is SimpleValidationError needed?
 TODO
 ---
 
+- RequiredValidationRule and not invoking other validations on null values
 - passing custom context to Validators
   - object or strongly typed (TContext)?
-- custom data in validation errors?
+  - rather Context type with dynamic or Dictionary<string, object> field inside
 - validation strategy configuration
   - "and / or" validation groups
   - stop on first error / stop on nth error / gather all errors

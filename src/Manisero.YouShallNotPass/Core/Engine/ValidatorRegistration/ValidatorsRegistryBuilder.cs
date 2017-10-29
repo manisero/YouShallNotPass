@@ -79,7 +79,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
                 throw new ArgumentException($"{nameof(validatorOpenGenericType)} is not a generic type definition (a.k.a. open generic type). Use standard registration method for it.", nameof(validatorOpenGenericType));
             }
 
-            // TODO: Validate that validatorOpenGenericType has only one generic type parameter (TValue)
+            // TODO: Validate that validatorOpenGenericType has only one generic type parameter
 
             var registration = new ValidatorsRegistry.GenericValidatorRegistration
             {

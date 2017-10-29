@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
@@ -34,13 +35,23 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
         [Fact]
         public void resolves_generic_validator()
         {
-            var validator = new ComplexValidator<string>();
             var registry = BuildRegistry(x => x.RegisterGenericValidatorFactory(typeof(ComplexValidator<>),
-                                                                                type => validator));
+                                                                                type => (IValidator)Activator.CreateInstance(type)));
 
             var result = registry.TryResolve<ComplexValidationRule<string>, string, ComplexValidationError>();
 
-            result.Should().Be(validator);
+            result.Should().BeOfType<ComplexValidator<string>>();
+        }
+
+        [Fact]
+        public void resolves_generic_validator_of_generic_parameter_different_than_IValidators_TValue_parameter()
+        {
+            var registry = BuildRegistry(x => x.RegisterGenericValidatorFactory(typeof(CollectionValidator<>),
+                                                                                type => (IValidator)Activator.CreateInstance(type)));
+
+            var result = registry.TryResolve<CollectionValidationRule<int>, IEnumerable<int>, CollectionValidationError>();
+
+            result.Should().BeOfType<CollectionValidator<int>>();
         }
 
         private ValidatorResolver BuildRegistry(Action<IValidatorsRegistryBuilder> registerValidators)

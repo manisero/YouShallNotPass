@@ -31,11 +31,11 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         public ValidationResult Validate(object value, IValidationRule rule)
         {
-            // TODO: Make this as fast as possible (build lambda and cache it under (valueType, ruleType) key)
-
-            var valueType = value.GetType();
+            // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
+            
             var ruleType = rule.GetType();
             var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
+            var valueType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TValueTypeParameterPosition];
             var errorType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
 
             try

@@ -15,6 +15,7 @@
 
     public static class ValidationRuleInterfaceConstants
     {
+        public const int TValueTypeParameterPosition = 0;
         public const int TErrorTypeParameterPosition = 1;
     }
 }

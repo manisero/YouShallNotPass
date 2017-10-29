@@ -61,15 +61,15 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TError : class
         {
             // TODO: Make this as fast as possible (e.g. cache factory / validatorType) (but don't cache validator returned by factory)
-            
-            if (!typeof(TRule).IsGenericType)
+
+            var ruleType = typeof(TRule);
+
+            if (!ruleType.IsGenericType)
             {
-                // TODO: Consider not calling this method in this case
                 return null;
             }
-
-            // TODO: Maybe it makes sense to assume that TRule is already a generic type definition?
-            var ruleGenericDefinition = typeof(TRule).GetGenericTypeDefinition();
+            
+            var ruleGenericDefinition = ruleType.GetGenericTypeDefinition();
 
             var registration = _validatorsRegistry.GenericValidatorFactories.GetValueOrNull(ruleGenericDefinition);
 
@@ -77,8 +77,9 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             {
                 return null;
             }
-            
-            var validatorType = registration.Value.ValidatorOpenGenericType.MakeGenericType(typeof(TValue));
+
+            var validatorTypeArgument = ruleType.GenericTypeArguments[0]; // Assumption: validator and rule have only one generic type parameter each, and it's the same parameter
+            var validatorType = registration.Value.ValidatorOpenGenericType.MakeGenericType(validatorTypeArgument);
 
             return (IValidator<TRule, TValue, TError>)registration.Value.Factory(validatorType);
         }
