@@ -9,9 +9,8 @@ namespace Manisero.YouShallNotPass.Validations
     {
         /// <summary>property name -> rule</summary>
         public IDictionary<string, IValidationRule> MemberRules { get; set; }
-
-        // TODO: Try IValidationRule<TItem>
-        public IValidationRule OverallRule { get; set; }
+        
+        public IValidationRule<TItem> OverallRule { get; set; }
     }
 
     public class ComplexValidationError

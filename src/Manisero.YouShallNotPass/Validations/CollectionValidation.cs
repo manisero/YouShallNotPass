@@ -7,8 +7,7 @@ namespace Manisero.YouShallNotPass.Validations
 {
     public class CollectionValidationRule<TItem> : IValidationRule<IEnumerable<TItem>, CollectionValidationError>
     {
-        // TODO: Try IValidationRule<TItem>
-        public IValidationRule ItemRule { get; set; }
+        public IValidationRule<TItem> ItemRule { get; set; }
     }
 
     public class CollectionValidationError

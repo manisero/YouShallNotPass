@@ -8,7 +8,7 @@
     {
     }
 
-    public interface IValidationRule<TValue, TError> : IValidationRule
+    public interface IValidationRule<TValue, TError> : IValidationRule<TValue>
         where TError : class
     {
     }
