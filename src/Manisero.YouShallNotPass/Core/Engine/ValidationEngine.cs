@@ -68,7 +68,12 @@ namespace Manisero.YouShallNotPass.Core.Engine
                 throw new InvalidOperationException($"Unable to find validator validating value '{typeof(TValue)}' against rule '{typeof(TRule)}'.");
             }
 
-            var error = validator.Validate(value, rule, null); // TODO: Pass context
+            var context = new ValidationContext // TODO: Avoid allocation for every validation
+            {
+                Engine = this
+            };
+
+            var error = validator.Validate(value, rule, context);
 
             return new ValidationResult
             {

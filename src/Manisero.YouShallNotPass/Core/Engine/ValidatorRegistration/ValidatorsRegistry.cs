@@ -52,6 +52,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TError : class
         {
             // TODO: Cache result
+
             // TODO: Get rid of loop (build appropriate dictionary up-front)
             foreach (var validatorDefinitionToFactory in _genericValidatorFactories)
             {
