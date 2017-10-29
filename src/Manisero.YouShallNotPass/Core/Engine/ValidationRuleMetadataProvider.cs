@@ -16,6 +16,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         public bool ValidatesNull(Type ruleType)
         {
+            // TODO: Benchmark caching vs non-caching approach
             return _validatesNullCache.GetOrAdd(ruleType, ValidatesNullInternal);
         }
 

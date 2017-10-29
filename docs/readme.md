@@ -212,7 +212,10 @@ TODO: Is SimpleValidationError needed?
 TODO
 ---
 
+- write more tests testing engine
+- write more tests testing individual rules
 - while caching results in classes, care for thread safety
+  - and benchmark to check it caches really help
 - passing custom context to Validators
   - object or strongly typed (TContext)?
   - rather Context type with dynamic or Dictionary<string, object> field inside
