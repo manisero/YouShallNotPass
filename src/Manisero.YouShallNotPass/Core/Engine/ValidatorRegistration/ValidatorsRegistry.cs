@@ -12,9 +12,11 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             public Func<Type, IValidator> Factory { get; set; }
         }
 
-        public IDictionary<ValidatorKey, IValidator> ValidatorInstances { get; set; }
+        /// <summary>rule type -> validator instance</summary>
+        public IDictionary<Type, IValidator> ValidatorInstances { get; set; }
 
-        public IDictionary<ValidatorKey, Func<IValidator>> ValidatorFactories { get; set; }
+        /// <summary>rule type -> validator factory</summary>
+        public IDictionary<Type, Func<IValidator>> ValidatorFactories { get; set; }
 
         /// <summary>rule type -> registration</summary>
         public IDictionary<Type, GenericValidatorRegistration> GenericValidatorOfNongenericRuleFactories { get; set; }

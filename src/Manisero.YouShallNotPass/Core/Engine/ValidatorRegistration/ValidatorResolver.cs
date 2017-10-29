@@ -33,7 +33,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var validator = _validatorsRegistry.ValidatorInstances.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
+            var validator = _validatorsRegistry.ValidatorInstances.GetValueOrDefault(typeof(TRule));
 
             if (validator == null)
             {
@@ -47,7 +47,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var validatorFactory = _validatorsRegistry.ValidatorFactories.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
+            var validatorFactory = _validatorsRegistry.ValidatorFactories.GetValueOrDefault(typeof(TRule));
 
             if (validatorFactory == null)
             {

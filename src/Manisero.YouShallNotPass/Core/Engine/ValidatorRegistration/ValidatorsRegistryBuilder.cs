@@ -37,8 +37,8 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 
     public class ValidatorsRegistryBuilder : IValidatorsRegistryBuilder
     {
-        private readonly IDictionary<ValidatorKey, IValidator> _validatorInstances = new Dictionary<ValidatorKey, IValidator>();
-        private readonly IDictionary<ValidatorKey, Func<IValidator>> _validatorFactories = new Dictionary<ValidatorKey, Func<IValidator>>();
+        private readonly IDictionary<Type, IValidator> _validatorInstances = new Dictionary<Type, IValidator>();
+        private readonly IDictionary<Type, Func<IValidator>> _validatorFactories = new Dictionary<Type, Func<IValidator>>();
         private readonly IDictionary<Type, ValidatorsRegistry.GenericValidatorRegistration> _genericValidatorOfNongenericRuleFactories = new Dictionary<Type, ValidatorsRegistry.GenericValidatorRegistration>();
         private readonly IDictionary<Type, ValidatorsRegistry.GenericValidatorRegistration> _genericValidatorOfGenericRuleFactories = new Dictionary<Type, ValidatorsRegistry.GenericValidatorRegistration>();
 
@@ -47,7 +47,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _validatorInstances.Add(ValidatorKey.Create<TValue, TRule>(), validator);
+            _validatorInstances.Add(typeof(TRule), validator);
         }
 
         public void RegisterAsyncValidator<TRule, TValue, TError>(
@@ -63,7 +63,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _validatorFactories.Add(ValidatorKey.Create<TValue, TRule>(), validatorFactory);
+            _validatorFactories.Add(typeof(TRule), validatorFactory);
         }
 
         public void RegisterAsyncValidatorFactory<TRule, TValue, TError>(
