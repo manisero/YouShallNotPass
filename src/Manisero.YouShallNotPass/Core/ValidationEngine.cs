@@ -63,7 +63,7 @@ namespace Manisero.YouShallNotPass.Core
             var validatorFactory = _validatorsRegistry[new ValidationEngineBuilder.ValidatorKey(typeof(TValue), typeof(TRule))];
             var validator = (IValidator<TValue, TRule, TError>)validatorFactory();
 
-            var error = validator.Validate(value, rule, null);
+            var error = validator.Validate(value, rule, null); // TODO: Pass context
 
             return new ValidationResult
             {

@@ -220,7 +220,7 @@ TODO
   - stop on first error / stop on nth error / gather all errors
   - conditional execution of validation rules
 - check if it will be convenient to create shared validation rules (e.g. for creation / update of same type - update would have couple additional rules)
-  - should be addressed in Validation builders design
+  - should be addressed in Rule builder's design
 
 
 
