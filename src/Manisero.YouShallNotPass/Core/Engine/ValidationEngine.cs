@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Extensions;
 
@@ -17,13 +17,13 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
     public class ValidationEngine : IValidationEngine
     {
-        private readonly IDictionary<ValidationEngineBuilder.ValidatorKey, Func<object>> _validatorsRegistry;
+        private readonly IValidatorsRegistry _validatorsRegistry;
 
         private readonly Lazy<MethodInfo> _validateGenericMethod = new Lazy<MethodInfo>(() => typeof(ValidationEngine).GetMethod(nameof(ValidateGeneric),
                                                                                                                                  BindingFlags.Instance | BindingFlags.NonPublic));
 
         public ValidationEngine(
-            IDictionary<ValidationEngineBuilder.ValidatorKey, Func<object>> validatorsRegistry)
+            IValidatorsRegistry validatorsRegistry)
         {
             _validatorsRegistry = validatorsRegistry;
         }
@@ -61,9 +61,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            var validatorFactory = _validatorsRegistry[new ValidationEngineBuilder.ValidatorKey(typeof(TValue), typeof(TRule))];
-            var validator = (IValidator<TValue, TRule, TError>)validatorFactory();
-
+            var validator = _validatorsRegistry.GetValidator<TValue, TRule, TError>();
             var error = validator.Validate(value, rule, null); // TODO: Pass context
 
             return new ValidationResult

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Core.Engine
@@ -23,44 +24,13 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
     public class ValidationEngineBuilder : IValidationEngineBuilder
     {
-        public struct ValidatorKey
-        {
-            public Type ValueType { get; }
-            public Type RuleType { get; }
-
-            public ValidatorKey(Type valueType, Type ruleType)
-            {
-                ValueType = valueType;
-                RuleType = ruleType;
-            }
-
-            public bool Equals(ValidatorKey other)
-            {
-                return ValueType == other.ValueType && RuleType == other.RuleType;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                return obj is ValidatorKey && Equals((ValidatorKey) obj);
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    return (ValueType.GetHashCode() * 397) ^ RuleType.GetHashCode();
-                }
-            }
-        }
-
-        private readonly IDictionary<ValidatorKey, Func<object>> _validatorsRegistry = new Dictionary<ValidatorKey, Func<object>>();
+        private readonly IDictionary<ValidatorKey, Func<object>> _validatorFactories = new Dictionary<ValidatorKey, Func<object>>();
 
         public IValidationEngineBuilder RegisterValidator<TValue, TRule, TError>(Func<IValidator<TValue, TRule, TError>> validatorFactory)
             where TRule : IValidationRule<TError>
             where TError : class
         {
-            _validatorsRegistry.Add(new ValidatorKey(typeof(TValue), typeof(TRule)), validatorFactory);
+            _validatorFactories.Add(ValidatorKey.Create<TValue, TRule>(), validatorFactory);
             return this;
         }
 
@@ -81,7 +51,9 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         public IValidationEngine Build()
         {
-            return new ValidationEngine(_validatorsRegistry);
+            var validatorsRegistry = new ValidatorsRegistry(_validatorFactories);
+
+            return new ValidationEngine(validatorsRegistry);
         }
     }
 
