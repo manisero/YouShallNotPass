@@ -3,7 +3,7 @@ using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class MinValidationRule<TValue>
+    public class MinValidationRule<TValue> : IValidationRule<EmptyValidationError>
         where TValue : IComparable<TValue>
     {
         public TValue MinValue { get; set; }

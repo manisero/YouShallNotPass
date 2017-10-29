@@ -15,7 +15,7 @@ namespace Manisero.YouShallNotPass
     {
         public static ComplexValidationRule Rule = new ComplexValidationRule
         {
-            MemberRules = new Dictionary<string, object>
+            MemberRules = new Dictionary<string, IValidationRule>
             {
                 [nameof(SampleType.Id)] = new MinValidationRule<int>
                 {

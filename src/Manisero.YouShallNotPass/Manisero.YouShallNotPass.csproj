@@ -45,9 +45,10 @@
     <Compile Include="ConcreteValidations\EmailValidationRule.cs" />
     <Compile Include="ConcreteValidations\MinValidationRule.cs" />
     <Compile Include="Core\ValidationEngineBuilder.cs" />
+    <Compile Include="Core\ValidationRule.cs" />
     <Compile Include="Sample.cs" />
     <Compile Include="Core\EmptyValidationError.cs" />
-    <Compile Include="Core\IValidator.cs" />
+    <Compile Include="Core\Validator.cs" />
     <Compile Include="Core\ValidationContext.cs" />
     <Compile Include="Core\ValidationEngine.cs" />
     <Compile Include="Core\ValidationResult.cs" />

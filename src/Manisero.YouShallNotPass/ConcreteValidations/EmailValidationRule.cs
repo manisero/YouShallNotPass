@@ -2,7 +2,7 @@
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class EmailValidationRule
+    public class EmailValidationRule : IValidationRule<EmptyValidationError>
     {
     }
 

@@ -5,9 +5,9 @@ using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class CollectionValidationRule
+    public class CollectionValidationRule : IValidationRule<CollectionValidationError>
     {
-        public object ItemRule { get; set; }
+        public IValidationRule ItemRule { get; set; }
     }
 
     public class CollectionValidationError

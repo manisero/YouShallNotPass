@@ -4,14 +4,12 @@ using Manisero.YouShallNotPass.Core;
 
 namespace Manisero.YouShallNotPass.ConcreteValidations
 {
-    public class ComplexValidationRule
+    public class ComplexValidationRule : IValidationRule<ComplexValidationError>
     {
-        // TODO: Try to avoid object types as rules
-
         /// <summary>property name -> rule</summary>
-        public IDictionary<string, object> MemberRules { get; set; }
+        public IDictionary<string, IValidationRule> MemberRules { get; set; }
         
-        public object OverallRule { get; set; }
+        public IValidationRule OverallRule { get; set; }
     }
 
     public class ComplexValidationError
@@ -25,8 +23,6 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
     public class ComplexValidator : IValidator<object, ComplexValidationRule, ComplexValidationError>,
                                     IAsyncValidator<object, ComplexValidationRule, ComplexValidationError>
     {
-        // TODO: Implement async
-
         // TODO: Consider avoiding boxing (object value)
         public ComplexValidationError Validate(object value, ComplexValidationRule rule, ValidationContext context)
         {
@@ -39,11 +35,12 @@ namespace Manisero.YouShallNotPass.ConcreteValidations
             foreach (var memberRule in rule.MemberRules)
             {
                 var propertyName = memberRule.Key;
+                var propertyRule = memberRule.Value;
 
                 // TODO: Cache property getter
                 var propertyValue = value.GetType().GetProperty(propertyName).GetValue(value);
-
-                var memberResult = context.Engine.Validate(propertyValue, memberRule);
+                
+                var memberResult = context.Engine.Validate(propertyValue, propertyRule);
 
                 if (memberResult.HasError())
                 {

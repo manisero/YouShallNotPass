@@ -5,20 +5,20 @@ namespace Manisero.YouShallNotPass.Core
 {
     public interface IValidationEngine
     {
-        ValidationResult Validate(object value, object rule);
+        ValidationResult Validate(object value, IValidationRule rule);
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<ValidationResult> ValidateAsync(object value, object rule);
+        Task<ValidationResult> ValidateAsync(object value, IValidationRule rule);
     }
 
     public class ValidationEngine : IValidationEngine
     {
-        public ValidationResult Validate(object value, object rule)
+        public ValidationResult Validate(object value, IValidationRule rule)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ValidationResult> ValidateAsync(object value, object rule)
+        public Task<ValidationResult> ValidateAsync(object value, IValidationRule rule)
         {
             throw new NotImplementedException();
         }

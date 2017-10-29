@@ -212,8 +212,6 @@ TODO: Is SimpleValidationError needed?
 TODO
 ---
 
-- move interfaces to "Core" folder
-- group interfaces by validation type (Simple / Complex) not by type (Validation / Validator / etc.)
 - passing custom context to Validators
   - object or strongly typed (TContext)?
 - custom data in validation errors?
@@ -221,7 +219,6 @@ TODO
   - "and / or" validation groups
   - stop on first error / stop on nth error / gather all errors
   - conditional execution of validation rules
-- async validation
 - check if it will be convenient to create shared validation rules (e.g. for creation / update of same type - update would have couple additional rules)
   - should be addressed in Validation builders design
 
