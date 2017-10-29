@@ -22,8 +22,8 @@ namespace Manisero.YouShallNotPass.Validations
         public IValidationResult OverallValidationError { get; set; }
     }
 
-    public class ComplexValidator<TItem> : IValidator<TItem, ComplexValidationRule<TItem>, ComplexValidationError>,
-                                           IAsyncValidator<TItem, ComplexValidationRule<TItem>, ComplexValidationError>
+    public class ComplexValidator<TItem> : IValidator<ComplexValidationRule<TItem>, TItem, ComplexValidationError>,
+                                           IAsyncValidator<ComplexValidationRule<TItem>, TItem, ComplexValidationError>
     {
         public ComplexValidationError Validate(TItem value, ComplexValidationRule<TItem> rule, ValidationContext context)
         {

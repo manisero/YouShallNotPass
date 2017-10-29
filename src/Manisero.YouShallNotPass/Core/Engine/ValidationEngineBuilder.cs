@@ -6,23 +6,23 @@ namespace Manisero.YouShallNotPass.Core.Engine
 {
     public interface IValidationEngineBuilder
     {
-        IValidationEngineBuilder RegisterValidator<TValue, TRule, TError>(
-            IValidator<TValue, TRule, TError> validator)
+        IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(
+            IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        IValidationEngineBuilder RegisterAsyncValidator<TValue, TRule, TError>(
-            IAsyncValidator<TValue, TRule, TError> validator)
+        IValidationEngineBuilder RegisterAsyncValidator<TRule, TValue, TError>(
+            IAsyncValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        IValidationEngineBuilder RegisterValidatorFactory<TValue, TRule, TError>(
-            Func<IValidator<TValue, TRule, TError>> validatorFactory)
+        IValidationEngineBuilder RegisterValidatorFactory<TRule, TValue, TError>(
+            Func<IValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
         
-        IValidationEngineBuilder RegisterAsyncValidatorFactory<TValue, TRule, TError>(
-            Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
+        IValidationEngineBuilder RegisterAsyncValidatorFactory<TRule, TValue, TError>(
+            Func<IAsyncValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
@@ -40,8 +40,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
             _validatorsRegistryBuilder = new ValidatorsRegistryBuilder();
         }
 
-        public IValidationEngineBuilder RegisterValidator<TValue, TRule, TError>(
-            IValidator<TValue, TRule, TError> validator)
+        public IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(
+            IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -49,8 +49,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return this;
         }
 
-        public IValidationEngineBuilder RegisterAsyncValidator<TValue, TRule, TError>(
-            IAsyncValidator<TValue, TRule, TError> validator)
+        public IValidationEngineBuilder RegisterAsyncValidator<TRule, TValue, TError>(
+            IAsyncValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -58,8 +58,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return this;
         }
 
-        public IValidationEngineBuilder RegisterValidatorFactory<TValue, TRule, TError>(
-            Func<IValidator<TValue, TRule, TError>> validatorFactory)
+        public IValidationEngineBuilder RegisterValidatorFactory<TRule, TValue, TError>(
+            Func<IValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -67,8 +67,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return this;
         }
 
-        public IValidationEngineBuilder RegisterAsyncValidatorFactory<TValue, TRule, TError>(
-            Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
+        public IValidationEngineBuilder RegisterAsyncValidatorFactory<TRule, TValue, TError>(
+            Func<IAsyncValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {

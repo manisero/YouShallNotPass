@@ -7,27 +7,27 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 {
     public interface IValidatorsRegistryBuilder
     {
-        void RegisterValidator<TValue, TRule, TError>(
-            IValidator<TValue, TRule, TError> validator)
+        void RegisterValidator<TRule, TValue, TError>(
+            IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        void RegisterAsyncValidator<TValue, TRule, TError>(
-            IAsyncValidator<TValue, TRule, TError> validator)
+        void RegisterAsyncValidator<TRule, TValue, TError>(
+            IAsyncValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        void RegisterValidatorFactory<TValue, TRule, TError>(
-            Func<IValidator<TValue, TRule, TError>> validatorFactory)
+        void RegisterValidatorFactory<TRule, TValue, TError>(
+            Func<IValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        void RegisterAsyncValidatorFactory<TValue, TRule, TError>(
-            Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
+        void RegisterAsyncValidatorFactory<TRule, TValue, TError>(
+            Func<IAsyncValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        /// <summary>Will try to register as both <see cref="IValidator{TValue,TRule,TError}"/> and <see cref="IAsyncValidator{TValue,TRule,TError}"/>.</summary>
+        /// <summary>Will try to register as both <see cref="IValidator{TRule,TValue,TError}"/> and <see cref="IAsyncValidator{TRule,TValue,TError}"/>.</summary>
         /// <param name="validatorTypeDefinition">Generic validator type definition (a.k.a. open generic type).</param>
         /// <param name="validatorFactory">concrete validator type => validator</param>
         void RegisterGenericValidatorFactory(Type validatorTypeDefinition, Func<Type, IValidator> validatorFactory);
@@ -42,32 +42,32 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         private readonly IDictionary<Type, ValidatorsRegistry.GenericValidatorRegistration> _genericValidatorOfNongenericRuleFactories = new Dictionary<Type, ValidatorsRegistry.GenericValidatorRegistration>();
         private readonly IDictionary<Type, ValidatorsRegistry.GenericValidatorRegistration> _genericValidatorOfGenericRuleFactories = new Dictionary<Type, ValidatorsRegistry.GenericValidatorRegistration>();
 
-        public void RegisterValidator<TValue, TRule, TError>(
-            IValidator<TValue, TRule, TError> validator)
+        public void RegisterValidator<TRule, TValue, TError>(
+            IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             _validatorInstances.Add(ValidatorKey.Create<TValue, TRule>(), validator);
         }
 
-        public void RegisterAsyncValidator<TValue, TRule, TError>(
-            IAsyncValidator<TValue, TRule, TError> validator)
+        public void RegisterAsyncValidator<TRule, TValue, TError>(
+            IAsyncValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             throw new NotImplementedException();
         }
 
-        public void RegisterValidatorFactory<TValue, TRule, TError>(
-            Func<IValidator<TValue, TRule, TError>> validatorFactory)
+        public void RegisterValidatorFactory<TRule, TValue, TError>(
+            Func<IValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             _validatorFactories.Add(ValidatorKey.Create<TValue, TRule>(), validatorFactory);
         }
 
-        public void RegisterAsyncValidatorFactory<TValue, TRule, TError>(
-            Func<IAsyncValidator<TValue, TRule, TError>> validatorFactory)
+        public void RegisterAsyncValidatorFactory<TRule, TValue, TError>(
+            Func<IAsyncValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {

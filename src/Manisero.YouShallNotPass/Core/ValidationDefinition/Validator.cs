@@ -7,14 +7,14 @@ namespace Manisero.YouShallNotPass.Core.ValidationDefinition
     {
     }
 
-    public interface IValidator<TValue, TRule, TError> : IValidator
+    public interface IValidator<TRule, TValue, TError> : IValidator
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
         TError Validate(TValue value, TRule rule, ValidationContext context);
     }
 
-    public interface IAsyncValidator<TValue, TRule, TError> : IValidator
+    public interface IAsyncValidator<TRule, TValue, TError> : IValidator
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
@@ -23,6 +23,6 @@ namespace Manisero.YouShallNotPass.Core.ValidationDefinition
 
     public static class ValidatorInterfaceConstants
     {
-        public const int TRuleTypeParamterPosition = 1;
+        public const int TRuleTypeParamterPosition = 0;
     }
 }

@@ -5,7 +5,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 {
     public interface IValidatorResolver
     {
-        IValidator<TValue, TRule, TError> TryResolve<TValue, TRule, TError>()
+        IValidator<TRule, TValue, TError> TryResolve<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }
@@ -19,17 +19,17 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             _validatorsRegistry = validatorsRegistry;
         }
 
-        public IValidator<TValue, TRule, TError> TryResolve<TValue, TRule, TError>()
+        public IValidator<TRule, TValue, TError> TryResolve<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            return TryGetValidatorInstance<TValue, TRule, TError>() ??
-                   TryGetValidatorFromFactory<TValue, TRule, TError>() ??
-                   TryGetGenericValidatorOfNongenericRule<TValue, TRule, TError>() ??
-                   TryGetGenericValidatorOfGenericRule<TValue, TRule, TError>();
+            return TryGetValidatorInstance<TRule, TValue, TError>() ??
+                   TryGetValidatorFromFactory<TRule, TValue, TError>() ??
+                   TryGetGenericValidatorOfNongenericRule<TRule, TValue, TError>() ??
+                   TryGetGenericValidatorOfGenericRule<TRule, TValue, TError>();
         }
 
-        private IValidator<TValue, TRule, TError> TryGetValidatorInstance<TValue, TRule, TError>()
+        private IValidator<TRule, TValue, TError> TryGetValidatorInstance<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -40,10 +40,10 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
                 return null;
             }
 
-            return (IValidator<TValue, TRule, TError>)validator;
+            return (IValidator<TRule, TValue, TError>)validator;
         }
 
-        private IValidator<TValue, TRule, TError> TryGetValidatorFromFactory<TValue, TRule, TError>()
+        private IValidator<TRule, TValue, TError> TryGetValidatorFromFactory<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -54,10 +54,10 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
                 return null;
             }
 
-            return (IValidator<TValue, TRule, TError>)validatorFactory();
+            return (IValidator<TRule, TValue, TError>)validatorFactory();
         }
 
-        private IValidator<TValue, TRule, TError> TryGetGenericValidatorOfNongenericRule<TValue, TRule, TError>()
+        private IValidator<TRule, TValue, TError> TryGetGenericValidatorOfNongenericRule<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -78,10 +78,10 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             
             var validatorType = registration.Value.ValidatorTypeDefinition.MakeGenericType(typeof(TValue));
 
-            return (IValidator<TValue, TRule, TError>)registration.Value.Factory(validatorType);
+            return (IValidator<TRule, TValue, TError>)registration.Value.Factory(validatorType);
         }
 
-        private IValidator<TValue, TRule, TError> TryGetGenericValidatorOfGenericRule<TValue, TRule, TError>()
+        private IValidator<TRule, TValue, TError> TryGetGenericValidatorOfGenericRule<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -104,7 +104,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             
             var validatorType = registration.Value.ValidatorTypeDefinition.MakeGenericType(typeof(TValue));
 
-            return (IValidator<TValue, TRule, TError>)registration.Value.Factory(validatorType);
+            return (IValidator<TRule, TValue, TError>)registration.Value.Factory(validatorType);
         }
     }
 }

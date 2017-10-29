@@ -41,7 +41,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             try
             {
                 var result = _validateGenericMethod.Value
-                                                   .MakeGenericMethod(valueType, ruleType, errorType)
+                                                   .MakeGenericMethod(ruleType, valueType, errorType)
                                                    .Invoke(this,
                                                            new object[] {value, rule});
 
@@ -59,11 +59,11 @@ namespace Manisero.YouShallNotPass.Core.Engine
             throw new NotImplementedException();
         }
 
-        private ValidationResult ValidateGeneric<TValue, TRule, TError>(TValue value, TRule rule)
+        private ValidationResult ValidateGeneric<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var validator = _validatorResolver.TryResolve<TValue, TRule, TError>();
+            var validator = _validatorResolver.TryResolve<TRule, TValue, TError>();
 
             if (validator == null)
             {

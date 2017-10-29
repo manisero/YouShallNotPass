@@ -16,7 +16,7 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
             var validator = new EmailValidator();
             var registry = BuildRegistry(x => x.RegisterValidator(validator));
 
-            var result = registry.TryResolve<string, EmailValidationRule, EmptyValidationError>();
+            var result = registry.TryResolve<EmailValidationRule, string, EmptyValidationError>();
 
             result.Should().Be(validator);
         }
@@ -27,7 +27,7 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
             var validator = new EmailValidator();
             var registry = BuildRegistry(x => x.RegisterValidatorFactory(() => validator));
 
-            var result = registry.TryResolve<string, EmailValidationRule, EmptyValidationError>();
+            var result = registry.TryResolve<EmailValidationRule, string, EmptyValidationError>();
 
             result.Should().Be(validator);
         }
@@ -39,7 +39,7 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
             var registry = BuildRegistry(x => x.RegisterGenericValidatorFactory(typeof(ComplexValidator<>),
                                                                                 type => validator));
 
-            var result = registry.TryResolve<string, ComplexValidationRule<string>, ComplexValidationError>();
+            var result = registry.TryResolve<ComplexValidationRule<string>, string, ComplexValidationError>();
 
             result.Should().Be(validator);
         }
@@ -51,7 +51,7 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
             var registry = BuildRegistry(x => x.RegisterGenericValidatorFactory(typeof(MinValidator<>),
                                                                                 type => validator));
 
-            var result = registry.TryResolve<int, MinValidationRule<int>, EmptyValidationError>();
+            var result = registry.TryResolve<MinValidationRule<int>, int, EmptyValidationError>();
 
             result.Should().Be(validator);
         }
@@ -64,7 +64,7 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
 
             // TODO: Currently validator's key is (TValue, TRule). Consider reducing it to (TRule)
             throw new NotImplementedException("'IEnumerable<int> below should be replaced with List<int>.");
-            var result = registry.TryResolve<IEnumerable<int>, CollectionValidationRule<int>, CollectionValidationError>();
+            var result = registry.TryResolve<CollectionValidationRule<int>, IEnumerable<int>, CollectionValidationError>();
 
             result.Should().Be(validator);
         }

@@ -10,7 +10,7 @@ namespace Manisero.YouShallNotPass.Validations
         public TValue MinValue { get; set; }
     }
 
-    public class MinValidator<TValue> : IValidator<TValue, MinValidationRule<TValue>, EmptyValidationError>
+    public class MinValidator<TValue> : IValidator<MinValidationRule<TValue>, TValue, EmptyValidationError>
         where TValue : IComparable<TValue>
     {
         public EmptyValidationError Validate(TValue value, MinValidationRule<TValue> rule, ValidationContext context)

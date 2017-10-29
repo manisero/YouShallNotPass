@@ -17,8 +17,8 @@ namespace Manisero.YouShallNotPass.Validations
         public IDictionary<int, IValidationResult> ItemValidationResults { get; set; }
     }
 
-    public class CollectionValidator<TItem> : IValidator<IEnumerable<TItem>, CollectionValidationRule<TItem>, CollectionValidationError>,
-                                              IAsyncValidator<IEnumerable<TItem>, CollectionValidationRule<TItem>, CollectionValidationError>
+    public class CollectionValidator<TItem> : IValidator<CollectionValidationRule<TItem>, IEnumerable<TItem>, CollectionValidationError>,
+                                              IAsyncValidator<CollectionValidationRule<TItem>, IEnumerable<TItem>, CollectionValidationError>
     {
         public CollectionValidationError Validate(
             IEnumerable<TItem> value,
