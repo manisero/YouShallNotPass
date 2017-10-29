@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
@@ -51,6 +52,18 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
                                                                                 type => validator));
 
             var result = registry.TryResolve<int, MinValidationRule<int>, EmptyValidationError>();
+
+            result.Should().Be(validator);
+        }
+
+        [Fact]
+        public void resolves_validator_for_value_of_type_deriving_from_validators_TValue()
+        {
+            var validator = new CollectionValidator();
+            var registry = BuildRegistry(x => x.RegisterValidator(validator));
+
+            // TODO: Currently validator's key is (TValue, TRule). Consired reducing it to (TRule)
+            var result = registry.TryResolve<List<int>, CollectionValidationRule, CollectionValidationError>();
 
             result.Should().Be(validator);
         }
