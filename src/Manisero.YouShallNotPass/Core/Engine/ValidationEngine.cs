@@ -35,8 +35,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             var valueType = value.GetType();
             var ruleType = rule.GetType();
-            var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<>));
-            var errorType = iRuleImplementation.GetGenericArguments()[0];
+            var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
+            var errorType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TErrorTypeParamterPosition];
 
             try
             {
@@ -60,7 +60,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         }
 
         private ValidationResult ValidateGeneric<TValue, TRule, TError>(TValue value, TRule rule)
-            where TRule : IValidationRule<TError>
+            where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             var validator = _validatorResolver.TryResolve<TValue, TRule, TError>();

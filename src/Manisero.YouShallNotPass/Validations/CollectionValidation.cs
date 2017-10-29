@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    public class CollectionValidationRule : IValidationRule<CollectionValidationError>
+    public class CollectionValidationRule<TItem> : IValidationRule<IEnumerable<TItem>, CollectionValidationError>
     {
+        // TODO: Try IValidationRule<TItem>
         public IValidationRule ItemRule { get; set; }
     }
 
@@ -17,10 +17,13 @@ namespace Manisero.YouShallNotPass.Validations
         public IDictionary<int, IValidationResult> ItemValidationResults { get; set; }
     }
 
-    public class CollectionValidator : IValidator<IEnumerable, CollectionValidationRule, CollectionValidationError>,
-                                       IAsyncValidator<IEnumerable, CollectionValidationRule, CollectionValidationError>
+    public class CollectionValidator<TItem> : IValidator<IEnumerable<TItem>, CollectionValidationRule<TItem>, CollectionValidationError>,
+                                              IAsyncValidator<IEnumerable<TItem>, CollectionValidationRule<TItem>, CollectionValidationError>
     {
-        public CollectionValidationError Validate(IEnumerable value, CollectionValidationRule rule, ValidationContext context)
+        public CollectionValidationError Validate(
+            IEnumerable<TItem> value,
+            CollectionValidationRule<TItem> rule,
+            ValidationContext context)
         {
             var invalid = false;
             var error = new CollectionValidationError // TODO: Avoid this up-front allocation
@@ -48,7 +51,10 @@ namespace Manisero.YouShallNotPass.Validations
                 : null;
         }
 
-        public Task<CollectionValidationError> ValidateAsync(IEnumerable value, CollectionValidationRule rule, ValidationContext context)
+        public Task<CollectionValidationError> ValidateAsync(
+            IEnumerable<TItem> value,
+            CollectionValidationRule<TItem> rule,
+            ValidationContext context)
         {
             throw new System.NotImplementedException();
         }

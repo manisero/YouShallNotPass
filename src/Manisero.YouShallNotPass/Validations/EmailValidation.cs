@@ -3,7 +3,7 @@ using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    public class EmailValidationRule : IValidationRule<EmptyValidationError>
+    public class EmailValidationRule : IValidationRule<string, EmptyValidationError>
     {
     }
 

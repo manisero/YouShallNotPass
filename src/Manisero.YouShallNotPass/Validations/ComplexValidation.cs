@@ -5,11 +5,12 @@ using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    public class ComplexValidationRule : IValidationRule<ComplexValidationError>
+    public class ComplexValidationRule<TItem> : IValidationRule<TItem, ComplexValidationError>
     {
         /// <summary>property name -> rule</summary>
         public IDictionary<string, IValidationRule> MemberRules { get; set; }
-        
+
+        // TODO: Try IValidationRule<TItem>
         public IValidationRule OverallRule { get; set; }
     }
 
@@ -17,14 +18,14 @@ namespace Manisero.YouShallNotPass.Validations
     {
         /// <summary>property name (only invalid properties) -> validation result</summary>
         public IDictionary<string, IValidationResult> MemberValidationErrors { get; set; }
-
+        
         public IValidationResult OverallValidationError { get; set; }
     }
 
-    public class ComplexValidator<TItem> : IValidator<TItem, ComplexValidationRule, ComplexValidationError>,
-                                           IAsyncValidator<TItem, ComplexValidationRule, ComplexValidationError>
+    public class ComplexValidator<TItem> : IValidator<TItem, ComplexValidationRule<TItem>, ComplexValidationError>,
+                                           IAsyncValidator<TItem, ComplexValidationRule<TItem>, ComplexValidationError>
     {
-        public ComplexValidationError Validate(TItem value, ComplexValidationRule rule, ValidationContext context)
+        public ComplexValidationError Validate(TItem value, ComplexValidationRule<TItem> rule, ValidationContext context)
         {
             var invalid = false;
             var error = new ComplexValidationError // TODO: Avoid this up-front allocation
@@ -65,7 +66,7 @@ namespace Manisero.YouShallNotPass.Validations
                 : null;
         }
 
-        public Task<ComplexValidationError> ValidateAsync(TItem value, ComplexValidationRule rule, ValidationContext context)
+        public Task<ComplexValidationError> ValidateAsync(TItem value, ComplexValidationRule<TItem> rule, ValidationContext context)
         {
             throw new System.NotImplementedException();
         }

@@ -16,7 +16,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
             public ICollection<int> ChildIds { get; set; }
         }
 
-        private static readonly ComplexValidationRule Rule = new ComplexValidationRule
+        private static readonly ComplexValidationRule<Item> Rule = new ComplexValidationRule<Item>
         {
             MemberRules = new Dictionary<string, IValidationRule>
             {
@@ -25,7 +25,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
                     MinValue = 1
                 },
                 [nameof(Item.Email)] = new EmailValidationRule(),
-                [nameof(Item.ChildIds)] = new CollectionValidationRule
+                [nameof(Item.ChildIds)] = new CollectionValidationRule<int>
                 {
                     ItemRule = new MinValidationRule<int>
                     {
@@ -47,7 +47,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         {
             var builder = new ValidationEngineBuilder();
             builder.RegisterGenericValidator(typeof(ComplexValidator<>), x => (IValidator)Activator.CreateInstance(x));
-            builder.RegisterValidator(new CollectionValidator());
+            builder.RegisterGenericValidator(typeof(CollectionValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterGenericValidator(typeof(MinValidator<>), x => (IValidator)Activator.CreateInstance(x));
             builder.RegisterValidator(new EmailValidator());
 

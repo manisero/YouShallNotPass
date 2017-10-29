@@ -4,7 +4,7 @@ using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    public class MinValidationRule<TValue> : IValidationRule<EmptyValidationError>
+    public class MinValidationRule<TValue> : IValidationRule<TValue, EmptyValidationError>
         where TValue : IComparable<TValue>
     {
         public TValue MinValue { get; set; }

@@ -39,7 +39,7 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
             var registry = BuildRegistry(x => x.RegisterGenericValidatorFactory(typeof(ComplexValidator<>),
                                                                                 type => validator));
 
-            var result = registry.TryResolve<string, ComplexValidationRule, ComplexValidationError>();
+            var result = registry.TryResolve<string, ComplexValidationRule<string>, ComplexValidationError>();
 
             result.Should().Be(validator);
         }
@@ -59,11 +59,12 @@ namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
         [Fact]
         public void resolves_validator_for_value_of_type_deriving_from_validators_TValue()
         {
-            var validator = new CollectionValidator();
+            var validator = new CollectionValidator<int>();
             var registry = BuildRegistry(x => x.RegisterValidator(validator));
 
-            // TODO: Currently validator's key is (TValue, TRule). Consired reducing it to (TRule)
-            var result = registry.TryResolve<List<int>, CollectionValidationRule, CollectionValidationError>();
+            // TODO: Currently validator's key is (TValue, TRule). Consider reducing it to (TRule)
+            throw new NotImplementedException("'IEnumerable<int> below should be replaced with List<int>.");
+            var result = registry.TryResolve<IEnumerable<int>, CollectionValidationRule<int>, CollectionValidationError>();
 
             result.Should().Be(validator);
         }

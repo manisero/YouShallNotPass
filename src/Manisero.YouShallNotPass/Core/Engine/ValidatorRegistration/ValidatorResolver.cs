@@ -6,7 +6,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
     public interface IValidatorResolver
     {
         IValidator<TValue, TRule, TError> TryResolve<TValue, TRule, TError>()
-            where TRule : IValidationRule<TError>
+            where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }
 
@@ -20,7 +20,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         }
 
         public IValidator<TValue, TRule, TError> TryResolve<TValue, TRule, TError>()
-            where TRule : IValidationRule<TError>
+            where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             return TryGetValidatorInstance<TValue, TRule, TError>() ??
@@ -30,7 +30,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         }
 
         private IValidator<TValue, TRule, TError> TryGetValidatorInstance<TValue, TRule, TError>()
-            where TRule : IValidationRule<TError>
+            where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             var validator = _validatorsRegistry.ValidatorInstances.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
@@ -44,7 +44,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         }
 
         private IValidator<TValue, TRule, TError> TryGetValidatorFromFactory<TValue, TRule, TError>()
-            where TRule : IValidationRule<TError>
+            where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             var validatorFactory = _validatorsRegistry.ValidatorFactories.GetValueOrDefault(ValidatorKey.Create<TValue, TRule>());
@@ -58,7 +58,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         }
 
         private IValidator<TValue, TRule, TError> TryGetGenericValidatorOfNongenericRule<TValue, TRule, TError>()
-            where TRule : IValidationRule<TError>
+            where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             // TODO: Make this as fast as possible (e.g. cache factory / validatorType) (but don't cache validator returned by factory)
@@ -82,7 +82,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         }
 
         private IValidator<TValue, TRule, TError> TryGetGenericValidatorOfGenericRule<TValue, TRule, TError>()
-            where TRule : IValidationRule<TError>
+            where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             // TODO: Make this as fast as possible (e.g. cache factory / validatorType) (but don't cache validator returned by factory)

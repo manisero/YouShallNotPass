@@ -15,7 +15,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
             public string Email { get; set; }
         }
 
-        private static readonly ComplexValidationRule Rule = new ComplexValidationRule
+        private static readonly ComplexValidationRule<Item> Rule = new ComplexValidationRule<Item>
         {
             MemberRules = new Dictionary<string, IValidationRule>
             {
