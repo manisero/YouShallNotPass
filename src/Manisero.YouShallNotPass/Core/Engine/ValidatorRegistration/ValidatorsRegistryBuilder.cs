@@ -39,8 +39,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
     {
         private readonly IDictionary<Type, IValidator> _validatorInstances = new Dictionary<Type, IValidator>();
         private readonly IDictionary<Type, Func<IValidator>> _validatorFactories = new Dictionary<Type, Func<IValidator>>();
-        private readonly IDictionary<Type, ValidatorsRegistry.GenericValidatorRegistration> _genericValidatorOfNongenericRuleFactories = new Dictionary<Type, ValidatorsRegistry.GenericValidatorRegistration>();
-        private readonly IDictionary<Type, ValidatorsRegistry.GenericValidatorRegistration> _genericValidatorOfGenericRuleFactories = new Dictionary<Type, ValidatorsRegistry.GenericValidatorRegistration>();
+        private readonly IDictionary<Type, ValidatorsRegistry.GenericValidatorRegistration> _genericValidatorFactories = new Dictionary<Type, ValidatorsRegistry.GenericValidatorRegistration>();
 
         public void RegisterValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
@@ -91,19 +90,14 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 
             var iValidatorImplementation = validatorTypeDefinition.GetGenericInterfaceDefinitionImplementation(typeof(IValidator<,,>));
 
+            // TODO: Consider getting IValidator generic type definition here
+
             if (iValidatorImplementation != null)
             {
                 var ruleType = iValidatorImplementation.GenericTypeArguments[ValidatorInterfaceConstants.TRuleTypeParamterPosition];
+                var ruleGenericDefinition = ruleType.GetGenericTypeDefinition();
 
-                if (!ruleType.IsGenericType)
-                {
-                    _genericValidatorOfNongenericRuleFactories.Add(ruleType, registration);
-                }
-                else
-                {
-                    var ruleGenericDefinition = ruleType.GetGenericTypeDefinition();
-                    _genericValidatorOfGenericRuleFactories.Add(ruleGenericDefinition, registration);
-                }
+                _genericValidatorFactories.Add(ruleGenericDefinition, registration);
             }
 
             // TODO: Also, if validatorTypeDefinition implements IAsyncValidator, register as IAsyncValidator
@@ -116,8 +110,7 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             {
                 ValidatorInstances = _validatorInstances,
                 ValidatorFactories = _validatorFactories,
-                GenericValidatorOfNongenericRuleFactories = _genericValidatorOfNongenericRuleFactories,
-                GenericValidatorOfGenericRuleFactories = _genericValidatorOfGenericRuleFactories
+                GenericValidatorFactories = _genericValidatorFactories
             };
         }
     }

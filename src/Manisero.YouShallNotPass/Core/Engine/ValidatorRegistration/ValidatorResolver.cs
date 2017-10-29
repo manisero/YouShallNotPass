@@ -25,7 +25,6 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
         {
             return TryGetValidatorInstance<TRule, TValue, TError>() ??
                    TryGetValidatorFromFactory<TRule, TValue, TError>() ??
-                   TryGetGenericValidatorOfNongenericRule<TRule, TValue, TError>() ??
                    TryGetGenericValidatorOfGenericRule<TRule, TValue, TError>();
         }
 
@@ -57,45 +56,22 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
             return (IValidator<TRule, TValue, TError>)validatorFactory();
         }
 
-        private IValidator<TRule, TValue, TError> TryGetGenericValidatorOfNongenericRule<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            // TODO: Make this as fast as possible (e.g. cache factory / validatorType) (but don't cache validator returned by factory)
-
-            if (typeof(TRule).IsGenericType)
-            {
-                // TODO: Consider not calling this method in this case
-                return null;
-            }
-
-            var registration = _validatorsRegistry.GenericValidatorOfNongenericRuleFactories.GetValueOrNull(typeof(TRule));
-
-            if (registration == null)
-            {
-                return null;
-            }
-            
-            var validatorType = registration.Value.ValidatorTypeDefinition.MakeGenericType(typeof(TValue));
-
-            return (IValidator<TRule, TValue, TError>)registration.Value.Factory(validatorType);
-        }
-
         private IValidator<TRule, TValue, TError> TryGetGenericValidatorOfGenericRule<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             // TODO: Make this as fast as possible (e.g. cache factory / validatorType) (but don't cache validator returned by factory)
-
+            
             if (!typeof(TRule).IsGenericType)
             {
                 // TODO: Consider not calling this method in this case
                 return null;
             }
 
+            // TODO: Maybe it makes sense to assume that TRule is already a generic type definition?
             var ruleGenericDefinition = typeof(TRule).GetGenericTypeDefinition();
 
-            var registration = _validatorsRegistry.GenericValidatorOfGenericRuleFactories.GetValueOrNull(ruleGenericDefinition);
+            var registration = _validatorsRegistry.GenericValidatorFactories.GetValueOrNull(ruleGenericDefinition);
 
             if (registration == null)
             {
