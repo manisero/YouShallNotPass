@@ -27,7 +27,7 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        IValidationEngineBuilder RegisterGenericValidator(
+        IValidationEngineBuilder RegisterGenericValidatorFactory(
             Type validatorOpenGenericType,
             Func<Type, IValidator> validatorFactory);
 
@@ -79,7 +79,7 @@ namespace Manisero.YouShallNotPass
             return this;
         }
         
-        public IValidationEngineBuilder RegisterGenericValidator(
+        public IValidationEngineBuilder RegisterGenericValidatorFactory(
             Type validatorOpenGenericType,
             Func<Type, IValidator> validatorFactory)
         {
@@ -95,6 +95,18 @@ namespace Manisero.YouShallNotPass
             var validatorResolver = new ValidatorResolver(validatorsRegistry);
             
             return new ValidationEngine(ruleMetadataProvider, validatorResolver);
+        }
+    }
+
+    public static class ValidationEngineBuilderExtensions
+    {
+        public static IValidationEngineBuilder RegisterGenericValidator(
+            this IValidationEngineBuilder builder,
+            Type validatorOpenGenericType)
+        {
+            // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
+            builder.RegisterGenericValidatorFactory(validatorOpenGenericType, type => (IValidator)Activator.CreateInstance(type));
+            return builder;
         }
     }
 }

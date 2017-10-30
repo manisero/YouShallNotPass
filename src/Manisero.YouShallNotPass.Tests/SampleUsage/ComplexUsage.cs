@@ -81,10 +81,10 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         private IValidationEngine BuildEngine()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterGenericValidator(typeof(RequiredValidator<>), x => (IValidator)Activator.CreateInstance(x));
-            builder.RegisterGenericValidator(typeof(ComplexValidator<>), x => (IValidator)Activator.CreateInstance(x));
-            builder.RegisterGenericValidator(typeof(CollectionValidator<>), x => (IValidator)Activator.CreateInstance(x));
-            builder.RegisterGenericValidator(typeof(MinValidator<>), x => (IValidator)Activator.CreateInstance(x));
+            builder.RegisterGenericValidator(typeof(RequiredValidator<>));
+            builder.RegisterGenericValidator(typeof(ComplexValidator<>));
+            builder.RegisterGenericValidator(typeof(CollectionValidator<>));
+            builder.RegisterGenericValidator(typeof(MinValidator<>));
             builder.RegisterValidator(new EmailValidator());
 
             return builder.Build();
