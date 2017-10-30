@@ -8,14 +8,6 @@ using Manisero.YouShallNotPass.Extensions;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
-    public interface IValidationEngine
-    {
-        ValidationResult Validate(object value, IValidationRule rule);
-
-        /// <summary>Will use sync validator if async one not found.</summary>
-        Task<ValidationResult> ValidateAsync(object value, IValidationRule rule);
-    }
-
     public class ValidationEngine : IValidationEngine
     {
         private readonly IValidationRuleMetadataProvider _validationRuleMetadataProvider;

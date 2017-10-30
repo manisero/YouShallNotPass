@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IValidationEngine.cs" />
     <Compile Include="Core\Engine\ValidationRuleMetadataProvider.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorsRegistry.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorsRegistryBuilder.cs" />
@@ -50,11 +51,11 @@
     <Compile Include="Validations\CollectionValidation.cs" />
     <Compile Include="Validations\EmailValidation.cs" />
     <Compile Include="Validations\MinValidation.cs" />
-    <Compile Include="Core\Engine\ValidationEngineBuilder.cs" />
-    <Compile Include="Core\ValidationDefinition\ValidationRule.cs" />
+    <Compile Include="ValidationEngineBuilder.cs" />
+    <Compile Include="ValidationRule.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Core\ValidationDefinition\EmptyValidationError.cs" />
-    <Compile Include="Core\ValidationDefinition\Validator.cs" />
+    <Compile Include="Validator.cs" />
     <Compile Include="Core\Engine\ValidationContext.cs" />
     <Compile Include="Core\Engine\ValidationEngine.cs" />
     <Compile Include="Core\Engine\ValidationResult.cs" />

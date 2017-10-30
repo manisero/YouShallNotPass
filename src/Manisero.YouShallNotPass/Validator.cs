@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Manisero.YouShallNotPass.Core.Engine;
 
-namespace Manisero.YouShallNotPass.Core.ValidationDefinition
+namespace Manisero.YouShallNotPass
 {
     public interface IValidator
     {
@@ -24,5 +24,7 @@ namespace Manisero.YouShallNotPass.Core.ValidationDefinition
     public static class ValidatorInterfaceConstants
     {
         public const int TRuleTypeParameterPosition = 0;
+        public const int TValueTypeParameterPosition = 1;
+        public const int TErrorTypeParameterPosition = 2;
     }
 }
