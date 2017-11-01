@@ -1,7 +1,6 @@
 ﻿using System;
 using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass
 {

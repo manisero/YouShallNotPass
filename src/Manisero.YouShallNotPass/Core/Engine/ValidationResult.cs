@@ -1,6 +1,4 @@
-﻿using Manisero.YouShallNotPass.Core.ValidationDefinition;
-
-namespace Manisero.YouShallNotPass.Core.Engine
+﻿namespace Manisero.YouShallNotPass.Core.Engine
 {
     public interface IValidationResult
     {
