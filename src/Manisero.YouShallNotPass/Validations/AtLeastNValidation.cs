@@ -13,6 +13,7 @@ namespace Manisero.YouShallNotPass.Validations
 
     public class AtLeastNValidationError
     {
+        /// <summary>rule index (only violated rules) -> validation result</summary>
         public IDictionary<int, ValidationResult> Violations { get; set; }
     }
 
