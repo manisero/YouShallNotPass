@@ -29,7 +29,7 @@ namespace Manisero.YouShallNotPass.Validations
                 ItemValidationResults = new Dictionary<int, IValidationResult>()
             };
 
-            var index = 0;
+            var itemIndex = 0;
 
             foreach (var item in value)
             {
@@ -38,10 +38,10 @@ namespace Manisero.YouShallNotPass.Validations
                 if (itemResult.HasError())
                 {
                     invalid = true;
-                    error.ItemValidationResults.Add(index, itemResult);
+                    error.ItemValidationResults.Add(itemIndex, itemResult);
                 }
 
-                index++;
+                itemIndex++;
             }
 
             return invalid

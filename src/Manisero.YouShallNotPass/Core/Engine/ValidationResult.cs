@@ -6,6 +6,7 @@
         object Error { get; }
     }
 
+    // TODO: Consider converting to struct
     public class ValidationResult : IValidationResult
     {
         public IValidationRule Rule { get; set; }
