@@ -34,7 +34,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
                         MinValue = 1
                     }
                 },
-                [nameof(Item.Age)] = new RequiredValidationRule<int?>()
+                [nameof(Item.Age)] = new NotNullValidationRule<int?>()
             }
         };
 
@@ -79,7 +79,7 @@ namespace Manisero.YouShallNotPass.Tests.SampleUsage
         private IValidationEngine BuildEngine()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterGenericValidator(typeof(RequiredValidator<>));
+            builder.RegisterGenericValidator(typeof(NotNullValidator<>));
             builder.RegisterGenericValidator(typeof(ComplexValidator<>));
             builder.RegisterGenericValidator(typeof(CollectionValidator<>));
             builder.RegisterGenericValidator(typeof(MinValidator<>));

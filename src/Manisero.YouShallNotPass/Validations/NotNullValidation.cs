@@ -4,13 +4,13 @@ using Manisero.YouShallNotPass.Core.ValidationDefinition;
 namespace Manisero.YouShallNotPass.Validations
 {
     [ValidatesNull]
-    public class RequiredValidationRule<TValue> : IValidationRule<TValue, EmptyValidationError>
+    public class NotNullValidationRule<TValue> : IValidationRule<TValue, EmptyValidationError>
     {
     }
 
-    public class RequiredValidator<TValue> : IValidator<RequiredValidationRule<TValue>, TValue, EmptyValidationError>
+    public class NotNullValidator<TValue> : IValidator<NotNullValidationRule<TValue>, TValue, EmptyValidationError>
     {
-        public EmptyValidationError Validate(TValue value, RequiredValidationRule<TValue> rule, ValidationContext context)
+        public EmptyValidationError Validate(TValue value, NotNullValidationRule<TValue> rule, ValidationContext context)
         {
             return value == null
                 ? EmptyValidationError.Some
