@@ -1,0 +1,67 @@
+﻿using System.Collections.Generic;
+using FluentAssertions;
+using Manisero.YouShallNotPass.Core.Engine;
+using Manisero.YouShallNotPass.Validations;
+using Xunit;
+
+namespace Manisero.YouShallNotPass.Samples.Custom_validations
+{
+    public class Macro_rules___composition
+    {
+        // Password validation
+
+        public class PasswordValidationRule : IValidationRule<string, AtLeastNValidationError>
+        {
+            private static readonly AtLeastNValidationRule<string> _innerRule = new AtLeastNValidationRule<string>
+            {
+                Rules = new List<IValidationRule<string>>
+                {
+                    new ContainsDigitValidationRule(),
+                    new ContainsLowerLetterValidationRule(),
+                    new ContainsUpperLetterValidationRule()
+                },
+                N = 2
+            };
+
+            public AtLeastNValidationRule<string> InnerRule => _innerRule;
+        }
+
+        public class PasswordValidator : IValidator<PasswordValidationRule, string, AtLeastNValidationError>
+        {
+            public AtLeastNValidationError Validate(string value, PasswordValidationRule rule, ValidationContext context)
+            {
+                // TODO: Make ValidationResult generic (<TRule, TError>) and Engine.Validate method generic, so that casting is not needed below
+
+                var innerValidationResult = context.Engine.Validate(value, rule.InnerRule);
+
+                return innerValidationResult.HasError()
+                    ? (AtLeastNValidationError)innerValidationResult.Error
+                    : null;
+            }
+        }
+
+        [Theory]
+        [InlineData("1aA", true)]
+        [InlineData("1aa", true)]
+        [InlineData("aaA", true)]
+        [InlineData("aaa", false)]
+        [InlineData("111", false)]
+        [InlineData("...", false)]
+        public void sample(string password, bool isValid)
+        {
+            var builder = new ValidationEngineBuilder();
+            builder.RegisterValidator(new ContainsDigitValidator());
+            builder.RegisterValidator(new ContainsLowerLetterValidator());
+            builder.RegisterValidator(new ContainsUpperLetterValidator());
+            builder.RegisterValidator(new PasswordValidator());
+
+            var engine = builder.Build();
+
+            var rule = new PasswordValidationRule();
+
+            var validResult = engine.Validate(password, rule);
+
+            validResult.HasError().Should().Be(!isValid);
+        }
+    }
+}
