@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentAssertions;
 using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.Tests.SampleUsage
+namespace Manisero.YouShallNotPass.Samples
 {
-    public class ComplexUsage
+    public class Complex_object_validation
     {
         private class Item
         {

@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{089E6862-E3C7-4FE3-ABFB-0D64D713F80B}</ProjectGuid>
+    <ProjectGuid>{459ED9CD-A2D2-486D-8A77-C97496D79461}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Manisero.YouShallNotPass.Tests</RootNamespace>
-    <AssemblyName>Manisero.YouShallNotPass.Tests</AssemblyName>
+    <RootNamespace>Manisero.YouShallNotPass.Samples</RootNamespace>
+    <AssemblyName>Manisero.YouShallNotPass.Samples</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -61,10 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\ValidatorResolutionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validations\MinValidationTests.cs" />
-    <Compile Include="Validations\ValidationsTestsHelper.cs" />
+    <Compile Include="Complex_object_validation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -78,6 +76,7 @@
       <Name>Manisero.YouShallNotPass</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
