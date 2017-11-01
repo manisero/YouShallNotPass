@@ -28,7 +28,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
             }
         }
 
-        [Theory]
+        [Theory(Skip = "This scenario is currently not supported.")]
         [InlineData("1aA", true)]
         [InlineData("1aa", true)]
         [InlineData("aaA", true)]

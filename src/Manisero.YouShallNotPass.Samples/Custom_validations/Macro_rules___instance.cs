@@ -18,7 +18,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
             },
             N = 2
         };
-
+        
         [Theory]
         [InlineData("1aA", true)]
         [InlineData("1aa", true)]
