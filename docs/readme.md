@@ -22,17 +22,4 @@ TODO
 - validation rules (and errors) should be POCOs without Action / Func properties
   - but this may be too limiting
   - consider some conversion of rule (or error) to "Descriptor" (which could be serialized to json)
-- composing rules of other rules
-  - e.g. Password - at least 3 of:
-    - one number
-    - one big letter
-    - one small letter
-    - one special char
-  - should go for inheritance?
-    - no need to write validator (AtLeastN validator would work on PasswordRule)
-    - but to extend behavior, PasswordValidator should be created
-  - should go for composition?
-    - validator should always be created
-    - but it would be easy to extend behavior / compose validators
-  - or such rules should be just instances (fixed instance of AtLeastN rule) instead of new classses?
-    - let's allow both
+- make ValidationResult generic (<TRule, TError>) and Engine.Validate method generic
