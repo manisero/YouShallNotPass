@@ -41,7 +41,7 @@ namespace Manisero.YouShallNotPass.Samples
         [Fact]
         public void valid_item___no_error()
         {
-            var engine = BuildEngine();
+            var engine = new ValidationEngineBuilder().Build();
             
             var item = new Item
             {
@@ -60,7 +60,7 @@ namespace Manisero.YouShallNotPass.Samples
         [Fact]
         public void invalid_item___error()
         {
-            var engine = BuildEngine();
+            var engine = new ValidationEngineBuilder().Build();
 
             var item = new Item
             {
@@ -74,18 +74,6 @@ namespace Manisero.YouShallNotPass.Samples
             var result = engine.Validate(item, Rule);
 
             result.HasError().Should().BeTrue();
-        }
-
-        private IValidationEngine BuildEngine()
-        {
-            var builder = new ValidationEngineBuilder();
-            builder.RegisterGenericValidator(typeof(NotNullValidator<>));
-            builder.RegisterGenericValidator(typeof(ComplexValidator<>));
-            builder.RegisterGenericValidator(typeof(CollectionValidator<>));
-            builder.RegisterGenericValidator(typeof(MinValidator<>));
-            builder.RegisterValidator(new EmailValidator());
-
-            return builder.Build();
         }
     }
 }

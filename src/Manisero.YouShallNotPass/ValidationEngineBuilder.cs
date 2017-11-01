@@ -1,6 +1,7 @@
 ﻿using System;
 using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass
 {
@@ -30,7 +31,7 @@ namespace Manisero.YouShallNotPass
             Type validatorOpenGenericType,
             Func<Type, IValidator> validatorFactory);
 
-        IValidationEngine Build();
+        IValidationEngine Build(bool registerDefaultValidators = true);
     }
 
     public class ValidationEngineBuilder : IValidationEngineBuilder
@@ -86,14 +87,29 @@ namespace Manisero.YouShallNotPass
             return this;
         }
 
-        public IValidationEngine Build()
+        public IValidationEngine Build(bool registerDefaultValidators = true)
         {
+            if (registerDefaultValidators)
+            {
+                RegisterDefaultValidators();
+            }
+
             var ruleMetadataProvider = new ValidationRuleMetadataProvider();
 
             var validatorsRegistry = _validatorsRegistryBuilder.Build();
             var validatorResolver = new ValidatorResolver(validatorsRegistry);
             
             return new ValidationEngine(ruleMetadataProvider, validatorResolver);
+        }
+
+        private void RegisterDefaultValidators()
+        {
+            this.RegisterGenericValidator(typeof(AtLeastNValidator<>));
+            this.RegisterGenericValidator(typeof(CollectionValidator<>));
+            this.RegisterGenericValidator(typeof(ComplexValidator<>));
+            RegisterValidator(new EmailValidator());
+            this.RegisterGenericValidator(typeof(MinValidator<>));
+            this.RegisterGenericValidator(typeof(NotNullValidator<>));
         }
     }
 

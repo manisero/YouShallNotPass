@@ -6,7 +6,7 @@ using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.Tests.Core.ValidatorRegistration
+namespace Manisero.YouShallNotPass.Tests.Core
 {
     public class ValidatorResolutionTests
     {
