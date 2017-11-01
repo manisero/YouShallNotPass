@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\GetCustomAttribute_vs_cache.cs" />
+    <Compile Include="Core\LightLazy_vs_up_front_allocation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
