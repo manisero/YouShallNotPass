@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Manisero.YouShallNotPass.Core.Engine;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -11,6 +13,11 @@ namespace Manisero.YouShallNotPass.Validations
 
     public class CollectionValidationError
     {
+        public static readonly Func<CollectionValidationError> Constructor = () => new CollectionValidationError
+        {
+            ItemValidationResults = new Dictionary<int, IValidationResult>()
+        };
+
         /// <summary>item index (only invalid items) -> validation result</summary>
         public IDictionary<int, IValidationResult> ItemValidationResults { get; set; }
     }
@@ -23,12 +30,7 @@ namespace Manisero.YouShallNotPass.Validations
             CollectionValidationRule<TItem> rule,
             ValidationContext context)
         {
-            var invalid = false;
-            var error = new CollectionValidationError // TODO: Avoid this up-front allocation
-            {
-                ItemValidationResults = new Dictionary<int, IValidationResult>()
-            };
-
+            var error = LightLazy.Create(CollectionValidationError.Constructor);
             var itemIndex = 0;
 
             foreach (var item in value)
@@ -37,16 +39,13 @@ namespace Manisero.YouShallNotPass.Validations
 
                 if (itemResult.HasError())
                 {
-                    invalid = true;
-                    error.ItemValidationResults.Add(itemIndex, itemResult);
+                    error.Item.ItemValidationResults.Add(itemIndex, itemResult);
                 }
 
                 itemIndex++;
             }
 
-            return invalid
-                ? error
-                : null;
+            return error.ItemOrNull;
         }
 
         public Task<CollectionValidationError> ValidateAsync(
@@ -54,7 +53,7 @@ namespace Manisero.YouShallNotPass.Validations
             CollectionValidationRule<TItem> rule,
             ValidationContext context)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

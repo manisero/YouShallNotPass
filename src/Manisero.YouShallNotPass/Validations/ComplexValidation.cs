@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Manisero.YouShallNotPass.Core.Engine;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -14,6 +16,11 @@ namespace Manisero.YouShallNotPass.Validations
 
     public class ComplexValidationError
     {
+        public static readonly Func<ComplexValidationError> Constructor = () => new ComplexValidationError
+        {
+            MemberValidationErrors = new Dictionary<string, IValidationResult>()
+        };
+
         /// <summary>property name (only invalid properties) -> validation result</summary>
         public IDictionary<string, IValidationResult> MemberValidationErrors { get; set; }
         
@@ -25,26 +32,23 @@ namespace Manisero.YouShallNotPass.Validations
     {
         public ComplexValidationError Validate(TItem value, ComplexValidationRule<TItem> rule, ValidationContext context)
         {
-            var invalid = false;
-            var error = new ComplexValidationError // TODO: Avoid this up-front allocation
+            var error = LightLazy.Create(ComplexValidationError.Constructor);
+
+            if (rule.MemberRules != null)
             {
-                MemberValidationErrors = new Dictionary<string, IValidationResult>()
-            };
-
-            foreach (var memberRule in rule.MemberRules)
-            {
-                var propertyName = memberRule.Key;
-                var propertyRule = memberRule.Value;
-
-                // TODO: Cache property getter
-                var propertyValue = value.GetType().GetProperty(propertyName).GetValue(value);
-
-                var memberResult = context.Engine.Validate(propertyValue, propertyRule);
-
-                if (memberResult.HasError())
+                foreach (var memberRule in rule.MemberRules)
                 {
-                    invalid = true;
-                    error.MemberValidationErrors.Add(propertyName, memberResult);
+                    var propertyName = memberRule.Key;
+                    var propertyRule = memberRule.Value;
+
+                    // TODO: Cache property getter
+                    var propertyValue = value.GetType().GetProperty(propertyName).GetValue(value);
+                    var memberResult = context.Engine.Validate(propertyValue, propertyRule);
+
+                    if (memberResult.HasError())
+                    {
+                        error.Item.MemberValidationErrors.Add(propertyName, memberResult);
+                    }
                 }
             }
 
@@ -54,19 +58,16 @@ namespace Manisero.YouShallNotPass.Validations
 
                 if (overallResult.HasError())
                 {
-                    invalid = true;
-                    error.OverallValidationError = overallResult;
+                    error.Item.OverallValidationError = overallResult;
                 }
             }
 
-            return invalid
-                ? error
-                : null;
+            return error.ItemOrNull;
         }
 
         public Task<ComplexValidationError> ValidateAsync(TItem value, ComplexValidationRule<TItem> rule, ValidationContext context)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
