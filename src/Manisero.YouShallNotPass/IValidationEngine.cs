@@ -5,9 +5,9 @@ namespace Manisero.YouShallNotPass
 {
     public interface IValidationEngine
     {
-        ValidationResult Validate(object value, IValidationRule rule);
+        IValidationResult Validate(object value, IValidationRule rule);
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<ValidationResult> ValidateAsync(object value, IValidationRule rule);
+        Task<IValidationResult> ValidateAsync(object value, IValidationRule rule);
     }
 }

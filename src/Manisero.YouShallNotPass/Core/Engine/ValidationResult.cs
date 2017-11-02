@@ -6,11 +6,19 @@
         object Error { get; }
     }
 
+    public interface IValidationResult<TError> : IValidationResult
+        where TError : class
+    {
+        new TError Error { get; }
+    }
+
     // TODO: Consider converting to struct
-    public class ValidationResult : IValidationResult
+    public class ValidationResult<TError> : IValidationResult<TError>
+        where TError : class
     {
         public IValidationRule Rule { get; set; }
-        public object Error { get; set; }
+        public TError Error { get; set; }
+        object IValidationResult.Error => Error;
     }
 
     public static class ValidationResultExtensions

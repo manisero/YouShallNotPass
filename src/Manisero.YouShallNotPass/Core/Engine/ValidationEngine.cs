@@ -23,21 +23,11 @@ namespace Manisero.YouShallNotPass.Core.Engine
             _validatorResolver = validatorResolver;
         }
 
-        public ValidationResult Validate(object value, IValidationRule rule)
+        public IValidationResult Validate(object value, IValidationRule rule)
         {
             // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
 
             var ruleType = rule.GetType();
-            var validatesNull = _validationRuleMetadataProvider.ValidatesNull(ruleType);
-
-            if (value == null && !validatesNull)
-            {
-                return new ValidationResult
-                {
-                    Rule = rule
-                };
-            }
-            
             var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
             var valueType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TValueTypeParameterPosition];
             var errorType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
@@ -49,7 +39,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
                                                    .Invoke(this,
                                                            new object[] {value, rule});
 
-                return (ValidationResult)result;
+                return (IValidationResult)result;
             }
             catch (TargetInvocationException exception)
             {
@@ -58,15 +48,25 @@ namespace Manisero.YouShallNotPass.Core.Engine
             }
         }
 
-        public Task<ValidationResult> ValidateAsync(object value, IValidationRule rule)
+        public Task<IValidationResult> ValidateAsync(object value, IValidationRule rule)
         {
             throw new NotImplementedException();
         }
 
-        private ValidationResult ValidateGeneric<TRule, TValue, TError>(TValue value, TRule rule)
+        private ValidationResult<TError> ValidateGeneric<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
+            var validatesNull = _validationRuleMetadataProvider.ValidatesNull(typeof(TRule));
+
+            if (!validatesNull && value == null)
+            {
+                return new ValidationResult<TError>
+                {
+                    Rule = rule
+                };
+            }
+
             var validator = _validatorResolver.TryResolve<TRule, TValue, TError>();
 
             if (validator == null)
@@ -81,7 +81,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             var error = validator.Validate(value, rule, context);
 
-            return new ValidationResult
+            return new ValidationResult<TError>
             {
                 Rule = rule,
                 Error = error
