@@ -1,5 +1,4 @@
 ﻿using System;
-using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations

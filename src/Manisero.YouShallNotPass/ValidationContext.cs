@@ -1,4 +1,4 @@
-﻿namespace Manisero.YouShallNotPass.Core.Engine
+﻿namespace Manisero.YouShallNotPass
 {
     public class ValidationContext
     {

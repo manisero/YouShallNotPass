@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Xunit;
 

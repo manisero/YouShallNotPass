@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Manisero.YouShallNotPass.Core.Engine;
 
 namespace Manisero.YouShallNotPass
 {

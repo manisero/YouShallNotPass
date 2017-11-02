@@ -58,9 +58,9 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Core\ValidationDefinition\EmptyValidationError.cs" />
     <Compile Include="Validator.cs" />
-    <Compile Include="Core\Engine\ValidationContext.cs" />
+    <Compile Include="ValidationContext.cs" />
     <Compile Include="Core\Engine\ValidationEngine.cs" />
-    <Compile Include="Core\Engine\ValidationResult.cs" />
+    <Compile Include="ValidationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validations\NotNullValidation.cs" />
   </ItemGroup>

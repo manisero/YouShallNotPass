@@ -22,5 +22,3 @@ TODO
 - validation rules (and errors) should be POCOs without Action / Func properties
   - but this may be too limiting
   - consider some conversion of rule (or error) to "Descriptor" (which could be serialized to json)
-- make ValidationResult generic (<TRule, TError>) and Engine.Validate method generic
-- move ValidationResult to root folder
