@@ -12,8 +12,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
         private readonly IValidationRuleMetadataProvider _validationRuleMetadataProvider;
         private readonly IValidatorResolver _validatorResolver;
 
-        private readonly Lazy<MethodInfo> _validateInternalMethod = new Lazy<MethodInfo>(() => typeof(ValidationEngine).GetMethod(nameof(ValidateInternal),
-                                                                                                                                  BindingFlags.Instance | BindingFlags.NonPublic));
+        private readonly Lazy<MethodInfo> _validateInternalGenericMethod = new Lazy<MethodInfo>(() => typeof(ValidationEngine).GetMethod(nameof(ValidateInternalGeneric),
+                                                                                                                                         BindingFlags.Instance | BindingFlags.NonPublic));
 
         public ValidationEngine(
             IValidationRuleMetadataProvider validationRuleMetadataProvider,
@@ -29,15 +29,60 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             var ruleType = rule.GetType();
             var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
-            var valueType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TValueTypeParameterPosition];
-            var errorType = iRuleImplementation.GetGenericArguments()[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
+            var ruleGenericArguments = iRuleImplementation.GetGenericArguments();
 
+            var valueType = ruleGenericArguments[ValidationRuleInterfaceConstants.TValueTypeParameterPosition];
+            var errorType = ruleGenericArguments[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
+
+            return ValidateInternal(ruleType, valueType, errorType, value, rule);
+        }
+
+        public Task<IValidationResult> ValidateAsync(object value, IValidationRule rule)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValidationResult Validate<TRule, TValue>(TValue value, TRule rule) where TRule : IValidationRule<TValue>
+        {
+            // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
+
+            var ruleType = typeof(TRule);
+            var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
+            var ruleGenericArguments = iRuleImplementation.GetGenericArguments();
+
+            var valueType = typeof(TValue);
+            var errorType = ruleGenericArguments[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
+
+            return ValidateInternal(ruleType, valueType, errorType, value, rule);
+        }
+
+        public Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule) where TRule : IValidationRule<TValue>
+        {
+            throw new NotImplementedException();
+        }
+
+        public IValidationResult<TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            return ValidateInternalGeneric<TRule, TValue, TError>(value, rule);
+        }
+
+        public Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            throw new NotImplementedException();
+        }
+
+        private IValidationResult ValidateInternal(Type ruleType, Type valueType, Type errorType, object value, IValidationRule rule)
+        {
             try
             {
-                var result = _validateInternalMethod.Value
-                                                    .MakeGenericMethod(ruleType, valueType, errorType)
-                                                    .Invoke(this,
-                                                            new object[] { value, rule });
+                var result = _validateInternalGenericMethod.Value
+                                                           .MakeGenericMethod(ruleType, valueType, errorType)
+                                                           .Invoke(this,
+                                                                   new object[] { value, rule });
 
                 return (IValidationResult)result;
             }
@@ -48,26 +93,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             }
         }
 
-        public Task<IValidationResult> ValidateAsync(object value, IValidationRule rule)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IValidationResult<TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            return ValidateInternal<TRule, TValue, TError>(value, rule);
-        }
-
-        public Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            throw new NotImplementedException();
-        }
-
-        private IValidationResult<TError> ValidateInternal<TRule, TValue, TError>(TValue value, TRule rule)
+        private IValidationResult<TError> ValidateInternalGeneric<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
