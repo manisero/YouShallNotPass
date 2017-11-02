@@ -15,9 +15,8 @@ TODO
   - "and / or" validation groups
   - stop on first error / stop on nth error / gather all errors
   - conditional execution of validation rules
-  - at least N of rules pass
 - check if it will be convenient to create shared validation rules (e.g. for creation / update of same type - update would have couple additional rules)
-  - should be addressed in Rule builder's design
+  - probably should be addressed in Rule builder's design
 - make internal classes internal
 - validation rules (and errors) should be POCOs without Action / Func properties
   - but this may be too limiting
