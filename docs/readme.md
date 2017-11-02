@@ -8,9 +8,6 @@ TODO
 - write more tests testing individual rules
 - while caching results in classes, care for thread safety
   - and benchmark to check if caches really help
-- passing custom context to Validators
-  - object or strongly typed (TContext)?
-  - rather Context type with dynamic or Dictionary<string, object> field inside
 - validation strategy configuration
   - "and / or" validation groups
   - stop on first error / stop on nth error / gather all errors

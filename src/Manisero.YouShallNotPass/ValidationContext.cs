@@ -6,6 +6,6 @@ namespace Manisero.YouShallNotPass
     {
         public IValidationEngine Engine { get; set; }
 
-        public IDictionary<string, object> Data { get; set; }
+        public IDictionary<string, object> Data { get; set; } // TODO: Consider replacing with some convenient data container (with nice Add and GetValueOrDefault<TValue> api)
     }
 }
