@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
-using Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_dependencies;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -48,10 +47,35 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
             {
                 var existingUser = context.Data[UserDataKey] as User;
 
-                return existingUser != null
+                return existingUser == null
                     ? EmptyValidationError.Some
                     : EmptyValidationError.None;
             }
+        }
+
+        [Fact]
+        public void validator_receives_data()
+        {
+            var builder = new ValidationEngineBuilder();
+            builder.RegisterValidator(new UserExistsValidator());
+
+            var engine = builder.Build();
+
+            var userRepository = new UserRepository();
+
+            var command = new UpdateUserCommand
+            {
+                UserId = 5
+            };
+
+            var data = new Dictionary<string, object>
+            {
+                [UserExistsValidator.UserDataKey] = userRepository.Get(command.UserId)
+            };
+
+            var result = engine.Validate(command, new UserExistsValidationRule(), data);
+
+            result.HasError().Should().BeTrue();
         }
 
         // UpdateUserCommand validation rule
@@ -69,7 +93,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
         };
 
         [Fact]
-        public void sample()
+        public void validator_receives_data_even_when_it_is_not_root_validator()
         {
             var builder = new ValidationEngineBuilder();
             builder.RegisterValidator(new UserExistsValidator());
@@ -88,7 +112,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
                 [UserExistsValidator.UserDataKey] = userRepository.Get(command.UserId)
             };
 
-            var result = engine.Validate(command, UpdateUserCommandValidationRule);
+            var result = engine.Validate(command, UpdateUserCommandValidationRule, data);
 
             result.HasError().Should().BeTrue();
         }
