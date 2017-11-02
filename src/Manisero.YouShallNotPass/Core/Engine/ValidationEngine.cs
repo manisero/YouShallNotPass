@@ -42,21 +42,23 @@ namespace Manisero.YouShallNotPass.Core.Engine
             throw new NotImplementedException();
         }
 
-        public IValidationResult Validate<TRule, TValue>(TValue value, TRule rule) where TRule : IValidationRule<TValue>
+        public IValidationResult Validate<TRule, TValue>(TValue value, TRule rule)
+            where TRule : IValidationRule<TValue>
         {
             // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
 
-            var ruleType = typeof(TRule);
+            var ruleType = rule.GetType();
             var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
             var ruleGenericArguments = iRuleImplementation.GetGenericArguments();
 
-            var valueType = typeof(TValue);
+            var valueType = ruleGenericArguments[ValidationRuleInterfaceConstants.TValueTypeParameterPosition];
             var errorType = ruleGenericArguments[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
 
             return ValidateInternal(ruleType, valueType, errorType, value, rule);
         }
 
-        public Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule) where TRule : IValidationRule<TValue>
+        public Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule)
+            where TRule : IValidationRule<TValue>
         {
             throw new NotImplementedException();
         }
