@@ -12,8 +12,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
         private readonly IValidationRuleMetadataProvider _validationRuleMetadataProvider;
         private readonly IValidatorResolver _validatorResolver;
 
-        private readonly Lazy<MethodInfo> _validateGenericMethod = new Lazy<MethodInfo>(() => typeof(ValidationEngine).GetMethod(nameof(ValidateGeneric),
-                                                                                                                                 BindingFlags.Instance | BindingFlags.NonPublic));
+        private readonly Lazy<MethodInfo> _validateInternalMethod = new Lazy<MethodInfo>(() => typeof(ValidationEngine).GetMethod(nameof(ValidateInternal),
+                                                                                                                                  BindingFlags.Instance | BindingFlags.NonPublic));
 
         public ValidationEngine(
             IValidationRuleMetadataProvider validationRuleMetadataProvider,
@@ -34,10 +34,10 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             try
             {
-                var result = _validateGenericMethod.Value
-                                                   .MakeGenericMethod(ruleType, valueType, errorType)
-                                                   .Invoke(this,
-                                                           new object[] {value, rule});
+                var result = _validateInternalMethod.Value
+                                                    .MakeGenericMethod(ruleType, valueType, errorType)
+                                                    .Invoke(this,
+                                                            new object[] { value, rule });
 
                 return (IValidationResult)result;
             }
@@ -53,7 +53,21 @@ namespace Manisero.YouShallNotPass.Core.Engine
             throw new NotImplementedException();
         }
 
-        private ValidationResult<TError> ValidateGeneric<TRule, TValue, TError>(TValue value, TRule rule)
+        public IValidationResult<TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            return ValidateInternal<TRule, TValue, TError>(value, rule);
+        }
+
+        public Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            throw new NotImplementedException();
+        }
+
+        private IValidationResult<TError> ValidateInternal<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {

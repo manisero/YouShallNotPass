@@ -11,8 +11,7 @@
     {
         new TError Error { get; }
     }
-
-    // TODO: Consider converting to struct
+    
     public class ValidationResult<TError> : IValidationResult<TError>
         where TError : class
     {

@@ -30,12 +30,10 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
         {
             public AtLeastNValidationError Validate(string value, PasswordValidationRule rule, ValidationContext context)
             {
-                // TODO: Make ValidationResult generic (<TRule, TError>) and Engine.Validate method generic, so that casting is not needed below
-
-                var innerValidationResult = context.Engine.Validate(value, rule.InnerRule);
+                var innerValidationResult = context.Engine.Validate<AtLeastNValidationRule<string>, string, AtLeastNValidationError>(value, rule.InnerRule);
 
                 return innerValidationResult.HasError()
-                    ? (AtLeastNValidationError)innerValidationResult.Error
+                    ? innerValidationResult.Error
                     : null;
             }
         }
