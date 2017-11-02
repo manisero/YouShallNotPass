@@ -2,7 +2,7 @@
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.Samples.Custom_validations
+namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_dependencies
 {
     public class Validator_with_dependency
     {
@@ -10,12 +10,12 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
 
         public interface IUserRepository
         {
-            bool UsernameExists(string username);
+            bool UserExists(string username);
         }
 
         public class UserRepository : IUserRepository
         {
-            public bool UsernameExists(string username) => true;
+            public bool UserExists(string username) => true;
         }
 
         // UniqueUsername validation
@@ -35,7 +35,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
 
             public EmptyValidationError Validate(string value, UniqueUsernameValidationRule rule, ValidationContext context)
             {
-                var isDuplicate = _userRepository.UsernameExists(value);
+                var isDuplicate = _userRepository.UserExists(value);
 
                 return isDuplicate
                     ? EmptyValidationError.Some
@@ -47,15 +47,17 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
         public void sample()
         {
             var builder = new ValidationEngineBuilder();
+
+            // You may want to replace below lambda with your DI Container usage
             builder.RegisterValidatorFactory(() => new UniqueUsernameValidator(new UserRepository()));
 
             var engine = builder.Build();
 
             var rule = new UniqueUsernameValidationRule();
 
-            var validResult = engine.Validate("user1", rule);
+            var result = engine.Validate("user1", rule);
 
-            validResult.HasError().Should().BeTrue();
+            result.HasError().Should().BeTrue();
         }
     }
 }
