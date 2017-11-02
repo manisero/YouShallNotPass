@@ -22,3 +22,7 @@ TODO
 - validation rules (and errors) should be POCOs without Action / Func properties
   - but this may be too limiting
   - consider some conversion of rule (or error) to "Descriptor" (which could be serialized to json)
+- registering rules
+  - so that while passing value, user does not have to pass rule
+- rule builder
+  - fleunt api for building rules

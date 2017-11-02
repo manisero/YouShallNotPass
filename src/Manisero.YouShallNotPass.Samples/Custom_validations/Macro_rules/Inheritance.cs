@@ -3,22 +3,31 @@ using FluentAssertions;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.Samples.Custom_validations
+namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
 {
-    public class Macro_rules___instance
+    public class Inheritance
     {
-        private static readonly AtLeastNValidationRule<string> PasswordValidationRule = new AtLeastNValidationRule<string>
+        // TODO: Currently this scenario is not supported (test will fail). Consider supporting it.
+
+        // Password validation
+
+        public class PasswordValidationRule : AtLeastNValidationRule<string>
         {
-            Rules = new List<IValidationRule<string>>
+            private static readonly ICollection<IValidationRule<string>> _rules = new List<IValidationRule<string>>
             {
                 new ContainsDigitValidationRule(),
                 new ContainsLowerLetterValidationRule(),
                 new ContainsUpperLetterValidationRule()
-            },
-            N = 2
-        };
-        
-        [Theory]
+            };
+
+            public PasswordValidationRule()
+            {
+                Rules = _rules;
+                N = 2;
+            }
+        }
+
+        [Theory(Skip = "This scenario is currently not supported.")]
         [InlineData("1aA", true)]
         [InlineData("1aa", true)]
         [InlineData("aaA", true)]
@@ -34,7 +43,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
 
             var engine = builder.Build();
 
-            var validResult = engine.Validate(password, PasswordValidationRule);
+            var rule = new PasswordValidationRule();
+
+            var validResult = engine.Validate(password, rule);
 
             validResult.HasError().Should().Be(!isValid);
         }

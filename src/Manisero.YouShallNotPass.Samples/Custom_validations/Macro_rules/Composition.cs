@@ -3,9 +3,9 @@ using FluentAssertions;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.Samples.Custom_validations
+namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
 {
-    public class Macro_rules___composition
+    public class Composition
     {
         // Password validation
 
