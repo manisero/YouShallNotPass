@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Manisero.YouShallNotPass.Extensions;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
@@ -20,18 +19,9 @@ namespace Manisero.YouShallNotPass.Core.Engine
             IValidationRule rule,
             IDictionary<string, object> data = null)
         {
-            // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
-
-            var ruleType = rule.GetType();
-            var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
-            var ruleGenericArguments = iRuleImplementation.GetGenericArguments();
-
-            var valueType = ruleGenericArguments[ValidationRuleInterfaceConstants.TValueTypeParameterPosition];
-            var errorType = ruleGenericArguments[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
-
             var context = CreateValidationContext(data);
 
-            return _validationExecutor.Validate(ruleType, valueType, errorType, value, rule, context);
+            return _validationExecutor.Validate(value, rule, context);
         }
 
         public Task<IValidationResult> ValidateAsync(
@@ -48,18 +38,9 @@ namespace Manisero.YouShallNotPass.Core.Engine
             IDictionary<string, object> data = null)
             where TRule : IValidationRule<TValue>
         {
-            // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
-
-            var ruleType = rule.GetType();
-            var iRuleImplementation = ruleType.GetGenericInterfaceDefinitionImplementation(typeof(IValidationRule<,>));
-            var ruleGenericArguments = iRuleImplementation.GetGenericArguments();
-
-            var valueType = ruleGenericArguments[ValidationRuleInterfaceConstants.TValueTypeParameterPosition];
-            var errorType = ruleGenericArguments[ValidationRuleInterfaceConstants.TErrorTypeParameterPosition];
-
             var context = CreateValidationContext(data);
 
-            return _validationExecutor.Validate(ruleType, valueType, errorType, value, rule, context);
+            return _validationExecutor.Validate(value, rule, context);
         }
 
         public Task<IValidationResult> ValidateAsync<TRule, TValue>(
@@ -80,7 +61,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         {
             var context = CreateValidationContext(data);
 
-            return _validationExecutor.ValidateGeneric<TRule, TValue, TError>(value, rule, context);
+            return _validationExecutor.Validate<TRule, TValue, TError>(value, rule, context);
         }
 
         public Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(
