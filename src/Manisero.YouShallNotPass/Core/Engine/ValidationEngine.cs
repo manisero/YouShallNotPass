@@ -19,9 +19,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
             IValidationRule rule,
             IDictionary<string, object> data = null)
         {
-            var context = CreateValidationContext(data);
-
-            return _validationExecutor.Validate(value, rule, context);
+            var subvalidationEngine = CreateSubvalidationEngine(data);
+            return subvalidationEngine.Validate(value, rule);
         }
 
         public Task<IValidationResult> ValidateAsync(
@@ -38,9 +37,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
             IDictionary<string, object> data = null)
             where TRule : IValidationRule<TValue>
         {
-            var context = CreateValidationContext(data);
-
-            return _validationExecutor.Validate(value, rule, context);
+            var subvalidationEngine = CreateSubvalidationEngine(data);
+            return subvalidationEngine.Validate(value, rule);
         }
 
         public Task<IValidationResult> ValidateAsync<TRule, TValue>(
@@ -59,9 +57,8 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var context = CreateValidationContext(data);
-
-            return _validationExecutor.Validate<TRule, TValue, TError>(value, rule, context);
+            var subvalidationEngine = CreateSubvalidationEngine(data);
+            return subvalidationEngine.Validate<TRule, TValue, TError>(value, rule);
         }
 
         public Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(
@@ -74,13 +71,9 @@ namespace Manisero.YouShallNotPass.Core.Engine
             throw new NotImplementedException();
         }
 
-        private ValidationContext CreateValidationContext(IDictionary<string, object> data)
+        private ISubvalidationEngine CreateSubvalidationEngine(IDictionary<string, object> data)
         {
-            return new ValidationContext
-            {
-                Engine = this, // TODO: Create contexted SubvalidationEngine instead
-                Data = data
-            };
+            return new SubvalidationEngine(_validationExecutor, data);
         }
     }
 }

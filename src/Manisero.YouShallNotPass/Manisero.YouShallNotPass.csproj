@@ -48,6 +48,7 @@
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorResolver.cs" />
     <Compile Include="Core\ValidationDefinition\ValidatesNullAttribute.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Core\Engine\SubvalidationEngine.cs" />
     <Compile Include="Validations\AtLeastNValidation.cs" />
     <Compile Include="Validations\ComplexValidation.cs" />
     <Compile Include="Validations\CollectionValidation.cs" />
