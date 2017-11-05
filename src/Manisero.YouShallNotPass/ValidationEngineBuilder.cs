@@ -99,9 +99,7 @@ namespace Manisero.YouShallNotPass
             var validatorsRegistry = _validatorsRegistryBuilder.Build();
             var validatorResolver = new ValidatorResolver(validatorsRegistry);
 
-            var validationExecutor = new ValidationExecutor(ruleMetadataProvider, validatorResolver);
-
-            return new ValidationEngine(validationExecutor);
+            return new ValidationEngine(ruleMetadataProvider, validatorResolver);
         }
 
         private void RegisterDefaultValidators()

@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
     public class ValidationEngine : IValidationEngine
     {
-        private readonly IValidationExecutor _validationExecutor;
+        private readonly IValidationRuleMetadataProvider _validationRuleMetadataProvider;
+        private readonly IValidatorResolver _validatorResolver;
 
         public ValidationEngine(
-            IValidationExecutor validationExecutor)
+            IValidationRuleMetadataProvider validationRuleMetadataProvider,
+            IValidatorResolver validatorResolver)
         {
-            _validationExecutor = validationExecutor;
+            _validationRuleMetadataProvider = validationRuleMetadataProvider;
+            _validatorResolver = validatorResolver;
         }
 
         public IValidationResult Validate(
@@ -73,7 +77,10 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         private ISubvalidationEngine CreateSubvalidationEngine(IDictionary<string, object> data)
         {
-            return new SubvalidationEngine(_validationExecutor, data);
+            // TODO: Move to some factory
+            return new SubvalidationEngine(_validationRuleMetadataProvider,
+                                           _validatorResolver,
+                                           data);
         }
     }
 }
