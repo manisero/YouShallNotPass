@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
     public class ValidationEngine : IValidationEngine
     {
-        private readonly IValidationRuleMetadataProvider _validationRuleMetadataProvider;
-        private readonly IValidatorResolver _validatorResolver;
+        private readonly ISubvalidationEngineFactory _subvalidationEngineFactory;
 
         public ValidationEngine(
-            IValidationRuleMetadataProvider validationRuleMetadataProvider,
-            IValidatorResolver validatorResolver)
+            ISubvalidationEngineFactory subvalidationEngineFactory)
         {
-            _validationRuleMetadataProvider = validationRuleMetadataProvider;
-            _validatorResolver = validatorResolver;
+            _subvalidationEngineFactory = subvalidationEngineFactory;
         }
 
         public IValidationResult Validate(
@@ -23,7 +19,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             IValidationRule rule,
             IDictionary<string, object> data = null)
         {
-            var subvalidationEngine = CreateSubvalidationEngine(data);
+            var subvalidationEngine = _subvalidationEngineFactory.Create(data);
             return subvalidationEngine.Validate(value, rule);
         }
 
@@ -41,7 +37,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             IDictionary<string, object> data = null)
             where TRule : IValidationRule<TValue>
         {
-            var subvalidationEngine = CreateSubvalidationEngine(data);
+            var subvalidationEngine = _subvalidationEngineFactory.Create(data);
             return subvalidationEngine.Validate(value, rule);
         }
 
@@ -61,7 +57,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var subvalidationEngine = CreateSubvalidationEngine(data);
+            var subvalidationEngine = _subvalidationEngineFactory.Create(data);
             return subvalidationEngine.Validate<TRule, TValue, TError>(value, rule);
         }
 
@@ -73,14 +69,6 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TError : class
         {
             throw new NotImplementedException();
-        }
-
-        private ISubvalidationEngine CreateSubvalidationEngine(IDictionary<string, object> data)
-        {
-            // TODO: Move to some factory
-            return new SubvalidationEngine(_validationRuleMetadataProvider,
-                                           _validatorResolver,
-                                           data);
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         {
             _validationRuleMetadataProvider = validationRuleMetadataProvider;
             _validatorResolver = validatorResolver;
+
             _context = new ValidationContext
             {
                 Engine = this,

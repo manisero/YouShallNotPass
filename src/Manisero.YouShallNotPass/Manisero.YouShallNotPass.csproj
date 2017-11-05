@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Engine\SubvalidationEngineFactory.cs" />
     <Compile Include="IValidationEngine.cs" />
     <Compile Include="Core\Engine\ValidationRuleMetadataProvider.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorsRegistry.cs" />

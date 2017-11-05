@@ -93,13 +93,11 @@ namespace Manisero.YouShallNotPass
             {
                 RegisterDefaultValidators();
             }
-
-            var ruleMetadataProvider = new ValidationRuleMetadataProvider();
-
+            
             var validatorsRegistry = _validatorsRegistryBuilder.Build();
-            var validatorResolver = new ValidatorResolver(validatorsRegistry);
+            var subvalidationEngineFactory = new SubvalidationEngineFactory(validatorsRegistry);
 
-            return new ValidationEngine(ruleMetadataProvider, validatorResolver);
+            return new ValidationEngine(subvalidationEngineFactory);
         }
 
         private void RegisterDefaultValidators()
