@@ -4,35 +4,10 @@ using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.Samples.Custom_validations
+namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
 {
-    public class Custom_data_in_ValidationContext
+    public class Using_ValidationContext_Data
     {
-        // User & UpdateUserCommand
-
-        public class User
-        {
-            public int UserId { get; set; }
-        }
-
-        public class UpdateUserCommand
-        {
-            public int UserId { get; set; }
-            // ...
-        }
-
-        // UserRepository
-
-        public interface IUserRepository
-        {
-            User Get(int userId);
-        }
-
-        public class UserRepository : IUserRepository
-        {
-            public User Get(int userId) => new User { UserId = userId };
-        }
-
         // UserExists validation
 
         public class UserExistsValidationRule : IValidationRule<UpdateUserCommand, EmptyValidationError>
