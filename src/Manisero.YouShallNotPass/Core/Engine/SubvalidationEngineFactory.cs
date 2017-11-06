@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
+﻿using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
     public interface ISubvalidationEngineFactory
     {
-        ISubvalidationEngine Create(IDictionary<string, object> data);
+        ISubvalidationEngine Create(ValidationData data = null);
     }
 
     public class SubvalidationEngineFactory : ISubvalidationEngineFactory
@@ -20,7 +19,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             _validatorResolver = new ValidatorResolver(validatorsRegistry);
         }
 
-        public ISubvalidationEngine Create(IDictionary<string, object> data)
+        public ISubvalidationEngine Create(ValidationData data = null)
         {
             return new SubvalidationEngine(_validationRuleMetadataProvider,
                                            _validatorResolver,

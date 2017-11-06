@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Manisero.YouShallNotPass.Core.Engine
@@ -17,7 +16,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         public IValidationResult Validate(
             object value,
             IValidationRule rule,
-            IDictionary<string, object> data = null)
+            ValidationData data = null)
         {
             var subvalidationEngine = _subvalidationEngineFactory.Create(data);
             return subvalidationEngine.Validate(value, rule);
@@ -26,7 +25,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         public Task<IValidationResult> ValidateAsync(
             object value,
             IValidationRule rule,
-            IDictionary<string, object> data = null)
+            ValidationData data = null)
         {
             throw new NotImplementedException();
         }
@@ -34,7 +33,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         public IValidationResult Validate<TRule, TValue>(
             TValue value,
             TRule rule,
-            IDictionary<string, object> data = null)
+            ValidationData data = null)
             where TRule : IValidationRule<TValue>
         {
             var subvalidationEngine = _subvalidationEngineFactory.Create(data);
@@ -44,7 +43,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         public Task<IValidationResult> ValidateAsync<TRule, TValue>(
             TValue value,
             TRule rule,
-            IDictionary<string, object> data = null)
+            ValidationData data = null)
             where TRule : IValidationRule<TValue>
         {
             throw new NotImplementedException();
@@ -53,7 +52,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         public IValidationResult<TError> Validate<TRule, TValue, TError>(
             TValue value,
             TRule rule,
-            IDictionary<string, object> data = null)
+            ValidationData data = null)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -64,7 +63,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         public Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(
             TValue value,
             TRule rule,
-            IDictionary<string, object> data = null)
+            ValidationData data = null)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {

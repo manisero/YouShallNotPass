@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -21,7 +20,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         public SubvalidationEngine(
             IValidationRuleMetadataProvider validationRuleMetadataProvider,
             IValidatorResolver validatorResolver,
-            IDictionary<string, object> data)
+            ValidationData data = null)
         {
             _validationRuleMetadataProvider = validationRuleMetadataProvider;
             _validatorResolver = validatorResolver;
@@ -29,7 +28,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             _context = new ValidationContext
             {
                 Engine = this,
-                Data = data
+                Data = data ?? (IReadonlyValidationData)EmptyValidationData.Instance
             };
         }
 

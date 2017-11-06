@@ -1,28 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Manisero.YouShallNotPass
 {
     public interface IValidationEngine
     {
-        IValidationResult Validate(object value, IValidationRule rule, IDictionary<string, object> data = null);
+        IValidationResult Validate(object value, IValidationRule rule, ValidationData data = null);
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult> ValidateAsync(object value, IValidationRule rule, IDictionary<string, object> data = null);
+        Task<IValidationResult> ValidateAsync(object value, IValidationRule rule, ValidationData data = null);
 
-        IValidationResult Validate<TRule, TValue>(TValue value, TRule rule, IDictionary<string, object> data = null)
+        IValidationResult Validate<TRule, TValue>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue>;
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule, IDictionary<string, object> data = null)
+        Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue>;
 
-        IValidationResult<TError> Validate<TRule, TValue, TError>(TValue value, TRule rule, IDictionary<string, object> data = null)
+        IValidationResult<TError> Validate<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule, IDictionary<string, object> data = null)
+        Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }

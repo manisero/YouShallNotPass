@@ -45,7 +45,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
 
             public EmptyValidationError Validate(UpdateUserCommand value, UserExistsValidationRule rule, ValidationContext context)
             {
-                var existingUser = context.Data[UserDataKey] as User;
+                var existingUser = context.Data.GetItemOrDefault<User>(UserDataKey);
 
                 return existingUser == null
                     ? EmptyValidationError.Some
@@ -68,10 +68,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
                 UserId = 5
             };
 
-            var data = new Dictionary<string, object>
-            {
-                [UserExistsValidator.UserDataKey] = userRepository.Get(command.UserId)
-            };
+            var data = new ValidationData().Put(UserExistsValidator.UserDataKey, userRepository.Get(command.UserId));
 
             var result = engine.Validate(command, new UserExistsValidationRule(), data);
 
@@ -107,10 +104,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
                 UserId = 5
             };
             
-            var data = new Dictionary<string, object>
-            {
-                [UserExistsValidator.UserDataKey] = userRepository.Get(command.UserId)
-            };
+            var data = new ValidationData().Put(UserExistsValidator.UserDataKey, userRepository.Get(command.UserId));
 
             var result = engine.Validate(command, UpdateUserCommandValidationRule, data);
 
