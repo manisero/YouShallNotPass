@@ -30,7 +30,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
 
         public class UserRepository : IUserRepository
         {
-            public User Get(int userId) => null;
+            public User Get(int userId) => new User { UserId = userId };
         }
 
         // UserExists validation
@@ -68,11 +68,14 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
                 UserId = 5
             };
 
-            var data = new ValidationData().Put(UserExistsValidator.UserDataKey, userRepository.Get(command.UserId));
+            var data = new ValidationData
+            {
+                { UserExistsValidator.UserDataKey, userRepository.Get(command.UserId) }
+            };
 
             var result = engine.Validate(command, new UserExistsValidationRule(), data);
 
-            result.HasError().Should().BeTrue();
+            result.HasError().Should().BeFalse();
         }
 
         // UpdateUserCommand validation rule
@@ -103,12 +106,15 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
             {
                 UserId = 5
             };
-            
-            var data = new ValidationData().Put(UserExistsValidator.UserDataKey, userRepository.Get(command.UserId));
+
+            var data = new ValidationData
+            {
+                { UserExistsValidator.UserDataKey, userRepository.Get(command.UserId) }
+            };
 
             var result = engine.Validate(command, UpdateUserCommandValidationRule, data);
 
-            result.HasError().Should().BeTrue();
+            result.HasError().Should().BeFalse();
         }
     }
 }

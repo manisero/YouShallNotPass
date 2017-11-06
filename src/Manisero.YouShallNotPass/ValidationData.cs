@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Manisero.YouShallNotPass.Extensions;
 
 namespace Manisero.YouShallNotPass
@@ -26,18 +28,13 @@ namespace Manisero.YouShallNotPass
             => null;
     }
 
-    public class ValidationData : IReadonlyValidationData
+    public class ValidationData : IReadonlyValidationData, IEnumerable
     {
         private readonly IDictionary<string, object> _data = new Dictionary<string, object>();
-
-        public void Put(string key, object item)
+        
+        public ValidationData Add(string key, object item)
         {
-            _data[key] = item;
-        }
-
-        public ValidationData Put<TItem>(string key, TItem item)
-        {
-            _data[key] = item;
+            _data.Add(key, item);
             return this;
         }
 
@@ -58,6 +55,11 @@ namespace Manisero.YouShallNotPass
             return item is TItem
                 ? (TItem?)item
                 : null;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            throw new NotSupportedException($"Enumerating {nameof(ValidationData)} is not supported. It implements {nameof(IEnumerable)} interface only to enable collection initializer syntax.");
         }
     }
 }

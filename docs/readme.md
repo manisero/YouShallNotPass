@@ -4,7 +4,6 @@ YouShallNotPass
 TODO
 ---
 
-- replace ValidationContext.Data with some more convenient object
 - write more tests testing engine
 - write more tests testing individual rules
 - while caching results in classes, care for thread safety
