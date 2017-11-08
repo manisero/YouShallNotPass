@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Custom_validations\Using_CustomValidation.cs" />
     <Compile Include="Custom_validation_data\case.cs" />
     <Compile Include="Custom_validation_data\Using_ValidationContext_Data.cs" />
     <Compile Include="Custom_validations\Macro_rules\Instance.cs" />
