@@ -22,3 +22,4 @@ TODO
 - rule builder
   - fleunt api for building rules
 - approach to displaying validation errors in real scenario (e.g. web app)
+- consider allowing validators to return custom result, e.g. AnyValidator could return violated rules (although at least one rule passed, so there is no error)

@@ -27,9 +27,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
 
             var engine = builder.Build();
 
-            var validResult = engine.Validate(value, ContainsDigitValidationRule);
+            var result = engine.Validate(value, ContainsDigitValidationRule);
 
-            validResult.HasError().Should().Be(!isValid);
+            result.HasError().Should().Be(!isValid);
         }
     }
 }
