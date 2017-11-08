@@ -9,7 +9,6 @@ TODO
 - while caching results in classes, care for thread safety
   - and benchmark to check if caches really help
 - validation strategy configuration
-  - "and / or" validation groups
   - stop on first error / stop on nth error / gather all errors
   - conditional execution of validation rules
 - check if it will be convenient to create shared validation rules (e.g. for creation / update of same type - update would have couple additional rules)
@@ -22,3 +21,4 @@ TODO
   - so that while passing value, user does not have to pass rule
 - rule builder
   - fleunt api for building rules
+- approach to displaying validation errors in real scenario (e.g. web app)

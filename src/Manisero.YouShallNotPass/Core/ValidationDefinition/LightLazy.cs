@@ -25,5 +25,7 @@ namespace Manisero.YouShallNotPass.Core.ValidationDefinition
 
         /// <summary>Constructs the item if not yet constructed.</summary>
         public TItem Item => ItemOrNull ?? (ItemOrNull = _itemConstructor());
+
+        public bool ItemConstructed => ItemOrNull != null;
     }
 }

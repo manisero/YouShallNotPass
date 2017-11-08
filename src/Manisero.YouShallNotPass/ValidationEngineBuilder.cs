@@ -102,6 +102,8 @@ namespace Manisero.YouShallNotPass
 
         private void RegisterDefaultValidators()
         {
+            this.RegisterGenericValidator(typeof(AllValidator<>));
+            this.RegisterGenericValidator(typeof(AnyValidator<>));
             this.RegisterGenericValidator(typeof(AtLeastNValidator<>));
             this.RegisterGenericValidator(typeof(CollectionValidator<>));
             this.RegisterGenericValidator(typeof(ComplexValidator<>));
