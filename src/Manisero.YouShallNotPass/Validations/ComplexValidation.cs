@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
+using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations
 {

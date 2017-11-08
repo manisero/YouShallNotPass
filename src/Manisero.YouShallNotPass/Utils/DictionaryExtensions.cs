@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Manisero.YouShallNotPass.Extensions
+namespace Manisero.YouShallNotPass.Utils
 {
     public static class DictionaryExtensions
     {

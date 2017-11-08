@@ -1,4 +1,4 @@
-﻿using Manisero.YouShallNotPass.Extensions;
+﻿using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Manisero.YouShallNotPass.Extensions
+namespace Manisero.YouShallNotPass.Utils
 {
     public static class TypeExtensions
     {

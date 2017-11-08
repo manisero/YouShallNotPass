@@ -47,7 +47,7 @@
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorsRegistryBuilder.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorResolver.cs" />
     <Compile Include="Core\ValidationDefinition\ValidatesNullAttribute.cs" />
-    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Utils\DictionaryExtensions.cs" />
     <Compile Include="Core\Engine\SubvalidationEngine.cs" />
     <Compile Include="ValidationData.cs" />
     <Compile Include="Validations\AnyValidation.cs" />
@@ -56,11 +56,11 @@
     <Compile Include="Validations\ComplexValidation.cs" />
     <Compile Include="Validations\CollectionValidation.cs" />
     <Compile Include="Validations\EmailValidation.cs" />
-    <Compile Include="Core\ValidationDefinition\LightLazy.cs" />
+    <Compile Include="Utils\LightLazy.cs" />
     <Compile Include="Validations\MinValidation.cs" />
     <Compile Include="ValidationEngineBuilder.cs" />
     <Compile Include="ValidationRule.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Utils\TypeExtensions.cs" />
     <Compile Include="Core\ValidationDefinition\EmptyValidationError.cs" />
     <Compile Include="Validator.cs" />
     <Compile Include="ValidationContext.cs" />

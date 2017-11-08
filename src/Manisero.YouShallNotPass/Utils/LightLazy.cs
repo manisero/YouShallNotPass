@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Manisero.YouShallNotPass.Core.ValidationDefinition
+namespace Manisero.YouShallNotPass.Utils
 {
     public static class LightLazy
     {
