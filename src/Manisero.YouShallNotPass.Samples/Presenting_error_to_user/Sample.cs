@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -14,6 +13,11 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             public string Email { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
+        }
+
+        public class CustomValidationError
+        {
+            public string Message { get; set; }
         }
 
         public static readonly ComplexValidationRule<CreateUserCommand> CreateUserCommandValidationRule = new ComplexValidationRule<CreateUserCommand>
@@ -31,9 +35,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
                 [nameof(CreateUserCommand.FirstName)] = new NotNullNorWhiteSpaceValidationRule(),
                 [nameof(CreateUserCommand.LastName)] = new NotNullNorWhiteSpaceValidationRule()
             },
-            OverallRule = new CustomValidationRule<CreateUserCommand, EmptyValidationError>
+            OverallRule = new CustomValidationRule<CreateUserCommand, CustomValidationError>
             {
-                Validator = (value, context) => EmptyValidationError.Some
+                Validator = (value, context) => new CustomValidationError { Message = "Command is overall invalid." }
             }
         };
 
@@ -53,9 +57,12 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             var error = result.Error;
 
             var validationErrorFormattingEngine = new ValidationErrorFormattingEngine();
-            validationErrorFormattingEngine.RegisterFormatter<ComplexValidationError>(FormatComplexError);
             validationErrorFormattingEngine.RegisterFormatter<AllValidationError>(FormatAllError);
-            validationErrorFormattingEngine.RegisterFormatter<EmptyValidationError>(FormatEmptyError);
+            validationErrorFormattingEngine.RegisterFormatter<ComplexValidationError>(FormatComplexError);
+            validationErrorFormattingEngine.RegisterFormatter<CustomValidationError>(FormatCustomError);
+            validationErrorFormattingEngine.RegisterFormatter<EmailValidationError>(FormatEmailError);
+            validationErrorFormattingEngine.RegisterFormatter<NotNullNorWhiteSpaceValidationError>(FormatNotNullNorWhiteSpaceError);
+            validationErrorFormattingEngine.RegisterFormatter<NotNullValidationError>(FormatNotNullError);
 
             var formattedErrorLines = validationErrorFormattingEngine.Format(error);
             var formattedError = string.Join(Environment.NewLine, formattedErrorLines);
@@ -123,9 +130,24 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             }
         }
 
-        public static IEnumerable<string> FormatEmptyError(EmptyValidationError error, ValidationErrorFormattingEngine engine)
+        public static IEnumerable<string> FormatNotNullError(NotNullValidationError error, ValidationErrorFormattingEngine engine)
         {
-            yield return "Other error";
+            yield return "Value is required.";
+        }
+
+        public static IEnumerable<string> FormatNotNullNorWhiteSpaceError(NotNullNorWhiteSpaceValidationError error, ValidationErrorFormattingEngine engine)
+        {
+            yield return "Value is required and cannot be empty nor consist of whitespace characters only.";
+        }
+
+        public static IEnumerable<string> FormatEmailError(EmailValidationError error, ValidationErrorFormattingEngine engine)
+        {
+            yield return "Value should be an e-mail address.";
+        }
+
+        public static IEnumerable<string> FormatCustomError(CustomValidationError error, ValidationErrorFormattingEngine engine)
+        {
+            yield return error.Message;
         }
     }
 }
