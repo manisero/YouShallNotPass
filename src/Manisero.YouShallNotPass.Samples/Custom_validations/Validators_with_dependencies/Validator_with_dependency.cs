@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
+using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_dependencies
@@ -20,11 +20,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
         // UniqueUsername validation
 
-        public class UniqueUsernameValidationRule : IValidationRule<string, EmptyValidationError>
+        public class UniqueUsernameValidationRule : IValidationRule<string, CustomMessageValidationError>
         {
         }
 
-        public class UniqueUsernameValidator : IValidator<UniqueUsernameValidationRule, string, EmptyValidationError>
+        public class UniqueUsernameValidator : IValidator<UniqueUsernameValidationRule, string, CustomMessageValidationError>
         {
             private readonly IUserRepository _userRepository;
 
@@ -33,13 +33,13 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
                 _userRepository = userRepository;
             }
 
-            public EmptyValidationError Validate(string value, UniqueUsernameValidationRule rule, ValidationContext context)
+            public CustomMessageValidationError Validate(string value, UniqueUsernameValidationRule rule, ValidationContext context)
             {
                 var isDuplicate = _userRepository.UserExists(value);
 
                 return isDuplicate
-                    ? EmptyValidationError.Some
-                    : EmptyValidationError.None;
+                    ? new CustomMessageValidationError()
+                    : null;
             }
         }
 

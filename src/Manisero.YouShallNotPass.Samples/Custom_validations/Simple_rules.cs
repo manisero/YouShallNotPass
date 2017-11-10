@@ -1,55 +1,55 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
+using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Custom_validations
 {
     // ContainsDigit validation
 
-    public class ContainsDigitValidationRule : IValidationRule<string, EmptyValidationError>
+    public class ContainsDigitValidationRule : IValidationRule<string, CustomMessageValidationError>
     {
     }
 
-    public class ContainsDigitValidator : IValidator<ContainsDigitValidationRule, string, EmptyValidationError>
+    public class ContainsDigitValidator : IValidator<ContainsDigitValidationRule, string, CustomMessageValidationError>
     {
-        public EmptyValidationError Validate(string value, ContainsDigitValidationRule rule, ValidationContext context)
+        public CustomMessageValidationError Validate(string value, ContainsDigitValidationRule rule, ValidationContext context)
         {
             return value.Any(char.IsDigit)
-                ? EmptyValidationError.None
-                : EmptyValidationError.Some;
+                ? null
+                : new CustomMessageValidationError();
         }
     }
 
     // ContainsLowerLetter validation
 
-    public class ContainsLowerLetterValidationRule : IValidationRule<string, EmptyValidationError>
+    public class ContainsLowerLetterValidationRule : IValidationRule<string, CustomMessageValidationError>
     {
     }
 
-    public class ContainsLowerLetterValidator : IValidator<ContainsLowerLetterValidationRule, string, EmptyValidationError>
+    public class ContainsLowerLetterValidator : IValidator<ContainsLowerLetterValidationRule, string, CustomMessageValidationError>
     {
-        public EmptyValidationError Validate(string value, ContainsLowerLetterValidationRule rule, ValidationContext context)
+        public CustomMessageValidationError Validate(string value, ContainsLowerLetterValidationRule rule, ValidationContext context)
         {
             return value.Any(char.IsLower)
-                ? EmptyValidationError.None
-                : EmptyValidationError.Some;
+                ? null
+                : new CustomMessageValidationError();
         }
     }
 
     // ContainsUpperLetter validation
 
-    public class ContainsUpperLetterValidationRule : IValidationRule<string, EmptyValidationError>
+    public class ContainsUpperLetterValidationRule : IValidationRule<string, CustomMessageValidationError>
     {
     }
 
-    public class ContainsUpperLetterValidator : IValidator<ContainsUpperLetterValidationRule, string, EmptyValidationError>
+    public class ContainsUpperLetterValidator : IValidator<ContainsUpperLetterValidationRule, string, CustomMessageValidationError>
     {
-        public EmptyValidationError Validate(string value, ContainsUpperLetterValidationRule rule, ValidationContext context)
+        public CustomMessageValidationError Validate(string value, ContainsUpperLetterValidationRule rule, ValidationContext context)
         {
             return value.Any(char.IsUpper)
-                ? EmptyValidationError.None
-                : EmptyValidationError.Some;
+                ? null
+                : new CustomMessageValidationError();
         }
     }
 

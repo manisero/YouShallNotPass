@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
+using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_dependencies
@@ -20,11 +20,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
         // IsAllowedValidation validation
 
-        public class IsAllowedValidationRule<TValue> : IValidationRule<TValue, EmptyValidationError>
+        public class IsAllowedValidationRule<TValue> : IValidationRule<TValue, CustomMessageValidationError>
         {
         }
 
-        public class Validator<TValue> : IValidator<IsAllowedValidationRule<TValue>, TValue, EmptyValidationError>
+        public class Validator<TValue> : IValidator<IsAllowedValidationRule<TValue>, TValue, CustomMessageValidationError>
         {
             private readonly IAllowedValuesRepository _allowedValuesRepository;
 
@@ -33,13 +33,13 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
                 _allowedValuesRepository = allowedValuesRepository;
             }
 
-            public EmptyValidationError Validate(TValue value, IsAllowedValidationRule<TValue> rule, ValidationContext context)
+            public CustomMessageValidationError Validate(TValue value, IsAllowedValidationRule<TValue> rule, ValidationContext context)
             {
                 var isAllowed = _allowedValuesRepository.IsAllowed(value);
 
                 return isAllowed
-                    ? EmptyValidationError.None
-                    : EmptyValidationError.Some;
+                    ? null
+                    : new CustomMessageValidationError();
             }
         }
 

@@ -56,6 +56,7 @@
     <Compile Include="Validations\AtLeastNValidation.cs" />
     <Compile Include="Validations\ComplexValidation.cs" />
     <Compile Include="Validations\CollectionValidation.cs" />
+    <Compile Include="Validations\CustomMessageValidationError.cs" />
     <Compile Include="Validations\CustomValidation.cs" />
     <Compile Include="Validations\EmailValidation.cs" />
     <Compile Include="Utils\LightLazy.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="ValidationEngineBuilder.cs" />
     <Compile Include="ValidationRule.cs" />
     <Compile Include="Utils\TypeExtensions.cs" />
-    <Compile Include="Core\ValidationDefinition\EmptyValidationError.cs" />
     <Compile Include="Validations\NotNullNorWhiteSpaceValidation.cs" />
     <Compile Include="Validator.cs" />
     <Compile Include="ValidationContext.cs" />

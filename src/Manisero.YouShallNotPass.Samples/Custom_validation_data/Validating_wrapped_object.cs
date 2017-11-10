@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
+using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
@@ -15,17 +15,17 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
 
         // UserExists validation
 
-        public class UserExistsValidationRule : IValidationRule<Wrapper, EmptyValidationError>
+        public class UserExistsValidationRule : IValidationRule<Wrapper, CustomMessageValidationError>
         {
         }
 
-        public class UserExistsValidator : IValidator<UserExistsValidationRule, Wrapper, EmptyValidationError>
+        public class UserExistsValidator : IValidator<UserExistsValidationRule, Wrapper, CustomMessageValidationError>
         {
-            public EmptyValidationError Validate(Wrapper value, UserExistsValidationRule rule, ValidationContext context)
+            public CustomMessageValidationError Validate(Wrapper value, UserExistsValidationRule rule, ValidationContext context)
             {
                 return value.User == null
-                    ? EmptyValidationError.Some
-                    : EmptyValidationError.None;
+                    ? new CustomMessageValidationError()
+                    : null;
             }
         }
 
