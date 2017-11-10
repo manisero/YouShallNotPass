@@ -77,8 +77,20 @@ namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
                 return null;
             }
 
-            var validatorTypeArgument = ruleType.GenericTypeArguments[0]; // Assumption: validator and rule have only one generic type parameter each, and it's the same parameter
-            var validatorType = registration.Value.ValidatorOpenGenericType.MakeGenericType(validatorTypeArgument);
+            // Assumptions:
+            // - if validator has n generic type parameters, then rule has at least n generic parameters
+            // - rule's first n generic type parameters are the same as validator's generic type parameters
+
+            var validatorOpenGenericType = registration.Value.ValidatorOpenGenericType;
+            var validatorTypeParameters = validatorOpenGenericType.GetGenericArguments();
+
+            if (ruleType.GenericTypeArguments.Length < validatorTypeParameters.Length)
+            {
+                return null;
+            }
+
+            var validatorTypeArguments = ruleType.GenericTypeArguments.GetRange(0, validatorTypeParameters.Length);
+            var validatorType = validatorOpenGenericType.MakeGenericType(validatorTypeArguments);
 
             return (IValidator<TRule, TValue, TError>)registration.Value.Factory(validatorType);
         }

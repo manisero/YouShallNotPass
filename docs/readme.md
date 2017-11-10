@@ -14,6 +14,7 @@ TODO
 - check if it will be convenient to create shared validation rules (e.g. for creation / update of same type - update would have couple additional rules)
   - probably should be addressed in Rule builder's design
 - make internal classes internal
+- use ETW to report failed validations?
 - validation rules (and errors) should be POCOs without Action / Func properties
   - but this may be too limiting
   - consider some conversion of rule (or error) to "Descriptor" (which could be serialized to json)
