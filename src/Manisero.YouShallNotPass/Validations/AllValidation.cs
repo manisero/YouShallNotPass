@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations
 {
+    [ValidatesNull]
     public class AllValidationRule<TValue> : IValidationRule<TValue, AllValidationError>
     {
         public ICollection<IValidationRule<TValue>> Rules { get; set; }

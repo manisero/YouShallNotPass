@@ -64,6 +64,7 @@
     <Compile Include="ValidationRule.cs" />
     <Compile Include="Utils\TypeExtensions.cs" />
     <Compile Include="Core\ValidationDefinition\EmptyValidationError.cs" />
+    <Compile Include="Validations\NotNullNorWhiteSpaceValidation.cs" />
     <Compile Include="Validator.cs" />
     <Compile Include="ValidationContext.cs" />
     <Compile Include="Core\Engine\ValidationEngine.cs" />
