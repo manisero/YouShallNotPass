@@ -49,7 +49,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             throw new NotImplementedException();
         }
 
-        public IValidationResult<TError> Validate<TRule, TValue, TError>(
+        public ValidationResult<TRule, TValue, TError> Validate<TRule, TValue, TError>(
             TValue value,
             TRule rule,
             ValidationData data = null)
@@ -60,7 +60,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return subvalidationEngine.Validate<TRule, TValue, TError>(value, rule);
         }
 
-        public Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(
+        public Task<ValidationResult<TRule, TValue, TError>> ValidateAsync<TRule, TValue, TError>(
             TValue value,
             TRule rule,
             ValidationData data = null)

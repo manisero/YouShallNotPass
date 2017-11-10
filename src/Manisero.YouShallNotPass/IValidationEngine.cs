@@ -16,12 +16,12 @@ namespace Manisero.YouShallNotPass
         Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue>;
 
-        IValidationResult<TError> Validate<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
+        ValidationResult<TRule, TValue, TError> Validate<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
+        Task<ValidationResult<TRule, TValue, TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }
@@ -41,12 +41,12 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue>;
 
         // TODO: Try to avoid the need to specify generic type arguments explicitly while calling this method
-        IValidationResult<TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
+        ValidationResult<TRule, TValue, TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
+        Task<ValidationResult<TRule, TValue, TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }

@@ -12,10 +12,13 @@
         new TError Error { get; }
     }
     
-    public class ValidationResult<TError> : IValidationResult<TError>
+    public class ValidationResult<TRule, TValue, TError> : IValidationResult<TError>
+        where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
-        public IValidationRule Rule { get; set; }
+        public TRule Rule { get; set; }
+        IValidationRule IValidationResult.Rule => Rule;
+
         public TError Error { get; set; }
         object IValidationResult.Error => Error;
     }

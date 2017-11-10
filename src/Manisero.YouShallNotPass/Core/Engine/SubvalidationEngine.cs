@@ -72,14 +72,14 @@ namespace Manisero.YouShallNotPass.Core.Engine
             throw new NotImplementedException();
         }
 
-        public IValidationResult<TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
+        public ValidationResult<TRule, TValue, TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             return ValidateInternalGeneric<TRule, TValue, TError>(value, rule);
         }
 
-        public Task<IValidationResult<TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
+        public Task<ValidationResult<TRule, TValue, TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -106,7 +106,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             }
         }
 
-        private IValidationResult<TError> ValidateInternalGeneric<TRule, TValue, TError>(TValue value, TRule rule)
+        private ValidationResult<TRule, TValue, TError> ValidateInternalGeneric<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -114,7 +114,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             if (!validatesNull && value == null)
             {
-                return new ValidationResult<TError>
+                return new ValidationResult<TRule, TValue, TError>
                 {
                     Rule = rule
                 };
@@ -129,7 +129,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             var error = validator.Validate(value, rule, _context);
 
-            return new ValidationResult<TError>
+            return new ValidationResult<TRule, TValue, TError>
             {
                 Rule = rule,
                 Error = error
