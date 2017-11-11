@@ -74,6 +74,7 @@
     <Compile Include="Presenting_error_to_user\Sample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Complex_object_validation.cs" />
+    <Compile Include="Utils\ObjectAssertionsExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -50,9 +50,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
                 User = userRepository.Get(command.UserId)
             };
 
-            var result = engine.Validate(wrapper, new UserExistsValidationRule());
+            var error = engine.Validate(wrapper, new UserExistsValidationRule());
 
-            result.HasError().Should().BeFalse();
+            error.Should().BeNull();
         }
     }
 }

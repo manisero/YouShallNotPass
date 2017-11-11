@@ -51,9 +51,9 @@ namespace Manisero.YouShallNotPass.Samples
                 Age = 3
             };
 
-            var result = engine.Validate(item, Rule);
+            var error = engine.Validate(item, Rule);
 
-            result.HasError().Should().BeFalse();
+            error.Should().BeNull();
         }
 
         [Fact]
@@ -70,9 +70,9 @@ namespace Manisero.YouShallNotPass.Samples
                 Age = null
             };
 
-            var result = engine.Validate(item, Rule);
+            var error = engine.Validate(item, Rule);
 
-            result.HasError().Should().BeTrue();
+            error.Should().NotBeNull();
         }
     }
 }

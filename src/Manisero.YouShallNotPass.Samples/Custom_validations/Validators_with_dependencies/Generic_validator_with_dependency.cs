@@ -57,9 +57,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
             var rule = new IsAllowedValidationRule<int>();
 
-            var result = engine.Validate(1, rule);
+            var error = engine.Validate(1, rule);
 
-            result.HasError().Should().BeTrue();
+            error.Should().NotBeNull();
         }
     }
 }

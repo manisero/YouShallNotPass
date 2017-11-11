@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FluentAssertions;
+using Manisero.YouShallNotPass.Samples.Utils;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -26,9 +27,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
 
             var engine = builder.Build();
 
-            var result = engine.Validate(value, ContainsDigitValidationRule);
+            var error = engine.Validate(value, ContainsDigitValidationRule);
 
-            result.HasError().Should().Be(!isValid);
+            error.Should().BeNullIf(isValid);
         }
     }
 }

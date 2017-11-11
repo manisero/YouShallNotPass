@@ -14,11 +14,11 @@ namespace Manisero.YouShallNotPass.Validations
     {
         public static readonly Func<CollectionValidationError> Constructor = () => new CollectionValidationError
         {
-            ItemValidationResults = new Dictionary<int, IValidationResult>()
+            ItemValidationErrors = new Dictionary<int, object>()
         };
 
-        /// <summary>item index (only invalid items) -> validation result</summary>
-        public IDictionary<int, IValidationResult> ItemValidationResults { get; set; }
+        /// <summary>item index (only invalid items) -> validation error</summary>
+        public IDictionary<int, object> ItemValidationErrors { get; set; }
     }
 
     public class CollectionValidator<TItem> : IValidator<CollectionValidationRule<TItem>, IEnumerable<TItem>, CollectionValidationError>,
@@ -34,11 +34,11 @@ namespace Manisero.YouShallNotPass.Validations
 
             foreach (var item in value)
             {
-                var itemResult = context.Engine.Validate(item, rule.ItemRule);
+                var itemError = context.Engine.Validate(item, rule.ItemRule);
 
-                if (itemResult.HasError())
+                if (itemError != null)
                 {
-                    error.Item.ItemValidationResults.Add(itemIndex, itemResult);
+                    error.Item.ItemValidationErrors.Add(itemIndex, itemError);
                 }
 
                 itemIndex++;

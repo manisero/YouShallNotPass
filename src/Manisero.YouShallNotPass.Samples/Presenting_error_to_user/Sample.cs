@@ -50,11 +50,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
             var command = new CreateUserCommand();
 
-            var result = engine.Validate<ComplexValidationRule<CreateUserCommand>, CreateUserCommand, ComplexValidationError>(command, CreateUserCommandValidationRule);
+            var error = engine.Validate<ComplexValidationRule<CreateUserCommand>, CreateUserCommand, ComplexValidationError>(command, CreateUserCommandValidationRule);
 
-            result.HasError().Should().Be(true);
-
-            var error = result.Error;
+            error.Should().NotBeNull();
 
             var validationErrorFormattingEngine = new ValidationErrorFormattingEngine();
             validationErrorFormattingEngine.RegisterFormatter<AllValidationError>(FormatAllError);
@@ -96,7 +94,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
         {
             if (error.OverallValidationError != null)
             {
-                var lines = engine.Format(error.OverallValidationError.Error);
+                var lines = engine.Format(error.OverallValidationError);
 
                 foreach (var line in lines)
                 {
@@ -108,7 +106,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             {
                 yield return $"{memberError.Key} is invalid:";
 
-                var lines = engine.Format(memberError.Value.Error);
+                var lines = engine.Format(memberError.Value);
 
                 foreach (var line in lines)
                 {
@@ -121,7 +119,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
         {
             foreach (var validationResult in error.Violations.Values)
             {
-                var lines = engine.Format(validationResult.Error);
+                var lines = engine.Format(validationResult);
 
                 foreach (var line in lines)
                 {

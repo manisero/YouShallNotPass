@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using Manisero.YouShallNotPass.Samples.Utils;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -34,9 +35,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
 
             var engine = builder.Build();
 
-            var validResult = engine.Validate(password, PasswordValidationRule);
+            var error = engine.Validate(password, PasswordValidationRule);
 
-            validResult.HasError().Should().Be(!isValid);
+            error.Should().BeNullIf(isValid);
         }
     }
 }

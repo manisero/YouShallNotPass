@@ -55,9 +55,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
             var rule = new UniqueUsernameValidationRule();
 
-            var result = engine.Validate("user1", rule);
+            var error = engine.Validate("user1", rule);
 
-            result.HasError().Should().BeTrue();
+            error.Should().NotBeNull();
         }
     }
 }

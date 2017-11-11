@@ -18,17 +18,17 @@ namespace Manisero.YouShallNotPass.Tests.Validations
         [InlineData(1)]
         public void value_lower_than_min___error(int value)
         {
-            var result = BuildEngine().Validate(value, Rule);
+            var error = BuildEngine().Validate(value, Rule);
 
-            result.HasError().Should().BeTrue();
+            error.Should().NotBeNull();
         }
 
         [Fact]
         public void value_equal_to_min___no_error()
         {
-            var result = BuildEngine().Validate(Rule.MinValue, Rule);
+            var error = BuildEngine().Validate(Rule.MinValue, Rule);
 
-            result.HasError().Should().BeFalse();
+            error.Should().BeNull();
         }
 
         [Theory]
@@ -37,9 +37,9 @@ namespace Manisero.YouShallNotPass.Tests.Validations
         [InlineData(5)]
         public void value_greater_than_min___no_error(int value)
         {
-            var result = BuildEngine().Validate(value, Rule);
+            var error = BuildEngine().Validate(value, Rule);
 
-            result.HasError().Should().BeFalse();
+            error.Should().BeNull();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             _subvalidationEngineFactory = subvalidationEngineFactory;
         }
 
-        public IValidationResult Validate(
+        public object Validate(
             object value,
             IValidationRule rule,
             ValidationData data = null)
@@ -22,7 +22,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return subvalidationEngine.Validate(value, rule);
         }
 
-        public Task<IValidationResult> ValidateAsync(
+        public Task<object> ValidateAsync(
             object value,
             IValidationRule rule,
             ValidationData data = null)
@@ -30,7 +30,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             throw new NotImplementedException();
         }
 
-        public IValidationResult Validate<TRule, TValue>(
+        public object Validate<TRule, TValue>(
             TValue value,
             TRule rule,
             ValidationData data = null)
@@ -40,7 +40,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return subvalidationEngine.Validate(value, rule);
         }
 
-        public Task<IValidationResult> ValidateAsync<TRule, TValue>(
+        public Task<object> ValidateAsync<TRule, TValue>(
             TValue value,
             TRule rule,
             ValidationData data = null)
@@ -49,7 +49,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             throw new NotImplementedException();
         }
 
-        public ValidationResult<TRule, TValue, TError> Validate<TRule, TValue, TError>(
+        public TError Validate<TRule, TValue, TError>(
             TValue value,
             TRule rule,
             ValidationData data = null)
@@ -60,7 +60,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return subvalidationEngine.Validate<TRule, TValue, TError>(value, rule);
         }
 
-        public Task<ValidationResult<TRule, TValue, TError>> ValidateAsync<TRule, TValue, TError>(
+        public Task<TError> ValidateAsync<TRule, TValue, TError>(
             TValue value,
             TRule rule,
             ValidationData data = null)

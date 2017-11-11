@@ -4,49 +4,49 @@ namespace Manisero.YouShallNotPass
 {
     public interface IValidationEngine
     {
-        IValidationResult Validate(object value, IValidationRule rule, ValidationData data = null);
+        object Validate(object value, IValidationRule rule, ValidationData data = null);
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult> ValidateAsync(object value, IValidationRule rule, ValidationData data = null);
+        Task<object> ValidateAsync(object value, IValidationRule rule, ValidationData data = null);
 
-        IValidationResult Validate<TRule, TValue>(TValue value, TRule rule, ValidationData data = null)
+        object Validate<TRule, TValue>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue>;
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule, ValidationData data = null)
+        Task<object> ValidateAsync<TRule, TValue>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue>;
 
-        ValidationResult<TRule, TValue, TError> Validate<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
+        TError Validate<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<ValidationResult<TRule, TValue, TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
+        Task<TError> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule, ValidationData data = null)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }
 
     public interface ISubvalidationEngine
     {
-        IValidationResult Validate(object value, IValidationRule rule);
+        object Validate(object value, IValidationRule rule);
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult> ValidateAsync(object value, IValidationRule rule);
+        Task<object> ValidateAsync(object value, IValidationRule rule);
 
-        IValidationResult Validate<TRule, TValue>(TValue value, TRule rule)
+        object Validate<TRule, TValue>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue>;
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule)
+        Task<object> ValidateAsync<TRule, TValue>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue>;
 
         // TODO: Try to avoid the need to specify generic type arguments explicitly while calling this method
-        ValidationResult<TRule, TValue, TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
+        TError Validate<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
         /// <summary>Will use sync validator if async one not found.</summary>
-        Task<ValidationResult<TRule, TValue, TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
+        Task<TError> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }
