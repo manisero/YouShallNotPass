@@ -16,7 +16,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterGenericFormatterFactory(
             Type formatterOpenGenericType,
-            Func<Type, IValidationErrorFormatter> formatterFactory);
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory);
 
         IValidationErrorFormattingEngine<TFormat> Build();
     }
@@ -43,7 +43,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterGenericFormatterFactory(
             Type formatterOpenGenericType,
-            Func<Type, IValidationErrorFormatter> formatterFactory)
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
         {
             // TODO
             return this;
@@ -53,6 +53,18 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             // TODO
             return null;
+        }
+    }
+
+    public static class ValidationErrorFormattingEngineBuilderExtensions
+    {
+        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterGenericFormatter<TFormat>(
+            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
+            Type formatterOpenGenericType)
+        {
+            // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
+            builder.RegisterGenericFormatterFactory(formatterOpenGenericType, type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type));
+            return builder;
         }
     }
 }

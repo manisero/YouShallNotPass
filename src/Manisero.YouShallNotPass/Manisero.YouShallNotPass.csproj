@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Engine\SubvalidationEngineFactory.cs" />
+    <Compile Include="Core\RuleKeyedOperationRegistration\OperationsRegistry.cs" />
+    <Compile Include="Core\RuleKeyedOperationRegistration\RuleKeyedOperationResolver.cs" />
     <Compile Include="ErrorFormatting\IValidationErrorFormattingEngine.cs" />
     <Compile Include="ErrorFormatting\ValidationErrorFormatter.cs" />
     <Compile Include="ErrorFormatting\ValidationErrorFormattingContext.cs" />

@@ -1,10 +1,10 @@
 ﻿namespace Manisero.YouShallNotPass.ErrorFormatting
 {
-    public interface IValidationErrorFormatter
+    public interface IValidationErrorFormatter<TFormat>
     {
     }
 
-    public interface IValidationErrorFormatter<TRule, TValue, TError, TFormat> : IValidationErrorFormatter
+    public interface IValidationErrorFormatter<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TFormat>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
