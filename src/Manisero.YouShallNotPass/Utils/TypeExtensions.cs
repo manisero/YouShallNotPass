@@ -34,5 +34,12 @@ namespace Manisero.YouShallNotPass.Utils
         {
             return type.GetGenericInterfaceDefinitionImplementation(interfaceDefinition) != null;
         }
+
+        public static Type GetGenericInterfaceTypeArgument(this Type type, Type genericInterfaceDefinition, int typeArgumentPosition)
+        {
+            var interfaceImplementation = type.GetGenericInterfaceDefinitionImplementation(genericInterfaceDefinition);
+
+            return interfaceImplementation?.GenericTypeArguments[typeArgumentPosition];
+        }
     }
 }

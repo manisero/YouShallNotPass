@@ -1,6 +1,7 @@
 ﻿using System;
 using Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration;
 using Manisero.YouShallNotPass.ErrorFormatting.Engine;
+using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting
 {
@@ -49,7 +50,23 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Type formatterOpenGenericType,
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
         {
-            throw new NotImplementedException();
+            if (!formatterOpenGenericType.IsGenericTypeDefinition)
+            {
+                throw new ArgumentException($"{nameof(formatterOpenGenericType)} is not a generic type definition (a.k.a. open generic type). Use standard registration method for it.", nameof(formatterOpenGenericType));
+            }
+
+            var ruleType = formatterOpenGenericType.GetGenericInterfaceTypeArgument(typeof(IValidationErrorFormatter<,,,>), ValidatorInterfaceConstants.TRuleTypeParameterPosition);
+
+            if (ruleType == null)
+            {
+                throw new ArgumentException($"{nameof(formatterOpenGenericType)} must implement {typeof(IValidationErrorFormatter<,,,>)} interface.", nameof(formatterOpenGenericType));
+            }
+
+            _formattersRegistryBuilder.RegisterGenericOperationFactory(ruleType.GetGenericTypeDefinition(),
+                                                                       formatterOpenGenericType,
+                                                                       formatterFactory);
+
+            return this;
         }
 
         public IValidationErrorFormattingEngine<TFormat> Build()
