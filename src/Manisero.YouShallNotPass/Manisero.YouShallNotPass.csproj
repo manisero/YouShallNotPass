@@ -41,6 +41,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Engine\SubvalidationEngineFactory.cs" />
+    <Compile Include="ErrorFormatting\IValidationErrorFormattingEngine.cs" />
+    <Compile Include="ErrorFormatting\ValidationErrorFormatter.cs" />
+    <Compile Include="ErrorFormatting\ValidationErrorFormattingContext.cs" />
+    <Compile Include="ErrorFormatting\Engine\ValidationErrorFormattingEngine.cs" />
+    <Compile Include="ErrorFormatting\ValidationErrorFormattingEngineBuilder.cs" />
     <Compile Include="IValidationEngine.cs" />
     <Compile Include="Core\Engine\ValidationRuleMetadataProvider.cs" />
     <Compile Include="Core\Engine\ValidatorRegistration\ValidatorsRegistry.cs" />
