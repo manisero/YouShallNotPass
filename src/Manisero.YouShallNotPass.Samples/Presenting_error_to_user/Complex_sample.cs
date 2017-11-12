@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.ErrorFormatting;
@@ -92,6 +92,44 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             }
         }
 
+        public class NotNullValidationErrorFormatter<TValue> : IValidationErrorFormatter<NotNullValidationRule<TValue>, TValue, EmptyValidationError, IEnumerable<string>>
+        {
+            public IEnumerable<string> Format(
+                ValidationResult<NotNullValidationRule<TValue>, TValue, EmptyValidationError> validationResult,
+                ValidationErrorFormattingContext<IEnumerable<string>> context)
+            {
+                yield return "Value is required.";
+            }
+        }
+
+        public class NotNullNorWhiteSpaceValidationErrorFormatter : IValidationErrorFormatter<NotNullNorWhiteSpaceValidationRule, string, EmptyValidationError, IEnumerable<string>>
+        {
+            public IEnumerable<string> Format(
+                ValidationResult<NotNullNorWhiteSpaceValidationRule, string, EmptyValidationError> validationResult,
+                ValidationErrorFormattingContext<IEnumerable<string>> context)
+            {
+                yield return "Value is required and cannot be empty nor consist of only white space characters.";
+            }
+        }
+
+        public class EmailValidationErrorFormatter : IValidationErrorFormatter<EmailValidationRule, string, EmptyValidationError, IEnumerable<string>>
+        {
+            public IEnumerable<string> Format(
+                ValidationResult<EmailValidationRule, string, EmptyValidationError> validationResult,
+                ValidationErrorFormattingContext<IEnumerable<string>> context)
+            {
+                yield return "Value should be an e-mail address.";
+            }
+        }
+
+        public class CreateUserCommandOverallValidationErrorFormatter : IValidationErrorFormatter<CustomValidationRule<CreateUserCommand, EmptyValidationError>, CreateUserCommand, EmptyValidationError, IEnumerable<string>>
+        {
+            public IEnumerable<string> Format(ValidationResult<CustomValidationRule<CreateUserCommand, EmptyValidationError>, CreateUserCommand, EmptyValidationError> validationResult, ValidationErrorFormattingContext<IEnumerable<string>> context)
+            {
+                yield return "Command is generally invalid.";
+            }
+        }
+
         [Fact]
         public void sample()
         {
@@ -101,6 +139,10 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<IEnumerable<string>>();
             formattingEngineBuilder.RegisterGenericFormatter(typeof(AllValidationErrorFormatter<>));
             formattingEngineBuilder.RegisterGenericFormatter(typeof(ComplexValidatonErrorFormatter<>));
+            formattingEngineBuilder.RegisterFormatter(new EmailValidationErrorFormatter());
+            formattingEngineBuilder.RegisterFormatter(new NotNullNorWhiteSpaceValidationErrorFormatter());
+            formattingEngineBuilder.RegisterGenericFormatter(typeof(NotNullValidationErrorFormatter<>));
+            formattingEngineBuilder.RegisterFormatter(new CreateUserCommandOverallValidationErrorFormatter());
             var formattingEngine = formattingEngineBuilder.Build();
 
             var command = new CreateUserCommand();
@@ -109,9 +151,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
             validationResult.HasError().Should().BeTrue("Validation is expected to fail.");
 
-            var error = formattingEngine.Format(validationResult);
+            var error = formattingEngine.Format(validationResult).ToList();
 
-            throw new NotImplementedException("TODO: Added remaining formatters, assert error");
+            error.Count.Should().Be(7);
         }
     }
 }
