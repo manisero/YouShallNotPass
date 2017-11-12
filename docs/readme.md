@@ -28,3 +28,144 @@ TODO
   - but keep the interfaces, they are good for generic validators / formatters
 - use MethodInfoExtensions in Core.Engine
 - use RuleKeyedOperationResolver in Core.Engine
+
+
+
+Desired API
+---
+
+Validators registration:
+
+```
+var builder = new ValidationEngineBuilder()
+```
+
+- non-generic rule without parameters
+
+```
+builder.RegisterValidator<Email>(x => x.IsEmail)
+```
+
+- generic rule without parameters
+
+```
+builder.RegisterValidator<NotNull<T>>(x => x != null)
+```
+
+- non-generic rule with parameters
+
+```
+builder.RegisterValidator<MinLength>((x, rule) => x.Length >= rule.MinLength)
+```
+
+- generic rule with parameters
+
+```
+builder.RegisterValidator<Min<T>>((x, rule) => x >= rule.MinValue)
+```
+
+- context-dependent rule
+
+```
+builder.RegisterValidator<Complex<T>>((x, rule, context) => {
+  ...
+})
+```
+
+Rules registration:
+
+```
+var cucRule = new ComplexRule<CreateUserCommand> = {
+  Members: {
+    Id: Min(1)
+    Email: [ NotNull, Email ],
+    Name: [ NotNull, MinLength(1) ]
+  }
+}
+
+builder.RegisterRule<CreateUserCommand>(cucRule)
+```
+
+Validation:
+
+```
+var engine = builder.Build()
+```
+
+- with registered rule:
+
+```
+var cuc = new CreateUserCommand()
+
+var result = engine.Validate(cuc)
+```
+
+- with specified rule:
+
+```
+var result = engine.Validate("a", new Email())
+```
+
+Error formatters registration:
+
+```
+var builder = new ValidationErrorFormattingEngineBuilder()
+```
+
+- just error; non-generic
+
+```
+builder.Register<Email>(e => "Value should be email.")
+```
+
+- just error; non-generic; result of generic validation
+
+```
+builder.Register<NotNull>(e => "Value is required.")
+```
+
+- just error; generic
+
+```
+TODO
+```
+
+- error and rule; non-generic
+
+```
+builder.Register<MinLength>((e, rule) => $"Value should have at least {rule.MinLength} characters.")
+```
+
+- error and rule; generic
+
+```
+builder.Register<Min<T>>((e, rule) => $"Value should be at least {rule.Min}.")
+```
+
+- error, rule and value; non-generic
+
+```
+builder.Register<MinLength>((e, rule, value) => $"Value has {value.Length} characters, while should have at least {rule.MinLength}.")
+```
+
+- error, rule and value; generic
+
+```
+builder.Register<Min<T>>((e, rule, value) => $"Value was {value}, while should be at least {rule.Min}.")
+```
+
+- context-dependent
+
+```
+builder.Register<Complex<T>>((e, rule, value, context) => {
+  ...
+})
+```
+
+Error formatting:
+
+```
+var engine = builder.Build()
+
+var formatted = engine.Format(validationResult)
+```
