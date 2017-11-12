@@ -25,14 +25,14 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
     public class ValidationErrorFormattingEngineBuilder<TFormat> : IValidationErrorFormattingEngineBuilder<TFormat>
     {
-        private readonly OperationsRegistry<IValidationErrorFormatter<TFormat>> _operationsRegistry = new OperationsRegistry<IValidationErrorFormatter<TFormat>>();
+        private readonly RuleKeyedOperationsRegistryBuilder<IValidationErrorFormatter<TFormat>> _formattersRegistryBuilder = new RuleKeyedOperationsRegistryBuilder<IValidationErrorFormatter<TFormat>>();
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError>(
             IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _operationsRegistry.OperationInstances.Add(typeof(TRule), formatter);
+            _formattersRegistryBuilder.RegisterOperation<TRule, TValue, TError>(formatter);
             return this;
         }
 
@@ -41,7 +41,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _operationsRegistry.OperationFactories.Add(typeof(TRule), formatterFactory);
+            _formattersRegistryBuilder.RegisterOperationFactory<TRule, TValue, TError>(formatterFactory);
             return this;
         }
 
@@ -54,7 +54,8 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
         public IValidationErrorFormattingEngine<TFormat> Build()
         {
-            var ruleKeyedOperationResolver = new RuleKeyedOperationResolver<IValidationErrorFormatter<TFormat>>(_operationsRegistry);
+            var formattersRegistry = _formattersRegistryBuilder.Build();
+            var ruleKeyedOperationResolver = new RuleKeyedOperationResolver<IValidationErrorFormatter<TFormat>>(formattersRegistry);
             var validationErrorFormattingExecutor = new ValidationErrorFormattingExecutor<TFormat>(ruleKeyedOperationResolver);
 
             return new ValidationErrorFormattingEngine<TFormat>(validationErrorFormattingExecutor);

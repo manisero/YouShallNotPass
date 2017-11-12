@@ -26,3 +26,5 @@ TODO
 - consider allowing validators to return custom result, e.g. AnyValidator could return violated rules (although at least one rule passed, so there is no error)
 - consider possibility to register Func instead of IValidator / IValidationErrorFormatter
   - but keep the interfaces, they are good for generic validators / formatters
+- use MethodInfoExtensions in Core.Engine
+- use RuleKeyedOperationResolver in Core.Engine
