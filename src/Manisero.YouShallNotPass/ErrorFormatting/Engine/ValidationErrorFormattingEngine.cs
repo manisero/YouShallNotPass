@@ -43,7 +43,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
             // TODO: Avoid creating new context instance for each formatting
             var context = new ValidationErrorFormattingContext<TFormat>
             {
-                FormattingEngine = this
+                Engine = this
             };
 
             return _validationErrorFormattingExecutor.Execute(validationResult, context);

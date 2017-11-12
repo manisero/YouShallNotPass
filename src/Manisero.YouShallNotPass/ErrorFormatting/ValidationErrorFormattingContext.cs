@@ -2,6 +2,6 @@
 {
     public class ValidationErrorFormattingContext<TFormat>
     {
-        public IValidationErrorFormattingEngine<TFormat> FormattingEngine { get; set; }
+        public IValidationErrorFormattingEngine<TFormat> Engine { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 {
-    public class Simple_sample
+    public class Basic_sample
     {
         public class EmailValidationErrorFormatter : IValidationErrorFormatter<EmailValidationRule, string, EmptyValidationError, string>
         {

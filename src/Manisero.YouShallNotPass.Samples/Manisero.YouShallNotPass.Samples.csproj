@@ -71,8 +71,8 @@
     <Compile Include="Custom_validations\Validators_with_dependencies\Generic_validator_with_dependency.cs" />
     <Compile Include="Custom_validations\Validators_with_dependencies\Validator_with_dependency.cs" />
     <Compile Include="Custom_validation_data\Validating_wrapped_object.cs" />
-    <Compile Include="Presenting_error_to_user\Simple_sample.cs" />
-    <Compile Include="Presenting_error_to_user\Sample.cs" />
+    <Compile Include="Presenting_error_to_user\Basic_sample.cs" />
+    <Compile Include="Presenting_error_to_user\Complex_sample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Complex_object_validation.cs" />
   </ItemGroup>
