@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -15,7 +16,7 @@ namespace Manisero.YouShallNotPass.Tests.Core
             var validator = new EmailValidator();
             var registry = BuildRegistry(x => x.RegisterValidator(validator));
 
-            var result = registry.TryResolve<EmailValidationRule, string, EmailValidationError>();
+            var result = registry.TryResolve<EmailValidationRule, string, EmptyValidationError>();
 
             result.Should().Be(validator);
         }
@@ -26,7 +27,7 @@ namespace Manisero.YouShallNotPass.Tests.Core
             var validator = new EmailValidator();
             var registry = BuildRegistry(x => x.RegisterValidatorFactory(() => validator));
 
-            var result = registry.TryResolve<EmailValidationRule, string, EmailValidationError>();
+            var result = registry.TryResolve<EmailValidationRule, string, EmptyValidationError>();
 
             result.Should().Be(validator);
         }

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using Manisero.YouShallNotPass.Samples.Utils;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -10,11 +10,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
     {
         // ContainsDigit validation
 
-        public static readonly CustomValidationRule<string, CustomMessageValidationError> ContainsDigitValidationRule = new CustomValidationRule<string, CustomMessageValidationError>
+        public static readonly CustomValidationRule<string, EmptyValidationError> ContainsDigitValidationRule = new CustomValidationRule<string, EmptyValidationError>
         {
             Validator = (value, context) => value.Any(char.IsDigit)
-                ? null
-                : new CustomMessageValidationError()
+                ? EmptyValidationError.None
+                : EmptyValidationError.Some
         };
 
         [Theory]
@@ -27,9 +27,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
 
             var engine = builder.Build();
 
-            var error = engine.Validate(value, ContainsDigitValidationRule);
+            var result = engine.Validate(value, ContainsDigitValidationRule);
 
-            error.Should().BeNullIf(isValid);
+            result.HasError().Should().Be(!isValid);
         }
     }
 }

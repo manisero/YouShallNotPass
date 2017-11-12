@@ -3,22 +3,17 @@
 namespace Manisero.YouShallNotPass.Validations
 {
     [ValidatesNull]
-    public class NotNullNorWhiteSpaceValidationRule : IValidationRule<string, NotNullNorWhiteSpaceValidationError>
+    public class NotNullNorWhiteSpaceValidationRule : IValidationRule<string, EmptyValidationError>
     {
     }
 
-    public class NotNullNorWhiteSpaceValidationError
+    public class NotNullNorWhiteSpaceValidator : IValidator<NotNullNorWhiteSpaceValidationRule, string, EmptyValidationError>
     {
-        public static readonly NotNullNorWhiteSpaceValidationError Instance = new NotNullNorWhiteSpaceValidationError();
-    }
-
-    public class NotNullNorWhiteSpaceValidator : IValidator<NotNullNorWhiteSpaceValidationRule, string, NotNullNorWhiteSpaceValidationError>
-    {
-        public NotNullNorWhiteSpaceValidationError Validate(string value, NotNullNorWhiteSpaceValidationRule rule, ValidationContext context)
+        public EmptyValidationError Validate(string value, NotNullNorWhiteSpaceValidationRule rule, ValidationContext context)
         {
             return string.IsNullOrWhiteSpace(value) 
-                ? NotNullNorWhiteSpaceValidationError.Instance
-                : null;
+                ? EmptyValidationError.Some
+                : EmptyValidationError.None;
         }
     }
 }

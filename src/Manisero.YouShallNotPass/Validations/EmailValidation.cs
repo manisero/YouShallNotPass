@@ -1,21 +1,21 @@
-﻿namespace Manisero.YouShallNotPass.Validations
+﻿using Manisero.YouShallNotPass.Core.ValidationDefinition;
+
+namespace Manisero.YouShallNotPass.Validations
 {
-    public class EmailValidationRule : IValidationRule<string, EmailValidationError>
+    public class EmailValidationRule : IValidationRule<string, EmptyValidationError>
     {
     }
 
-    public class EmailValidationError
+    public class EmailValidator : IValidator<EmailValidationRule, string, EmptyValidationError>
     {
-        public static readonly EmailValidationError Instance = new EmailValidationError();
-    }
-
-    public class EmailValidator : IValidator<EmailValidationRule, string, EmailValidationError>
-    {
-        public EmailValidationError Validate(string value, EmailValidationRule rule, ValidationContext context)
+        public EmptyValidationError Validate(string value, EmailValidationRule rule, ValidationContext context)
         {
-            return !IsEmail(value)
-                ? EmailValidationError.Instance
-                : null;
+            if (!IsEmail(value))
+            {
+                return EmptyValidationError.Some;
+            }
+
+            return EmptyValidationError.None;
         }
 
         private bool IsEmail(string value)

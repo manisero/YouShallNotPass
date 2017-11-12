@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
-using Manisero.YouShallNotPass.Samples.Utils;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -30,7 +29,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
         {
             public AtLeastNValidationError Validate(string value, PasswordValidationRule rule, ValidationContext context)
             {
-                return context.Engine.Validate<AtLeastNValidationRule<string>, string, AtLeastNValidationError>(value, rule.InnerRule);
+                var innerValidationResult = context.Engine.Validate<AtLeastNValidationRule<string>, string, AtLeastNValidationError>(value, rule.InnerRule);
+
+                return innerValidationResult.HasError()
+                    ? innerValidationResult.Error
+                    : null;
             }
         }
 
@@ -53,9 +56,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
 
             var rule = new PasswordValidationRule();
 
-            var error = engine.Validate(password, rule);
+            var validResult = engine.Validate(password, rule);
 
-            error.Should().BeNullIf(isValid);
+            validResult.HasError().Should().Be(!isValid);
         }
     }
 }

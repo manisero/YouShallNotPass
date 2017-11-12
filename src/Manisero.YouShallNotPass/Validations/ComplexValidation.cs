@@ -17,13 +17,13 @@ namespace Manisero.YouShallNotPass.Validations
     {
         public static readonly Func<ComplexValidationError> Constructor = () => new ComplexValidationError
         {
-            MemberValidationErrors = new Dictionary<string, object>()
+            MemberValidationErrors = new Dictionary<string, IValidationResult>()
         };
 
-        /// <summary>property name (only invalid properties) -> validation error</summary>
-        public IDictionary<string, object> MemberValidationErrors { get; set; }
+        /// <summary>property name (only invalid properties) -> validation result</summary>
+        public IDictionary<string, IValidationResult> MemberValidationErrors { get; set; }
         
-        public object OverallValidationError { get; set; }
+        public IValidationResult OverallValidationError { get; set; }
     }
 
     public class ComplexValidator<TItem> : IValidator<ComplexValidationRule<TItem>, TItem, ComplexValidationError>,
@@ -42,22 +42,22 @@ namespace Manisero.YouShallNotPass.Validations
 
                     // TODO: Cache property getter
                     var propertyValue = value.GetType().GetProperty(propertyName).GetValue(value);
-                    var memberError = context.Engine.Validate(propertyValue, propertyRule);
+                    var memberResult = context.Engine.Validate(propertyValue, propertyRule);
 
-                    if (memberError != null)
+                    if (memberResult.HasError())
                     {
-                        error.Item.MemberValidationErrors.Add(propertyName, memberError);
+                        error.Item.MemberValidationErrors.Add(propertyName, memberResult);
                     }
                 }
             }
 
             if (rule.OverallRule != null)
             {
-                var overallError = context.Engine.Validate(value, rule.OverallRule);
+                var overallResult = context.Engine.Validate(value, rule.OverallRule);
 
-                if (overallError != null)
+                if (overallResult.HasError())
                 {
-                    error.Item.OverallValidationError = overallError;
+                    error.Item.OverallValidationError = overallResult;
                 }
             }
 

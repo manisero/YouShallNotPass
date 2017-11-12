@@ -14,25 +14,25 @@ namespace Manisero.YouShallNotPass.Validations
 
     public class AtLeastNValidationError
     {
-        /// <summary>rule index (only violated rules) -> validation error</summary>
-        public IDictionary<int, object> Violations { get; set; }
+        /// <summary>rule index (only violated rules) -> validation result</summary>
+        public IDictionary<int, IValidationResult> Violations { get; set; }
     }
 
     public class AtLeastNValidator<TValue> : IValidator<AtLeastNValidationRule<TValue>, TValue, AtLeastNValidationError>
     {
         public AtLeastNValidationError Validate(TValue value, AtLeastNValidationRule<TValue> rule, ValidationContext context)
         {
-            var violations = LightLazy.Create(() => new Dictionary<int, object>());
+            var violations = LightLazy.Create(() => new Dictionary<int, IValidationResult>());
             var ruleIndex = 0;
             var passed = 0;
 
             foreach (var subRule in rule.Rules)
             {
-                var subError = context.Engine.Validate(value, subRule);
+                var subResult = context.Engine.Validate(value, subRule);
 
-                if (subError != null)
+                if (subResult.HasError())
                 {
-                    violations.Item.Add(ruleIndex, subError);
+                    violations.Item.Add(ruleIndex, subResult);
                 }
                 else
                 {

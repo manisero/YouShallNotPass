@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -9,21 +10,21 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
     {
         // UserExists validation
 
-        public class UserExistsValidationRule : IValidationRule<UpdateUserCommand, CustomMessageValidationError>
+        public class UserExistsValidationRule : IValidationRule<UpdateUserCommand, EmptyValidationError>
         {
         }
 
-        public class UserExistsValidator : IValidator<UserExistsValidationRule, UpdateUserCommand, CustomMessageValidationError>
+        public class UserExistsValidator : IValidator<UserExistsValidationRule, UpdateUserCommand, EmptyValidationError>
         {
             public const string UserDataKey = "User";
 
-            public CustomMessageValidationError Validate(UpdateUserCommand value, UserExistsValidationRule rule, ValidationContext context)
+            public EmptyValidationError Validate(UpdateUserCommand value, UserExistsValidationRule rule, ValidationContext context)
             {
                 var existingUser = context.Data.GetItemOrDefault<User>(UserDataKey);
 
                 return existingUser == null
-                    ? new CustomMessageValidationError()
-                    : null;
+                    ? EmptyValidationError.Some
+                    : EmptyValidationError.None;
             }
         }
 
@@ -47,9 +48,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
                 { UserExistsValidator.UserDataKey, userRepository.Get(command.UserId) }
             };
 
-            var error = engine.Validate(command, new UserExistsValidationRule(), data);
+            var result = engine.Validate(command, new UserExistsValidationRule(), data);
 
-            error.Should().BeNull();
+            result.HasError().Should().BeFalse();
         }
 
         // UpdateUserCommand validation rule
@@ -86,9 +87,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
                 { UserExistsValidator.UserDataKey, userRepository.Get(command.UserId) }
             };
 
-            var error = engine.Validate(command, UpdateUserCommandValidationRule, data);
+            var result = engine.Validate(command, UpdateUserCommandValidationRule, data);
 
-            error.Should().BeNull();
+            result.HasError().Should().BeFalse();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Manisero.YouShallNotPass.Validations;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_dependencies
@@ -20,11 +20,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
         // UniqueUsername validation
 
-        public class UniqueUsernameValidationRule : IValidationRule<string, CustomMessageValidationError>
+        public class UniqueUsernameValidationRule : IValidationRule<string, EmptyValidationError>
         {
         }
 
-        public class UniqueUsernameValidator : IValidator<UniqueUsernameValidationRule, string, CustomMessageValidationError>
+        public class UniqueUsernameValidator : IValidator<UniqueUsernameValidationRule, string, EmptyValidationError>
         {
             private readonly IUserRepository _userRepository;
 
@@ -33,13 +33,13 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
                 _userRepository = userRepository;
             }
 
-            public CustomMessageValidationError Validate(string value, UniqueUsernameValidationRule rule, ValidationContext context)
+            public EmptyValidationError Validate(string value, UniqueUsernameValidationRule rule, ValidationContext context)
             {
                 var isDuplicate = _userRepository.UserExists(value);
 
                 return isDuplicate
-                    ? new CustomMessageValidationError()
-                    : null;
+                    ? EmptyValidationError.Some
+                    : EmptyValidationError.None;
             }
         }
 
@@ -55,9 +55,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
             var rule = new UniqueUsernameValidationRule();
 
-            var error = engine.Validate("user1", rule);
+            var result = engine.Validate("user1", rule);
 
-            error.Should().NotBeNull();
+            result.HasError().Should().BeTrue();
         }
     }
 }

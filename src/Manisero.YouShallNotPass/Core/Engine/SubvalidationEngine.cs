@@ -32,7 +32,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             };
         }
 
-        public object Validate(object value, IValidationRule rule)
+        public IValidationResult Validate(object value, IValidationRule rule)
         {
             // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
 
@@ -46,12 +46,12 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return ValidateInternal(ruleType, valueType, errorType, value, rule);
         }
 
-        public Task<object> ValidateAsync(object value, IValidationRule rule)
+        public Task<IValidationResult> ValidateAsync(object value, IValidationRule rule)
         {
             throw new NotImplementedException();
         }
 
-        public object Validate<TRule, TValue>(TValue value, TRule rule)
+        public IValidationResult Validate<TRule, TValue>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue>
         {
             // TODO: Make this as fast as possible (build lambda and cache it under ruleType key)
@@ -66,36 +66,38 @@ namespace Manisero.YouShallNotPass.Core.Engine
             return ValidateInternal(ruleType, valueType, errorType, value, rule);
         }
 
-        public Task<object> ValidateAsync<TRule, TValue>(TValue value, TRule rule)
+        public Task<IValidationResult> ValidateAsync<TRule, TValue>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue>
         {
             throw new NotImplementedException();
         }
 
-        public TError Validate<TRule, TValue, TError>(TValue value, TRule rule)
+        public ValidationResult<TRule, TValue, TError> Validate<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             return ValidateInternalGeneric<TRule, TValue, TError>(value, rule);
         }
 
-        public Task<TError> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
+        public Task<ValidationResult<TRule, TValue, TError>> ValidateAsync<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             throw new NotImplementedException();
         }
 
-        private object ValidateInternal(
+        private IValidationResult ValidateInternal(
             Type ruleType, Type valueType, Type errorType,
             object value, IValidationRule rule)
         {
             try
             {
-                return ValidateInternalGenericMethod.Value
-                                                    .MakeGenericMethod(ruleType, valueType, errorType)
-                                                    .Invoke(this,
-                                                            new object[] { value, rule });
+                var result = ValidateInternalGenericMethod.Value
+                                                          .MakeGenericMethod(ruleType, valueType, errorType)
+                                                          .Invoke(this,
+                                                                  new object[] { value, rule });
+
+                return (IValidationResult)result;
             }
             catch (TargetInvocationException exception)
             {
@@ -104,7 +106,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             }
         }
 
-        private TError ValidateInternalGeneric<TRule, TValue, TError>(TValue value, TRule rule)
+        private ValidationResult<TRule, TValue, TError> ValidateInternalGeneric<TRule, TValue, TError>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
@@ -112,7 +114,10 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             if (!validatesNull && value == null)
             {
-                return null;
+                return new ValidationResult<TRule, TValue, TError>
+                {
+                    Rule = rule
+                };
             }
 
             var validator = _validatorResolver.TryResolve<TRule, TValue, TError>();
@@ -122,7 +127,13 @@ namespace Manisero.YouShallNotPass.Core.Engine
                 throw new InvalidOperationException($"Unable to find validator validating value '{typeof(TValue)}' against rule '{typeof(TRule)}'.");
             }
 
-            return validator.Validate(value, rule, _context);
+            var error = validator.Validate(value, rule, _context);
+
+            return new ValidationResult<TRule, TValue, TError>
+            {
+                Rule = rule,
+                Error = error
+            };
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Manisero.YouShallNotPass.Validations;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
@@ -15,17 +15,17 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
 
         // UserExists validation
 
-        public class UserExistsValidationRule : IValidationRule<Wrapper, CustomMessageValidationError>
+        public class UserExistsValidationRule : IValidationRule<Wrapper, EmptyValidationError>
         {
         }
 
-        public class UserExistsValidator : IValidator<UserExistsValidationRule, Wrapper, CustomMessageValidationError>
+        public class UserExistsValidator : IValidator<UserExistsValidationRule, Wrapper, EmptyValidationError>
         {
-            public CustomMessageValidationError Validate(Wrapper value, UserExistsValidationRule rule, ValidationContext context)
+            public EmptyValidationError Validate(Wrapper value, UserExistsValidationRule rule, ValidationContext context)
             {
                 return value.User == null
-                    ? new CustomMessageValidationError()
-                    : null;
+                    ? EmptyValidationError.Some
+                    : EmptyValidationError.None;
             }
         }
 
@@ -50,9 +50,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
                 User = userRepository.Get(command.UserId)
             };
 
-            var error = engine.Validate(wrapper, new UserExistsValidationRule());
+            var result = engine.Validate(wrapper, new UserExistsValidationRule());
 
-            error.Should().BeNull();
+            result.HasError().Should().BeFalse();
         }
     }
 }

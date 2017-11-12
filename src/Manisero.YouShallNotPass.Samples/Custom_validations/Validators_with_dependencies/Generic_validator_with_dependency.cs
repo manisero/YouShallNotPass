@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Manisero.YouShallNotPass.Validations;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_dependencies
@@ -20,11 +20,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
         // IsAllowedValidation validation
 
-        public class IsAllowedValidationRule<TValue> : IValidationRule<TValue, CustomMessageValidationError>
+        public class IsAllowedValidationRule<TValue> : IValidationRule<TValue, EmptyValidationError>
         {
         }
 
-        public class Validator<TValue> : IValidator<IsAllowedValidationRule<TValue>, TValue, CustomMessageValidationError>
+        public class Validator<TValue> : IValidator<IsAllowedValidationRule<TValue>, TValue, EmptyValidationError>
         {
             private readonly IAllowedValuesRepository _allowedValuesRepository;
 
@@ -33,13 +33,13 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
                 _allowedValuesRepository = allowedValuesRepository;
             }
 
-            public CustomMessageValidationError Validate(TValue value, IsAllowedValidationRule<TValue> rule, ValidationContext context)
+            public EmptyValidationError Validate(TValue value, IsAllowedValidationRule<TValue> rule, ValidationContext context)
             {
                 var isAllowed = _allowedValuesRepository.IsAllowed(value);
 
                 return isAllowed
-                    ? null
-                    : new CustomMessageValidationError();
+                    ? EmptyValidationError.None
+                    : EmptyValidationError.Some;
             }
         }
 
@@ -57,9 +57,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
             var rule = new IsAllowedValidationRule<int>();
 
-            var error = engine.Validate(1, rule);
+            var result = engine.Validate(1, rule);
 
-            error.Should().NotBeNull();
+            result.HasError().Should().BeTrue();
         }
     }
 }

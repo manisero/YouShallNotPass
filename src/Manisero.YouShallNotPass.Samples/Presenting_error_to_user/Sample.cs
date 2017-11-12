@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -13,11 +14,6 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             public string Email { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
-        }
-
-        public class CustomValidationError
-        {
-            public string Message { get; set; }
         }
 
         public static readonly ComplexValidationRule<CreateUserCommand> CreateUserCommandValidationRule = new ComplexValidationRule<CreateUserCommand>
@@ -35,9 +31,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
                 [nameof(CreateUserCommand.FirstName)] = new NotNullNorWhiteSpaceValidationRule(),
                 [nameof(CreateUserCommand.LastName)] = new NotNullNorWhiteSpaceValidationRule()
             },
-            OverallRule = new CustomValidationRule<CreateUserCommand, CustomValidationError>
+            OverallRule = new CustomValidationRule<CreateUserCommand, EmptyValidationError>
             {
-                Validator = (value, context) => new CustomValidationError { Message = "Command is overall invalid." }
+                Validator = (value, context) => EmptyValidationError.Some
             }
         };
 
@@ -50,17 +46,16 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
             var command = new CreateUserCommand();
 
-            var error = engine.Validate<ComplexValidationRule<CreateUserCommand>, CreateUserCommand, ComplexValidationError>(command, CreateUserCommandValidationRule);
+            var result = engine.Validate<ComplexValidationRule<CreateUserCommand>, CreateUserCommand, ComplexValidationError>(command, CreateUserCommandValidationRule);
 
-            error.Should().NotBeNull();
+            result.HasError().Should().Be(true);
+
+            var error = result.Error;
 
             var validationErrorFormattingEngine = new ValidationErrorFormattingEngine();
-            validationErrorFormattingEngine.RegisterFormatter<AllValidationError>(FormatAllError);
             validationErrorFormattingEngine.RegisterFormatter<ComplexValidationError>(FormatComplexError);
-            validationErrorFormattingEngine.RegisterFormatter<CustomValidationError>(FormatCustomError);
-            validationErrorFormattingEngine.RegisterFormatter<EmailValidationError>(FormatEmailError);
-            validationErrorFormattingEngine.RegisterFormatter<NotNullNorWhiteSpaceValidationError>(FormatNotNullNorWhiteSpaceError);
-            validationErrorFormattingEngine.RegisterFormatter<NotNullValidationError>(FormatNotNullError);
+            validationErrorFormattingEngine.RegisterFormatter<AllValidationError>(FormatAllError);
+            validationErrorFormattingEngine.RegisterFormatter<EmptyValidationError>(FormatEmptyError);
 
             var formattedErrorLines = validationErrorFormattingEngine.Format(error);
             var formattedError = string.Join(Environment.NewLine, formattedErrorLines);
@@ -94,7 +89,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
         {
             if (error.OverallValidationError != null)
             {
-                var lines = engine.Format(error.OverallValidationError);
+                var lines = engine.Format(error.OverallValidationError.Error);
 
                 foreach (var line in lines)
                 {
@@ -106,7 +101,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             {
                 yield return $"{memberError.Key} is invalid:";
 
-                var lines = engine.Format(memberError.Value);
+                var lines = engine.Format(memberError.Value.Error);
 
                 foreach (var line in lines)
                 {
@@ -119,7 +114,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
         {
             foreach (var validationResult in error.Violations.Values)
             {
-                var lines = engine.Format(validationResult);
+                var lines = engine.Format(validationResult.Error);
 
                 foreach (var line in lines)
                 {
@@ -128,24 +123,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             }
         }
 
-        public static IEnumerable<string> FormatNotNullError(NotNullValidationError error, ValidationErrorFormattingEngine engine)
+        public static IEnumerable<string> FormatEmptyError(EmptyValidationError error, ValidationErrorFormattingEngine engine)
         {
-            yield return "Value is required.";
-        }
-
-        public static IEnumerable<string> FormatNotNullNorWhiteSpaceError(NotNullNorWhiteSpaceValidationError error, ValidationErrorFormattingEngine engine)
-        {
-            yield return "Value is required and cannot be empty nor consist of whitespace characters only.";
-        }
-
-        public static IEnumerable<string> FormatEmailError(EmailValidationError error, ValidationErrorFormattingEngine engine)
-        {
-            yield return "Value should be an e-mail address.";
-        }
-
-        public static IEnumerable<string> FormatCustomError(CustomValidationError error, ValidationErrorFormattingEngine engine)
-        {
-            yield return error.Message;
+            yield return "Other error";
         }
     }
 }
