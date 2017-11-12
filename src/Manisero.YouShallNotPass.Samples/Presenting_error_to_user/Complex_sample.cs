@@ -112,16 +112,6 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             }
         }
 
-        public class EmailValidationErrorFormatter : IValidationErrorFormatter<EmailValidationRule, string, EmptyValidationError, IEnumerable<string>>
-        {
-            public IEnumerable<string> Format(
-                ValidationResult<EmailValidationRule, string, EmptyValidationError> validationResult,
-                ValidationErrorFormattingContext<IEnumerable<string>> context)
-            {
-                yield return "Value should be an e-mail address.";
-            }
-        }
-
         public class CreateUserCommandOverallValidationErrorFormatter : IValidationErrorFormatter<CustomValidationRule<CreateUserCommand, EmptyValidationError>, CreateUserCommand, EmptyValidationError, IEnumerable<string>>
         {
             public IEnumerable<string> Format(ValidationResult<CustomValidationRule<CreateUserCommand, EmptyValidationError>, CreateUserCommand, EmptyValidationError> validationResult, ValidationErrorFormattingContext<IEnumerable<string>> context)
@@ -139,7 +129,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<IEnumerable<string>>();
             formattingEngineBuilder.RegisterGenericFormatter(typeof(AllValidationErrorFormatter<>));
             formattingEngineBuilder.RegisterGenericFormatter(typeof(ComplexValidatonErrorFormatter<>));
-            formattingEngineBuilder.RegisterFormatter(new EmailValidationErrorFormatter());
+            formattingEngineBuilder.RegisterFormatter((EmailValidationError _) => new[] { "Value should be an e-mail address." });
             formattingEngineBuilder.RegisterFormatter(new NotNullNorWhiteSpaceValidationErrorFormatter());
             formattingEngineBuilder.RegisterGenericFormatter(typeof(NotNullValidationErrorFormatter<>));
             formattingEngineBuilder.RegisterFormatter(new CreateUserCommandOverallValidationErrorFormatter());

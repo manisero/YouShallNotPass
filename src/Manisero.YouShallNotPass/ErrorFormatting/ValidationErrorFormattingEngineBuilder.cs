@@ -1,6 +1,7 @@
 ﻿using System;
 using Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration;
 using Manisero.YouShallNotPass.ErrorFormatting.Engine;
+using Manisero.YouShallNotPass.ErrorFormatting.Formatters;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting
@@ -10,6 +11,10 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError>(
             IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
             where TRule : IValidationRule<TValue, TError>
+            where TError : class;
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError>(
+            IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class;
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TRule, TValue, TError>(
@@ -35,6 +40,13 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             _formattersRegistryBuilder.RegisterOperation<TRule, TValue, TError>(formatter);
             return this;
+        }
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError>(
+            IValidationErrorFormatter<TError, TFormat> formatter)
+            where TError : class
+        {
+            throw new NotImplementedException();
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TRule, TValue, TError>(
@@ -81,6 +93,29 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
     public static class ValidationErrorFormattingEngineBuilderExtensions
     {
+        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError, TFormat>(
+            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
+            Func<TError, TFormat> formatter)
+            where TError : class
+        {
+            var wrapper = new ErrorOnlyFormatter<TError, TFormat>(formatter);
+
+            builder.RegisterFormatter(wrapper);
+            return builder;
+        }
+
+        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError, TFormat>(
+            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
+            Func<TError, TRule, TValue, TFormat> formatter)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var wrapper = new ErrorRuleAndValueFormatter<TRule, TValue, TError, TFormat>(formatter);
+
+            builder.RegisterFormatter(wrapper);
+            return builder;
+        }
+
         public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterGenericFormatter<TFormat>(
             this IValidationErrorFormattingEngineBuilder<TFormat> builder,
             Type formatterOpenGenericType)

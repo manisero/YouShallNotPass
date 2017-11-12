@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.ErrorFormatting;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
@@ -8,12 +7,12 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 {
     public class Basic_sample
     {
-        public class EmailValidationErrorFormatter : IValidationErrorFormatter<EmailValidationRule, string, EmptyValidationError, string>
+        public class EmailValidationErrorFormatter : IValidationErrorFormatter<EmailValidationRule, string, EmailValidationError, string>
         {
             public const string ErrorMessage = "Value should be an e-mail address.";
 
             public string Format(
-                ValidationResult<EmailValidationRule, string, EmptyValidationError> validationResult,
+                ValidationResult<EmailValidationRule, string, EmailValidationError> validationResult,
                 ValidationErrorFormattingContext<string> context)
             {
                 return ErrorMessage;

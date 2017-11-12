@@ -28,6 +28,9 @@ TODO
   - but keep the interfaces, they are good for generic validators / formatters
 - use MethodInfoExtensions in Core.Engine
 - use RuleKeyedOperationResolver in Core.Engine
+- consider implementing validator / formatter factories as feature outside engine
+  - factory would be wrapped by sigle-instance wrapper
+    - wrapper would accept factory in constructor and ivoke it in Validate / Format method
 
 
 
