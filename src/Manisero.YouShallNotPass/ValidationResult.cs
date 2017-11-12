@@ -5,6 +5,7 @@ namespace Manisero.YouShallNotPass
     public interface IValidationResult
     {
         IValidationRule Rule { get; }
+        object Value { get; }
         object Error { get; }
 
         Type GetRuleType();
@@ -24,6 +25,9 @@ namespace Manisero.YouShallNotPass
     {
         public TRule Rule { get; set; }
         IValidationRule IValidationResult.Rule => Rule;
+
+        public TValue Value { get; set; }
+        object IValidationResult.Value => Value;
 
         public TError Error { get; set; }
         object IValidationResult.Error => Error;

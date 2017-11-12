@@ -110,14 +110,25 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
+            var error = GetValidationError<TRule, TValue, TError>(value, rule);
+
+            return new ValidationResult<TRule, TValue, TError>
+            {
+                Rule = rule,
+                Value = value,
+                Error = error
+            };
+        }
+
+        private TError GetValidationError<TRule, TValue, TError>(TValue value, TRule rule)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
             var validatesNull = _validationRuleMetadataProvider.ValidatesNull(typeof(TRule));
 
             if (!validatesNull && value == null)
             {
-                return new ValidationResult<TRule, TValue, TError>
-                {
-                    Rule = rule
-                };
+                return null;
             }
 
             var validator = _validatorResolver.TryResolve<TRule, TValue, TError>();
@@ -127,13 +138,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
                 throw new InvalidOperationException($"Unable to find validator validating value '{typeof(TValue)}' against rule '{typeof(TRule)}'.");
             }
 
-            var error = validator.Validate(value, rule, _context);
-
-            return new ValidationResult<TRule, TValue, TError>
-            {
-                Rule = rule,
-                Error = error
-            };
+            return validator.Validate(value, rule, _context);
         }
     }
 }
