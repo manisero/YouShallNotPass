@@ -58,6 +58,7 @@
     <Compile Include="Utils\ArrayExtensions.cs" />
     <Compile Include="Utils\DictionaryExtensions.cs" />
     <Compile Include="Core\Engine\SubvalidationEngine.cs" />
+    <Compile Include="Utils\MethodInfoExtensions.cs" />
     <Compile Include="ValidationData.cs" />
     <Compile Include="Validations\AnyValidation.cs" />
     <Compile Include="Validations\AllValidation.cs" />

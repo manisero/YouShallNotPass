@@ -1,9 +1,15 @@
-﻿namespace Manisero.YouShallNotPass
+﻿using System;
+
+namespace Manisero.YouShallNotPass
 {
     public interface IValidationResult
     {
         IValidationRule Rule { get; }
         object Error { get; }
+
+        Type GetRuleType();
+        Type GetValueType();
+        Type GetErrorType();
     }
 
     public interface IValidationResult<TError> : IValidationResult
@@ -21,6 +27,10 @@
 
         public TError Error { get; set; }
         object IValidationResult.Error => Error;
+
+        public Type GetRuleType() => typeof(TRule);
+        public Type GetValueType() => typeof(TValue);
+        public Type GetErrorType() => typeof(TError);
     }
 
     public static class ValidationResultExtensions
