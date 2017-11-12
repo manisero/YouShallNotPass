@@ -1,4 +1,6 @@
 ﻿using System;
+using Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration;
+using Manisero.YouShallNotPass.ErrorFormatting.Engine;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting
 {
@@ -23,12 +25,14 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
     public class ValidationErrorFormattingEngineBuilder<TFormat> : IValidationErrorFormattingEngineBuilder<TFormat>
     {
+        private readonly OperationsRegistry<IValidationErrorFormatter<TFormat>> _operationsRegistry = new OperationsRegistry<IValidationErrorFormatter<TFormat>>();
+
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError>(
             IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            // TODO
+            _operationsRegistry.OperationInstances.Add(typeof(TRule), formatter);
             return this;
         }
 
@@ -37,7 +41,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            // TODO
+            _operationsRegistry.OperationFactories.Add(typeof(TRule), formatterFactory);
             return this;
         }
 
@@ -45,14 +49,15 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Type formatterOpenGenericType,
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
         {
-            // TODO
-            return this;
+            throw new NotImplementedException();
         }
 
         public IValidationErrorFormattingEngine<TFormat> Build()
         {
-            // TODO
-            return null;
+            var ruleKeyedOperationResolver = new RuleKeyedOperationResolver<IValidationErrorFormatter<TFormat>>(_operationsRegistry);
+            var validationErrorFormattingExecutor = new ValidationErrorFormattingExecutor<TFormat>(ruleKeyedOperationResolver);
+
+            return new ValidationErrorFormattingEngine<TFormat>(validationErrorFormattingExecutor);
         }
     }
 

@@ -30,7 +30,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             formattingEngineBuilder.RegisterFormatter(new EmailValidationErrorFormatter());
             var formattingEngine = formattingEngineBuilder.Build();
 
-            var validationResult = validationEngine.Validate("a", new EmailValidationRule());
+            var validationResult = validationEngine.Validate<EmailValidationRule, string, EmptyValidationError>("a", new EmailValidationRule());
 
             validationResult.HasError().Should().BeTrue("Validation is expected to fail.");
 
