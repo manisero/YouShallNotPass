@@ -88,7 +88,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Func<TError, TFormat> formatter)
             where TError : class
         {
-            var wrapper = new ErrorOnlyFormatter<TError, TFormat>(formatter);
+            var wrapper = new ErrorOnlyFormatterWrapper<TError, TFormat>(formatter);
 
             builder.RegisterFormatter(wrapper);
             return builder;
@@ -100,7 +100,30 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var wrapper = new ErrorRuleAndValueFormatter<TRule, TValue, TError, TFormat>(formatter);
+            var wrapper = new ErrorRuleAndValueFormatterWrapper<TRule, TValue, TError, TFormat>(formatter);
+
+            builder.RegisterFormatter(wrapper);
+            return builder;
+        }
+
+        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TError, TFormat>(
+            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
+            Func<Func<TError, TFormat>> formatterFactory)
+            where TError : class
+        {
+            var wrapper = new ErrorOnlyFormatterFactoryWrapper<TError, TFormat>(formatterFactory);
+
+            builder.RegisterFormatter(wrapper);
+            return builder;
+        }
+
+        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TRule, TValue, TError, TFormat>(
+            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
+            Func<Func<TError, TRule, TValue, TFormat>> formatterFactory)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var wrapper = new ErrorRuleAndValueFormatterFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
 
             builder.RegisterFormatter(wrapper);
             return builder;

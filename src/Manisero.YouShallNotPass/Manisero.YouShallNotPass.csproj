@@ -48,8 +48,9 @@
     <Compile Include="ErrorFormatting\Engine\FormatterRegistration\ValidationErrorFormattersRegistry.cs" />
     <Compile Include="ErrorFormatting\Engine\FormatterRegistration\ValidationErrorFormattersRegistryBuilder.cs" />
     <Compile Include="ErrorFormatting\Engine\ValidationErrorFormattingExecutor.cs" />
+    <Compile Include="ErrorFormatting\Formatters\ErrorRuleAndValueFormatterWrappers.cs" />
     <Compile Include="ErrorFormatting\IValidationErrorFormattingEngine.cs" />
-    <Compile Include="ErrorFormatting\Formatters\Formatters.cs" />
+    <Compile Include="ErrorFormatting\Formatters\ErrorOnlyFormatterWrappers.cs" />
     <Compile Include="ErrorFormatting\ValidationErrorFormatter.cs" />
     <Compile Include="ErrorFormatting\ValidationErrorFormattingContext.cs" />
     <Compile Include="ErrorFormatting\Engine\ValidationErrorFormattingEngine.cs" />
