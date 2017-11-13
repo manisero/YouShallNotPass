@@ -44,6 +44,9 @@
     <Compile Include="Core\RuleKeyedOperationRegistration\OperationsRegistry.cs" />
     <Compile Include="Core\RuleKeyedOperationRegistration\RuleKeyedOperationResolver.cs" />
     <Compile Include="Core\RuleKeyedOperationRegistration\RuleKeyedOperationsRegistryBuilder.cs" />
+    <Compile Include="ErrorFormatting\Engine\FormatterRegistration\ValidationErrorFormatterResolver.cs" />
+    <Compile Include="ErrorFormatting\Engine\FormatterRegistration\ValidationErrorFormattersRegistry.cs" />
+    <Compile Include="ErrorFormatting\Engine\FormatterRegistration\ValidationErrorFormattersRegistryBuilder.cs" />
     <Compile Include="ErrorFormatting\Engine\ValidationErrorFormattingExecutor.cs" />
     <Compile Include="ErrorFormatting\IValidationErrorFormattingEngine.cs" />
     <Compile Include="ErrorFormatting\Formatters\Formatters.cs" />

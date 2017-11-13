@@ -14,10 +14,10 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
         }
 
         public TFormat Format(
-            IValidationResult<TError> validationResult,
+            TError error,
             ValidationErrorFormattingContext<TFormat> context)
         {
-            return _formatter(validationResult.Error);
+            return _formatter(error);
         }
     }
 

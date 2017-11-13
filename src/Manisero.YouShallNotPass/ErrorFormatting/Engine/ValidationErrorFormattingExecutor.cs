@@ -1,5 +1,5 @@
 ﻿using System;
-using Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration;
+using Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
 {
@@ -14,10 +14,10 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
 
     public class ValidationErrorFormattingExecutor<TFormat> : IValidationErrorFormattingExecutor<TFormat>
     {
-        private readonly IRuleKeyedOperationResolver<IValidationErrorFormatter<TFormat>> _formatterResolver;
+        private readonly IValidationErrorFormatterResolver<TFormat> _formatterResolver;
 
         public ValidationErrorFormattingExecutor(
-            IRuleKeyedOperationResolver<IValidationErrorFormatter<TFormat>> formatterResolver)
+            IValidationErrorFormatterResolver<TFormat> formatterResolver)
         {
             _formatterResolver = formatterResolver;
         }
@@ -28,16 +28,21 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var untypedFormatter = _formatterResolver.TryResolve<TRule, TValue, TError>();
+            var errorOnlyFormatter = _formatterResolver.TryResolveErrorOnly<TError>();
 
-            if (untypedFormatter == null)
+            if (errorOnlyFormatter != null)
             {
-                throw new InvalidOperationException($"Unable to find formatter for result of validation of value '{typeof(TValue)}' against rule '{typeof(TRule)}'.");
+                return errorOnlyFormatter.Format(validationResult.Error, context);
             }
 
-            var formatter = (IValidationErrorFormatter<TRule, TValue, TError, TFormat>)untypedFormatter;
+            var fullFormatter = _formatterResolver.TryResolveFull<TRule, TValue, TError>();
 
-            return formatter.Format(validationResult, context);
+            if (fullFormatter != null)
+            {
+                return fullFormatter.Format(validationResult, context);
+            }
+
+            throw new InvalidOperationException($"Unable to find formatter for result of validation of value '{typeof(TValue)}' against rule '{typeof(TRule)}'. (Error: '{typeof(TError)}'.)");
         }
     }
 }

@@ -8,7 +8,7 @@
         where TError : class
     {
         TFormat Format(
-            IValidationResult<TError> validationResult,
+            TError error,
             ValidationErrorFormattingContext<TFormat> context);
     }
 

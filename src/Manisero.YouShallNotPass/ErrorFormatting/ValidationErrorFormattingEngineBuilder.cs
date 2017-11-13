@@ -1,20 +1,19 @@
 ﻿using System;
-using Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration;
 using Manisero.YouShallNotPass.ErrorFormatting.Engine;
+using Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration;
 using Manisero.YouShallNotPass.ErrorFormatting.Formatters;
-using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting
 {
     public interface IValidationErrorFormattingEngineBuilder<TFormat>
     {
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError>(
+            IValidationErrorFormatter<TError, TFormat> formatter)
+            where TError : class;
+
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError>(
             IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
             where TRule : IValidationRule<TValue, TError>
-            where TError : class;
-
-        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError>(
-            IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class;
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TRule, TValue, TError>(
@@ -31,22 +30,28 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
     public class ValidationErrorFormattingEngineBuilder<TFormat> : IValidationErrorFormattingEngineBuilder<TFormat>
     {
-        private readonly RuleKeyedOperationsRegistryBuilder<IValidationErrorFormatter<TFormat>> _formattersRegistryBuilder = new RuleKeyedOperationsRegistryBuilder<IValidationErrorFormatter<TFormat>>();
+        private readonly IValidationErrorFormattersRegistryBuilder<TFormat> _formattersRegistryBuilder;
 
-        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError>(
-            IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
+        public ValidationErrorFormattingEngineBuilder()
         {
-            _formattersRegistryBuilder.RegisterOperation<TRule, TValue, TError>(formatter);
-            return this;
+            _formattersRegistryBuilder = new ValidationErrorFormattersRegistryBuilder<TFormat>();
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError>(
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class
         {
-            throw new NotImplementedException();
+            _formattersRegistryBuilder.RegisterFormatter(formatter);
+            return this;
+        }
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError>(
+            IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            _formattersRegistryBuilder.RegisterFormatter(formatter);
+            return this;
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TRule, TValue, TError>(
@@ -54,7 +59,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _formattersRegistryBuilder.RegisterOperationFactory<TRule, TValue, TError>(formatterFactory);
+            _formattersRegistryBuilder.RegisterFormatterFactory(formatterFactory);
             return this;
         }
 
@@ -62,30 +67,15 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Type formatterOpenGenericType,
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
         {
-            if (!formatterOpenGenericType.IsGenericTypeDefinition)
-            {
-                throw new ArgumentException($"{nameof(formatterOpenGenericType)} is not a generic type definition (a.k.a. open generic type). Use standard registration method for it.", nameof(formatterOpenGenericType));
-            }
-
-            var ruleType = formatterOpenGenericType.GetGenericInterfaceTypeArgument(typeof(IValidationErrorFormatter<,,,>), ValidatorInterfaceConstants.TRuleTypeParameterPosition);
-
-            if (ruleType == null)
-            {
-                throw new ArgumentException($"{nameof(formatterOpenGenericType)} must implement {typeof(IValidationErrorFormatter<,,,>)} interface.", nameof(formatterOpenGenericType));
-            }
-
-            _formattersRegistryBuilder.RegisterGenericOperationFactory(ruleType.GetGenericTypeDefinition(),
-                                                                       formatterOpenGenericType,
-                                                                       formatterFactory);
-
+            _formattersRegistryBuilder.RegisterGenericFormatterFactory(formatterOpenGenericType, formatterFactory);
             return this;
         }
 
         public IValidationErrorFormattingEngine<TFormat> Build()
         {
             var formattersRegistry = _formattersRegistryBuilder.Build();
-            var ruleKeyedOperationResolver = new RuleKeyedOperationResolver<IValidationErrorFormatter<TFormat>>(formattersRegistry);
-            var validationErrorFormattingExecutor = new ValidationErrorFormattingExecutor<TFormat>(ruleKeyedOperationResolver);
+            var formatterResolver = new ValidationErrorFormatterResolver<TFormat>(formattersRegistry);
+            var validationErrorFormattingExecutor = new ValidationErrorFormattingExecutor<TFormat>(formatterResolver);
 
             return new ValidationErrorFormattingEngine<TFormat>(validationErrorFormattingExecutor);
         }
