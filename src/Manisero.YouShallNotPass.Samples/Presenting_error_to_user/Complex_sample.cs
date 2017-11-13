@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.ErrorFormatting;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
@@ -19,6 +18,10 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             public string LastName { get; set; }
         }
 
+        public class CreateUserCommandOverallValidationError
+        {
+        }
+
         public static readonly ComplexValidationRule<CreateUserCommand> CreateUserCommandValidationRule = new ComplexValidationRule<CreateUserCommand>
         {
             MemberRules = new Dictionary<string, IValidationRule>
@@ -34,9 +37,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
                 [nameof(CreateUserCommand.FirstName)] = new NotNullNorWhiteSpaceValidationRule(),
                 [nameof(CreateUserCommand.LastName)] = new NotNullNorWhiteSpaceValidationRule()
             },
-            OverallRule = new CustomValidationRule<CreateUserCommand, EmptyValidationError>
+            OverallRule = new CustomValidationRule<CreateUserCommand, CreateUserCommandOverallValidationError>
             {
-                Validator = (value, context) => EmptyValidationError.Some
+                Validator = (value, context) => new CreateUserCommandOverallValidationError()
             }
         };
 
@@ -92,14 +95,6 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             }
         }
 
-        public class CreateUserCommandOverallValidationErrorFormatter : IValidationErrorFormatter<CustomValidationRule<CreateUserCommand, EmptyValidationError>, CreateUserCommand, EmptyValidationError, IEnumerable<string>>
-        {
-            public IEnumerable<string> Format(ValidationResult<CustomValidationRule<CreateUserCommand, EmptyValidationError>, CreateUserCommand, EmptyValidationError> validationResult, ValidationErrorFormattingContext<IEnumerable<string>> context)
-            {
-                yield return "Command is generally invalid.";
-            }
-        }
-
         [Fact]
         public void sample()
         {
@@ -112,7 +107,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             formattingEngineBuilder.RegisterFormatter((EmailValidationError _) => new[] { "Value should be an e-mail address." });
             formattingEngineBuilder.RegisterFormatter((NotNullNorWhiteSpaceValidationError _) => new [] { "Value is required and cannot be empty nor consist of only white space characters." });
             formattingEngineBuilder.RegisterFormatter((NotNullValidationError _) => new[] { "Value is required." });
-            formattingEngineBuilder.RegisterFormatter(new CreateUserCommandOverallValidationErrorFormatter());
+            formattingEngineBuilder.RegisterFormatter((CreateUserCommandOverallValidationError _) => new[] { "Command is generally invalid." });
             var formattingEngine = formattingEngineBuilder.Build();
 
             var command = new CreateUserCommand();
