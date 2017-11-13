@@ -92,26 +92,6 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             }
         }
 
-        public class NotNullValidationErrorFormatter<TValue> : IValidationErrorFormatter<NotNullValidationRule<TValue>, TValue, EmptyValidationError, IEnumerable<string>>
-        {
-            public IEnumerable<string> Format(
-                ValidationResult<NotNullValidationRule<TValue>, TValue, EmptyValidationError> validationResult,
-                ValidationErrorFormattingContext<IEnumerable<string>> context)
-            {
-                yield return "Value is required.";
-            }
-        }
-
-        public class NotNullNorWhiteSpaceValidationErrorFormatter : IValidationErrorFormatter<NotNullNorWhiteSpaceValidationRule, string, EmptyValidationError, IEnumerable<string>>
-        {
-            public IEnumerable<string> Format(
-                ValidationResult<NotNullNorWhiteSpaceValidationRule, string, EmptyValidationError> validationResult,
-                ValidationErrorFormattingContext<IEnumerable<string>> context)
-            {
-                yield return "Value is required and cannot be empty nor consist of only white space characters.";
-            }
-        }
-
         public class CreateUserCommandOverallValidationErrorFormatter : IValidationErrorFormatter<CustomValidationRule<CreateUserCommand, EmptyValidationError>, CreateUserCommand, EmptyValidationError, IEnumerable<string>>
         {
             public IEnumerable<string> Format(ValidationResult<CustomValidationRule<CreateUserCommand, EmptyValidationError>, CreateUserCommand, EmptyValidationError> validationResult, ValidationErrorFormattingContext<IEnumerable<string>> context)
@@ -130,8 +110,8 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             formattingEngineBuilder.RegisterGenericFormatter(typeof(AllValidationErrorFormatter<>));
             formattingEngineBuilder.RegisterGenericFormatter(typeof(ComplexValidatonErrorFormatter<>));
             formattingEngineBuilder.RegisterFormatter((EmailValidationError _) => new[] { "Value should be an e-mail address." });
-            formattingEngineBuilder.RegisterFormatter(new NotNullNorWhiteSpaceValidationErrorFormatter());
-            formattingEngineBuilder.RegisterGenericFormatter(typeof(NotNullValidationErrorFormatter<>));
+            formattingEngineBuilder.RegisterFormatter((NotNullNorWhiteSpaceValidationError _) => new [] { "Value is required and cannot be empty nor consist of only white space characters." });
+            formattingEngineBuilder.RegisterFormatter((NotNullValidationError _) => new[] { "Value is required." });
             formattingEngineBuilder.RegisterFormatter(new CreateUserCommandOverallValidationErrorFormatter());
             var formattingEngine = formattingEngineBuilder.Build();
 
