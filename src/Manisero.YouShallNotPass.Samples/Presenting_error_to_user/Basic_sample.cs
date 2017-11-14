@@ -7,17 +7,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 {
     public class Basic_sample
     {
-        public class EmailValidationErrorFormatter : IValidationErrorFormatter<EmailValidationRule, string, EmailValidationError, string>
-        {
-            public const string ErrorMessage = "Value should be an e-mail address.";
-
-            public string Format(
-                ValidationResult<EmailValidationRule, string, EmailValidationError> validationResult,
-                ValidationErrorFormattingContext<string> context)
-            {
-                return ErrorMessage;
-            }
-        }
+        public const string EmailValidationErrorMessage = "Value should be an e-mail address.";
 
         [Fact]
         public void sample()
@@ -26,7 +16,8 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             var validationEngine = validationEngineBuilder.Build();
 
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
-            formattingEngineBuilder.RegisterFormatter(new EmailValidationErrorFormatter());
+            
+            formattingEngineBuilder.RegisterFormatter((EmailValidationError _) => EmailValidationErrorMessage);
             var formattingEngine = formattingEngineBuilder.Build();
 
             var validationResult = validationEngine.Validate("a", new EmailValidationRule());
@@ -35,7 +26,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
             var error = formattingEngine.Format(validationResult);
 
-            error.Should().Be(EmailValidationErrorFormatter.ErrorMessage);
+            error.Should().Be(EmailValidationErrorMessage);
         }
     }
 }
