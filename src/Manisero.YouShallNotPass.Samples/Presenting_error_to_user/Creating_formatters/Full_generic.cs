@@ -33,7 +33,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
         }
 
         [Fact]
-        public void error_only_formatter()
+        public void full_generic_formatter()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
             formattingEngineBuilder.RegisterFullGenericFormatter(typeof(MinValidationErrorFormatter<>));
@@ -45,9 +45,11 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
         }
 
         [Fact]
-        public void error_only_formatter_factory()
+        public void full_generic_formatter_factory()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
+
+            // You may want to replace below lambda with your DI Container usage
             formattingEngineBuilder.RegisterFullGenericFormatterFactory(typeof(MinValidationErrorFormatter<>),
                                                                         type => (IValidationErrorFormatter<string>)Activator.CreateInstance(type));
 

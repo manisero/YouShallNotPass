@@ -76,7 +76,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
             _ => "Value should be an e-mail.";
 
         [Fact]
-        public void error_only_formatter()
+        public void full_formatter()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
             formattingEngineBuilder.RegisterErrorOnlyFormatterFunc(NotNullNorWhiteSpaceValidationErrorFormatter);
@@ -90,7 +90,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
         }
 
         [Fact]
-        public void error_only_formatter_factory()
+        public void full_formatter_factory()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
             formattingEngineBuilder.RegisterErrorOnlyFormatterFunc(NotNullNorWhiteSpaceValidationErrorFormatter);
