@@ -94,7 +94,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class
         {
-            _formattersRegistryBuilder.RegisterFormatter(formatter);
+            _formattersRegistryBuilder.RegisterErrorOnlyFormatter(formatter);
             return this;
         }
 
@@ -129,7 +129,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _formattersRegistryBuilder.RegisterFormatter(formatter);
+            _formattersRegistryBuilder.RegisterFullFormatter(formatter);
             return this;
         }
 
@@ -138,7 +138,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _formattersRegistryBuilder.RegisterFormatterFactory(formatterFactory);
+            _formattersRegistryBuilder.RegisterFullFormatterFactory(formatterFactory);
             return this;
         }
 
@@ -156,7 +156,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Type formatterOpenGenericType,
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
         {
-            _formattersRegistryBuilder.RegisterGenericFormatterFactory(formatterOpenGenericType, formatterFactory);
+            _formattersRegistryBuilder.RegisterFullGenericFormatterFactory(formatterOpenGenericType, formatterFactory);
             return this;
         }
 

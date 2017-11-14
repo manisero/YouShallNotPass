@@ -7,23 +7,31 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
 {
     public interface IValidationErrorFormattersRegistryBuilder<TFormat>
     {
-        void RegisterFormatter<TError>(
+        // Error only
+
+        void RegisterErrorOnlyFormatter<TError>(
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class;
 
-        void RegisterFormatter<TRule, TValue, TError>(
+        // Full
+
+        void RegisterFullFormatter<TRule, TValue, TError>(
             IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        void RegisterFormatterFactory<TRule, TValue, TError>(
+        void RegisterFullFormatterFactory<TRule, TValue, TError>(
             Func<IValidationErrorFormatter<TRule, TValue, TError, TFormat>> formatterFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        void RegisterGenericFormatterFactory(
+        // Generic
+
+        void RegisterFullGenericFormatterFactory(
             Type formatterOpenGenericType,
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory);
+
+        // Build
 
         ValidationErrorFormattersRegistry<TFormat> Build();
     }
@@ -39,14 +47,18 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
             _fullFormattersRegistryBuilder = new RuleKeyedOperationsRegistryBuilder<IValidationErrorFormatter<TFormat>>();
         }
 
-        public void RegisterFormatter<TError>(
+        // Error only
+
+        public void RegisterErrorOnlyFormatter<TError>(
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class
         {
             _errorOnlyFormatters.Add(typeof(TError), formatter);
         }
 
-        public void RegisterFormatter<TRule, TValue, TError>(
+        // Full
+
+        public void RegisterFullFormatter<TRule, TValue, TError>(
             IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
@@ -54,7 +66,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
             _fullFormattersRegistryBuilder.RegisterOperation<TRule, TValue, TError>(formatter);
         }
 
-        public void RegisterFormatterFactory<TRule, TValue, TError>(
+        public void RegisterFullFormatterFactory<TRule, TValue, TError>(
             Func<IValidationErrorFormatter<TRule, TValue, TError, TFormat>> formatterFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
@@ -62,7 +74,9 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
             _fullFormattersRegistryBuilder.RegisterOperationFactory<TRule, TValue, TError>(formatterFactory);
         }
 
-        public void RegisterGenericFormatterFactory(
+        // Generic
+
+        public void RegisterFullGenericFormatterFactory(
             Type formatterOpenGenericType,
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
         {
@@ -82,6 +96,8 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
                                                                            formatterOpenGenericType,
                                                                            formatterFactory);
         }
+
+        // Build
 
         public ValidationErrorFormattersRegistry<TFormat> Build()
         {
