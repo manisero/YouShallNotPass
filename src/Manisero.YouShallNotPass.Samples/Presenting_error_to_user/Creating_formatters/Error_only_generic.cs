@@ -6,32 +6,32 @@ using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_formatters
 {
-    public class Full_generic
+    public class Error_only_generic
     {
         public static readonly ValidationResult<MinValidationRule<int>, int, MinValidationError<int>> ValidationResult =
             new ValidationResult<MinValidationRule<int>, int, MinValidationError<int>>
             {
-                Rule = new MinValidationRule<int>{MinValue = 1},
+                Rule = new MinValidationRule<int> { MinValue = 1 },
                 Value = 0,
                 Error = new MinValidationError<int> { MinValue = 1 }
             };
 
         // formatters
 
-        public class MinValidationErrorFormatter<TValue> : IValidationErrorFormatter<MinValidationRule<TValue>, TValue, MinValidationError<TValue>, string>
+        public class MinValidationErrorFormatter<TValue> : IValidationErrorFormatter<MinValidationError<TValue>, string>
             where TValue : IComparable<TValue>
         {
             public string Format(
-                ValidationResult<MinValidationRule<TValue>, TValue, MinValidationError<TValue>> validationResult,
+                MinValidationError<TValue> error,
                 ValidationErrorFormattingContext<string> context)
-                => $"Value was {validationResult.Value}, while should be at least {validationResult.Rule.MinValue}.";
+                => $"Value should be at least {error.MinValue}.";
         }
 
         [Fact]
-        public void full_generic_formatter()
+        public void error_only_generic_formatter()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
-            formattingEngineBuilder.RegisterFullGenericFormatter(typeof(MinValidationErrorFormatter<>));
+            formattingEngineBuilder.RegisterErrorOnlyGenericFormatter(typeof(MinValidationErrorFormatter<>));
 
             var formattingEngine = formattingEngineBuilder.Build();
             var error = formattingEngine.Format(ValidationResult);
@@ -40,13 +40,13 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
         }
 
         [Fact]
-        public void full_generic_formatter_factory()
+        public void error_only_generic_formatter_factory()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
 
             // You may want to replace below lambda with your DI Container usage
-            formattingEngineBuilder.RegisterFullGenericFormatterFactory(typeof(MinValidationErrorFormatter<>),
-                                                                        type => (IValidationErrorFormatter<string>)Activator.CreateInstance(type));
+            formattingEngineBuilder.RegisterErrorOnlyGenericFormatterFactory(typeof(MinValidationErrorFormatter<>),
+                                                                             type => (IValidationErrorFormatter<string>)Activator.CreateInstance(type));
 
             var formattingEngine = formattingEngineBuilder.Build();
             var error = formattingEngine.Format(ValidationResult);

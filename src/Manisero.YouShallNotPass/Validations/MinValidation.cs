@@ -1,22 +1,26 @@
 ﻿using System;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    public class MinValidationRule<TValue> : IValidationRule<TValue, EmptyValidationError>
+    public class MinValidationRule<TValue> : IValidationRule<TValue, MinValidationError<TValue>>
         where TValue : IComparable<TValue>
     {
         public TValue MinValue { get; set; }
     }
 
-    public class MinValidator<TValue> : IValidator<MinValidationRule<TValue>, TValue, EmptyValidationError>
+    public class MinValidationError<TValue>
+    {
+        public TValue MinValue { get; set; }
+    }
+
+    public class MinValidator<TValue> : IValidator<MinValidationRule<TValue>, TValue, MinValidationError<TValue>>
         where TValue : IComparable<TValue>
     {
-        public EmptyValidationError Validate(TValue value, MinValidationRule<TValue> rule, ValidationContext context)
+        public MinValidationError<TValue> Validate(TValue value, MinValidationRule<TValue> rule, ValidationContext context)
         {
             return value.CompareTo(rule.MinValue) < 0
-                ? EmptyValidationError.Some
-                : EmptyValidationError.None;
+                ? new MinValidationError<TValue> { MinValue = rule.MinValue }
+                : null;
         }
     }
 }

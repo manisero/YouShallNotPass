@@ -25,6 +25,15 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Func<IValidationErrorFormatter<TError, TFormat>> formatterFactory)
             where TError : class;
 
+        // Error only generic
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatter(
+            Type formatterOpenGenericType);
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatterFactory(
+            Type formatterOpenGenericType,
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory);
+
         // Error rule and value
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFunc<TRule, TValue, TError>(
@@ -49,7 +58,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        // Generic
+        // Full generic
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatter(
             Type formatterOpenGenericType);
@@ -112,6 +121,26 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             return this;
         }
 
+        // Error only generic
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatter(
+            Type formatterOpenGenericType)
+        {
+            // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
+            RegisterErrorOnlyGenericFormatterFactory(formatterOpenGenericType,
+                                                     type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type));
+
+            return this;
+        }
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatterFactory(
+            Type formatterOpenGenericType,
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
+        {
+            // TODO: Decide whether it should be separate method, or there should be single RegisterGenericFormatterFactory for each type of formatter
+            throw new NotImplementedException();
+        }
+
         // Error rule and value
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFunc<TRule, TValue, TError>(
@@ -158,13 +187,15 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             return this;
         }
 
-        // Generic
+        // Full generic
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatter(
             Type formatterOpenGenericType)
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
-            RegisterFullGenericFormatterFactory(formatterOpenGenericType, type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type));
+            RegisterFullGenericFormatterFactory(formatterOpenGenericType,
+                                                type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type));
+
             return this;
         }
 
