@@ -73,6 +73,7 @@
     <Compile Include="Custom_validation_data\Validating_wrapped_object.cs" />
     <Compile Include="Presenting_error_to_user\Basic_sample.cs" />
     <Compile Include="Presenting_error_to_user\Complex_sample.cs" />
+    <Compile Include="Presenting_error_to_user\Creating_formatters\Full.cs" />
     <Compile Include="Presenting_error_to_user\Creating_formatters\Error_rule_and_value.cs" />
     <Compile Include="Presenting_error_to_user\Creating_formatters\Error_only.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
