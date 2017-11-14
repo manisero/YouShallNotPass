@@ -8,16 +8,23 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
 {
     public class Error_only
     {
-        public const string ErrorMessage = "Value should be an e-mail address.";
+        public static readonly ValidationResult<EmailValidationRule, string, EmailValidationError> ValidationResult =
+            new ValidationResult<EmailValidationRule, string, EmailValidationError>
+            {
+                Rule = new EmailValidationRule(),
+                Value = "a",
+                Error = EmailValidationError.Instance
+            };
 
-        public static readonly ValidationResult<EmailValidationRule, string, EmailValidationError> ValidationResult
-            = new ValidationResult<EmailValidationRule, string, EmailValidationError>();
+        // formatter func
+
+        private static readonly Func<EmailValidationError, string> FormatterFunc = _ => "Value should be an e-mail address.";
 
         [Fact]
         public void error_only_formatter_func()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
-            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidationError>(_ => ErrorMessage);
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc(FormatterFunc);
 
             var formattingEngine = formattingEngineBuilder.Build();
             var error = formattingEngine.Format(ValidationResult);
@@ -28,10 +35,8 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
         [Fact]
         public void error_only_formatter_func_factory()
         {
-            Func<EmailValidationError, string> formatter = _ => "Value should be an e-mail address.";
-
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
-            formattingEngineBuilder.RegisterErrorOnlyFormatterFuncFactory(() => formatter);
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFuncFactory(() => FormatterFunc);
 
             var formattingEngine = formattingEngineBuilder.Build();
             var error = formattingEngine.Format(ValidationResult);
@@ -39,12 +44,12 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
             error.Should().NotBeNull();
         }
 
+        // formatter
+
         public class EmailValidationErrorFormatter : IValidationErrorFormatter<EmailValidationError, string>
         {
             public string Format(EmailValidationError error, ValidationErrorFormattingContext<string> context)
-            {
-                return "Value should be an e-mail address.";
-            }
+                => "Value should be an e-mail address.";
         }
 
         [Fact]

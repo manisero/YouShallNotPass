@@ -152,7 +152,9 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _formattersRegistryBuilder.RegisterFullFormatterFactory(formatterFactory);
+            var wrapper = new FullFormatterFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
+
+            RegisterFullFormatter(wrapper);
             return this;
         }
 

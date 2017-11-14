@@ -20,11 +20,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        void RegisterFullFormatterFactory<TRule, TValue, TError>(
-            Func<IValidationErrorFormatter<TRule, TValue, TError, TFormat>> formatterFactory)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class;
-
         // Generic
 
         void RegisterFullGenericFormatterFactory(
@@ -39,6 +34,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
     public class ValidationErrorFormattersRegistryBuilder<TFormat> : IValidationErrorFormattersRegistryBuilder<TFormat>
     {
         private readonly IDictionary<Type, IValidationErrorFormatter<TFormat>> _errorOnlyFormatters;
+        // TODO: Try to get rid of this, consider just having 3-4 dictionaries
         private readonly IRuleKeyedOperationsRegistryBuilder<IValidationErrorFormatter<TFormat>> _fullFormattersRegistryBuilder;
 
         public ValidationErrorFormattersRegistryBuilder()
@@ -64,14 +60,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
             where TError : class
         {
             _fullFormattersRegistryBuilder.RegisterOperation<TRule, TValue, TError>(formatter);
-        }
-
-        public void RegisterFullFormatterFactory<TRule, TValue, TError>(
-            Func<IValidationErrorFormatter<TRule, TValue, TError, TFormat>> formatterFactory)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            _fullFormattersRegistryBuilder.RegisterOperationFactory<TRule, TValue, TError>(formatterFactory);
         }
 
         // Generic
