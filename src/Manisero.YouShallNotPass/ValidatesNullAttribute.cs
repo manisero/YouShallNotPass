@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Manisero.YouShallNotPass.Core.ValidationDefinition
+namespace Manisero.YouShallNotPass
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ValidatesNullAttribute : Attribute

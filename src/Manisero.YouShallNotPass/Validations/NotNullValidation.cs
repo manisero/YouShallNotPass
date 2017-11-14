@@ -1,6 +1,4 @@
-﻿using Manisero.YouShallNotPass.Core.ValidationDefinition;
-
-namespace Manisero.YouShallNotPass.Validations
+﻿namespace Manisero.YouShallNotPass.Validations
 {
     [ValidatesNull]
     public class NotNullValidationRule<TValue> : IValidationRule<TValue, NotNullValidationError>

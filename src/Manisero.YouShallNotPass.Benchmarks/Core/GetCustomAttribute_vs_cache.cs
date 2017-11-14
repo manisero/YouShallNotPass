@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 using BenchmarkDotNet.Attributes;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
 using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Benchmarks.Core
