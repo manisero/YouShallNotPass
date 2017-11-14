@@ -17,7 +17,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
             
-            formattingEngineBuilder.RegisterFormatter((EmailValidationError _) => EmailValidationErrorMessage);
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidationError>(_ => EmailValidationErrorMessage);
             var formattingEngine = formattingEngineBuilder.Build();
 
             var validationResult = validationEngine.Validate("a", new EmailValidationRule());

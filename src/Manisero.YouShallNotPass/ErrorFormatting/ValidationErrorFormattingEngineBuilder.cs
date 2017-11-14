@@ -7,23 +7,54 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 {
     public interface IValidationErrorFormattingEngineBuilder<TFormat>
     {
-        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError>(
+        // Error only
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFunc<TError>(
+            Func<TError, TFormat> formatter)
+            where TError : class;
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFuncFactory<TError>(
+            Func<Func<TError, TFormat>> formatterFactory)
+            where TError : class;
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatter<TError>(
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class;
 
-        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError>(
+        // Error rule and value
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFunc<TRule, TValue, TError>(
+            Func<TError, TRule, TValue, TFormat> formatter)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class;
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFuncFactory<TRule, TValue, TError>(
+            Func<Func<TError, TRule, TValue, TFormat>> formatterFactory)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class;
+
+        // Full
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullFormatter<TRule, TValue, TError>(
             IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TRule, TValue, TError>(
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullFormatterFactory<TRule, TValue, TError>(
             Func<IValidationErrorFormatter<TRule, TValue, TError, TFormat>> formatterFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        IValidationErrorFormattingEngineBuilder<TFormat> RegisterGenericFormatterFactory(
+        // Generic
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatter(
+            Type formatterOpenGenericType);
+
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatterFactory(
             Type formatterOpenGenericType,
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory);
+
+        // Build
 
         IValidationErrorFormattingEngine<TFormat> Build();
     }
@@ -37,7 +68,29 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             _formattersRegistryBuilder = new ValidationErrorFormattersRegistryBuilder<TFormat>();
         }
 
-        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError>(
+        // Error only
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFunc<TError>(
+            Func<TError, TFormat> formatter)
+            where TError : class
+        {
+            var wrapper = new ErrorOnlyFormatterWrapper<TError, TFormat>(formatter);
+
+            RegisterErrorOnlyFormatter(wrapper);
+            return this;
+        }
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFuncFactory<TError>(
+            Func<Func<TError, TFormat>> formatterFactory)
+            where TError : class
+        {
+            var wrapper = new ErrorOnlyFormatterFactoryWrapper<TError, TFormat>(formatterFactory);
+
+            RegisterErrorOnlyFormatter(wrapper);
+            return this;
+        }
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatter<TError>(
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class
         {
@@ -45,7 +98,33 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             return this;
         }
 
-        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError>(
+        // Error rule and value
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFunc<TRule, TValue, TError>(
+            Func<TError, TRule, TValue, TFormat> formatter)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var wrapper = new ErrorRuleAndValueFormatterWrapper<TRule, TValue, TError, TFormat>(formatter);
+
+            RegisterFullFormatter(wrapper);
+            return this;
+        }
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFuncFactory<TRule, TValue, TError>(
+            Func<Func<TError, TRule, TValue, TFormat>> formatterFactory)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var wrapper = new ErrorRuleAndValueFormatterFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
+
+            RegisterFullFormatter(wrapper);
+            return this;
+        }
+
+        // Full
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullFormatter<TRule, TValue, TError>(
             IValidationErrorFormatter<TRule, TValue, TError, TFormat> formatter)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
@@ -54,7 +133,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             return this;
         }
 
-        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TRule, TValue, TError>(
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullFormatterFactory<TRule, TValue, TError>(
             Func<IValidationErrorFormatter<TRule, TValue, TError, TFormat>> formatterFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
@@ -63,13 +142,25 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             return this;
         }
 
-        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterGenericFormatterFactory(
+        // Generic
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatter(
+            Type formatterOpenGenericType)
+        {
+            // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
+            RegisterFullGenericFormatterFactory(formatterOpenGenericType, type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type));
+            return this;
+        }
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatterFactory(
             Type formatterOpenGenericType,
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
         {
             _formattersRegistryBuilder.RegisterGenericFormatterFactory(formatterOpenGenericType, formatterFactory);
             return this;
         }
+
+        // Build
 
         public IValidationErrorFormattingEngine<TFormat> Build()
         {
@@ -78,64 +169,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             var validationErrorFormattingExecutor = new ValidationErrorFormattingExecutor<TFormat>(formatterResolver);
 
             return new ValidationErrorFormattingEngine<TFormat>(validationErrorFormattingExecutor);
-        }
-    }
-
-    public static class ValidationErrorFormattingEngineBuilderExtensions
-    {
-        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TError, TFormat>(
-            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
-            Func<TError, TFormat> formatter)
-            where TError : class
-        {
-            var wrapper = new ErrorOnlyFormatterWrapper<TError, TFormat>(formatter);
-
-            builder.RegisterFormatter(wrapper);
-            return builder;
-        }
-
-        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatter<TRule, TValue, TError, TFormat>(
-            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
-            Func<TError, TRule, TValue, TFormat> formatter)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var wrapper = new ErrorRuleAndValueFormatterWrapper<TRule, TValue, TError, TFormat>(formatter);
-
-            builder.RegisterFormatter(wrapper);
-            return builder;
-        }
-
-        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TError, TFormat>(
-            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
-            Func<Func<TError, TFormat>> formatterFactory)
-            where TError : class
-        {
-            var wrapper = new ErrorOnlyFormatterFactoryWrapper<TError, TFormat>(formatterFactory);
-
-            builder.RegisterFormatter(wrapper);
-            return builder;
-        }
-
-        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterFormatterFactory<TRule, TValue, TError, TFormat>(
-            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
-            Func<Func<TError, TRule, TValue, TFormat>> formatterFactory)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var wrapper = new ErrorRuleAndValueFormatterFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
-
-            builder.RegisterFormatter(wrapper);
-            return builder;
-        }
-
-        public static IValidationErrorFormattingEngineBuilder<TFormat> RegisterGenericFormatter<TFormat>(
-            this IValidationErrorFormattingEngineBuilder<TFormat> builder,
-            Type formatterOpenGenericType)
-        {
-            // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
-            builder.RegisterGenericFormatterFactory(formatterOpenGenericType, type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type));
-            return builder;
         }
     }
 }

@@ -11,10 +11,13 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
         public void error_only_non_generic_formatter()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
-            formattingEngineBuilder.RegisterFormatter((EmailValidationError _) => "Value should be an e-mail address.");
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidationError>(_ => "Value should be an e-mail address.");
+
             var formattingEngine = formattingEngineBuilder.Build();
 
-            var error = formattingEngine.Format(new ValidationResult<EmailValidationRule, string, EmailValidationError>());
+            var validationResult = new ValidationResult<EmailValidationRule, string, EmailValidationError>();
+
+            var error = formattingEngine.Format(validationResult);
 
             error.Should().NotBeNull();
         }
@@ -23,7 +26,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
         public void error_rule_and_value_non_generic_formatter()
         {
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
-            formattingEngineBuilder.RegisterFormatter<MinLengthValidationRule, string, MinLengthValidationError, string>((e, r, v) => $"Value has {v.Length} characters(s), while should have at least {r.MinLength}.");
+            formattingEngineBuilder.RegisterErrorRuleAndValueFormatterFunc<MinLengthValidationRule, string, MinLengthValidationError>(
+                (e, r, v) => $"Value has {v.Length} characters(s), while should have at least {r.MinLength}.");
+
             var formattingEngine = formattingEngineBuilder.Build();
 
             var validationResult = new ValidationResult<MinLengthValidationRule, string, MinLengthValidationError>

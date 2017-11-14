@@ -102,12 +102,12 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             var validationEngine = validationEngineBuilder.Build();
 
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<IEnumerable<string>>();
-            formattingEngineBuilder.RegisterGenericFormatter(typeof(AllValidationErrorFormatter<>));
-            formattingEngineBuilder.RegisterGenericFormatter(typeof(ComplexValidatonErrorFormatter<>));
-            formattingEngineBuilder.RegisterFormatter((EmailValidationError _) => new[] { "Value should be an e-mail address." });
-            formattingEngineBuilder.RegisterFormatter((NotNullNorWhiteSpaceValidationError _) => new [] { "Value is required and cannot be empty nor consist of only white space characters." });
-            formattingEngineBuilder.RegisterFormatter((NotNullValidationError _) => new[] { "Value is required." });
-            formattingEngineBuilder.RegisterFormatter((CreateUserCommandOverallValidationError _) => new[] { "Command is generally invalid." });
+            formattingEngineBuilder.RegisterFullGenericFormatter(typeof(AllValidationErrorFormatter<>));
+            formattingEngineBuilder.RegisterFullGenericFormatter(typeof(ComplexValidatonErrorFormatter<>));
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidationError>(_ => new[] { "Value should be an e-mail address." });
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<NotNullNorWhiteSpaceValidationError>(_ => new[] { "Value is required and cannot be empty nor consist of only white space characters." });
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<NotNullValidationError>(_ => new[] { "Value is required." });
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<CreateUserCommandOverallValidationError>(_ => new[] { "Command is generally invalid." });
             var formattingEngine = formattingEngineBuilder.Build();
 
             var command = new CreateUserCommand();
