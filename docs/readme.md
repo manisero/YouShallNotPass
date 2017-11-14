@@ -32,6 +32,7 @@ TODO
 - consider implementing validator / formatter factories as feature outside engine
   - factory would be wrapped by sigle-instance wrapper
     - wrapper would accept factory in constructor and ivoke it in Validate / Format method
+- unify naming of validations, organize them in folders (e.g. StringValidations)
 
 
 
