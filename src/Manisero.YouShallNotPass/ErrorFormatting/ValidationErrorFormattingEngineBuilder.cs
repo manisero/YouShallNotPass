@@ -21,6 +21,10 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class;
 
+        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFactory<TError>(
+            Func<IValidationErrorFormatter<TError, TFormat>> formatterFactory)
+            where TError : class;
+
         // Error rule and value
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFunc<TRule, TValue, TError>(
@@ -74,7 +78,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Func<TError, TFormat> formatter)
             where TError : class
         {
-            var wrapper = new ErrorOnlyFormatterWrapper<TError, TFormat>(formatter);
+            var wrapper = new ErrorOnlyFormatterFuncWrapper<TError, TFormat>(formatter);
 
             RegisterErrorOnlyFormatter(wrapper);
             return this;
@@ -84,7 +88,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Func<Func<TError, TFormat>> formatterFactory)
             where TError : class
         {
-            var wrapper = new ErrorOnlyFormatterFactoryWrapper<TError, TFormat>(formatterFactory);
+            var wrapper = new ErrorOnlyFormatterFuncFactoryWrapper<TError, TFormat>(formatterFactory);
 
             RegisterErrorOnlyFormatter(wrapper);
             return this;
@@ -95,6 +99,16 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TError : class
         {
             _formattersRegistryBuilder.RegisterErrorOnlyFormatter(formatter);
+            return this;
+        }
+
+        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFactory<TError>(
+            Func<IValidationErrorFormatter<TError, TFormat>> formatterFactory)
+            where TError : class
+        {
+            var wrapper = new ErrorOnlyFormatterFactoryWrapper<TError, TFormat>(formatterFactory);
+
+            RegisterErrorOnlyFormatter(wrapper);
             return this;
         }
 

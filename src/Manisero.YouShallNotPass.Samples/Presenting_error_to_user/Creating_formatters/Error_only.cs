@@ -58,5 +58,17 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
 
             error.Should().NotBeNull();
         }
+
+        [Fact]
+        public void error_only_formatter_factory()
+        {
+            var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFactory(() => new EmailValidationErrorFormatter());
+
+            var formattingEngine = formattingEngineBuilder.Build();
+            var error = formattingEngine.Format(ValidationResult);
+
+            error.Should().NotBeNull();
+        }
     }
 }
