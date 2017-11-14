@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Manisero.YouShallNotPass.Core.ValidationDefinition;
+using Manisero.YouShallNotPass.Samples.Utils;
 using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_dependencies

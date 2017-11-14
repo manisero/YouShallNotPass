@@ -79,7 +79,6 @@
     <Compile Include="ValidationEngineBuilder.cs" />
     <Compile Include="ValidationRule.cs" />
     <Compile Include="Utils\TypeExtensions.cs" />
-    <Compile Include="Core\ValidationDefinition\EmptyValidationError.cs" />
     <Compile Include="Validations\MinLengthValidationRule.cs" />
     <Compile Include="Validations\NotNullNorWhiteSpaceValidation.cs" />
     <Compile Include="Validator.cs" />

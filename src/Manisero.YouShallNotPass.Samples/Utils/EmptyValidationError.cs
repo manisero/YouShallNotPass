@@ -1,4 +1,4 @@
-﻿namespace Manisero.YouShallNotPass.Core.ValidationDefinition
+﻿namespace Manisero.YouShallNotPass.Samples.Utils
 {
     public class EmptyValidationError
     {
