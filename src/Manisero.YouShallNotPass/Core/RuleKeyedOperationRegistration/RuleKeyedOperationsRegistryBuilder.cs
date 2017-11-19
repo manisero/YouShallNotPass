@@ -9,11 +9,11 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        /// <param name="operationFactory">concrete operation type => operation</param>
-        void RegisterGenericOperationFactory(
+        /// <param name="operationGetter">concrete operation type => operation</param>
+        void RegisterGenericOperation(
             Type ruleGenericDefinition,
             Type operationOpenGenericType,
-            Func<Type, TOperation> operationFactory);
+            Func<Type, TOperation> operationGetter);
 
         OperationsRegistry<TOperation> Build();
     }
@@ -27,21 +27,21 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _registry.OperationInstances.Add(typeof(TRule), operation);
+            _registry.Operations.Add(typeof(TRule), operation);
         }
 
-        public void RegisterGenericOperationFactory(
+        public void RegisterGenericOperation(
             Type ruleGenericDefinition,
             Type operationOpenGenericType,
-            Func<Type, TOperation> operationFactory)
+            Func<Type, TOperation> operationGetter)
         {
             var registration = new OperationsRegistry<TOperation>.GenericOperationRegistration
             {
                 OperationOpenGenericType = operationOpenGenericType,
-                Factory = operationFactory
+                Getter = operationGetter
             };
 
-            _registry.GenericOperationFactories.Add(ruleGenericDefinition, registration);
+            _registry.GenericOperations.Add(ruleGenericDefinition, registration);
         }
 
         public OperationsRegistry<TOperation> Build()

@@ -22,9 +22,9 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
 
         // Generic
 
-        void RegisterFullGenericFormatterFactory(
+        void RegisterFullGenericFormatter(
             Type formatterOpenGenericType,
-            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory);
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterGetter);
 
         // Build
 
@@ -64,9 +64,9 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
 
         // Generic
 
-        public void RegisterFullGenericFormatterFactory(
+        public void RegisterFullGenericFormatter(
             Type formatterOpenGenericType,
-            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterGetter)
         {
             if (!formatterOpenGenericType.IsGenericTypeDefinition)
             {
@@ -80,9 +80,9 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
                 throw new ArgumentException($"{nameof(formatterOpenGenericType)} must implement {typeof(IValidationErrorFormatter<,,,>)} interface.", nameof(formatterOpenGenericType));
             }
 
-            _fullFormattersRegistryBuilder.RegisterGenericOperationFactory(ruleType.GetGenericTypeDefinition(),
-                                                                           formatterOpenGenericType,
-                                                                           formatterFactory);
+            _fullFormattersRegistryBuilder.RegisterGenericOperation(ruleType.GetGenericTypeDefinition(),
+                                                                    formatterOpenGenericType,
+                                                                    formatterGetter);
         }
 
         // Build

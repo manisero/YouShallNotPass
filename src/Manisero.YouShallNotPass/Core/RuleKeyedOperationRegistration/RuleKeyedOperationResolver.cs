@@ -27,7 +27,7 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
         {
             var ruleType = typeof(TRule);
 
-            var operation = _operationsRegistry.OperationInstances.GetValueOrDefault(ruleType);
+            var operation = _operationsRegistry.Operations.GetValueOrDefault(ruleType);
 
             if (operation != null)
             {
@@ -39,7 +39,7 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             if (genericOperation != null)
             {
                 // TODO: Make it thread-safe
-                _operationsRegistry.OperationInstances.Add(ruleType, genericOperation);
+                _operationsRegistry.Operations.Add(ruleType, genericOperation);
                 return genericOperation;
             }
 
@@ -57,7 +57,7 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             
             var ruleGenericDefinition = ruleType.GetGenericTypeDefinition();
 
-            var registration = _operationsRegistry.GenericOperationFactories.GetValueOrNull(ruleGenericDefinition);
+            var registration = _operationsRegistry.GenericOperations.GetValueOrNull(ruleGenericDefinition);
 
             if (registration == null)
             {
@@ -80,7 +80,7 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             var operationTypeArguments = ruleType.GenericTypeArguments.GetRange(0, operationTypeParameters.Length);
             var operationType = operationOpenGenericType.MakeGenericType(operationTypeArguments);
 
-            return registration.Value.Factory(operationType);
+            return registration.Value.Getter(operationType);
         }
     }
 }
