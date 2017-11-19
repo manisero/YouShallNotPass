@@ -37,14 +37,11 @@ namespace Manisero.YouShallNotPass.Tests.Core
                                                      type => (IValidator)Activator.CreateInstance(type))
                 .Build();
 
-            var validation1 = Task.Run(() => ExecuteValidation(engine));
-            var validation2 = Task.Run(() => ExecuteValidation(engine));
+            var validation1 = Task.Run(() => engine.Validate(Value, ValidationRule));
+            var validation2 = Task.Run(() => engine.Validate(Value, ValidationRule));
             Task.WaitAll(validation1, validation2);
             
             Validator<int>.InstancesCount.Should().Be(1);
         }
-
-        private void ExecuteValidation(IValidationEngine engine)
-            => engine.Validate<Rule<int>, int, object>(Value, ValidationRule);
     }
 }

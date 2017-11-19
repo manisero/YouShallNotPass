@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Core\Engine\SubvalidationEngineFactory.cs" />
     <Compile Include="Core\Engine\ValidationExecutor.cs" />
+    <Compile Include="Utils\ThreadSafeCache.cs" />
     <Compile Include="ErrorFormatting\Core\FormatterRegistration\ValidationErrorFormatterResolver.cs" />
     <Compile Include="ErrorFormatting\Core\FormatterRegistration\ValidationErrorFormattersRegistry.cs" />
     <Compile Include="ErrorFormatting\Core\FormatterRegistration\ValidationErrorFormattersRegistryBuilder.cs" />

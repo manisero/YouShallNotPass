@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
@@ -47,27 +46,6 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
         private IValidator TryResolveFullGeneric(Type ruleType)
         {
             return _validatorsRegistry.FullGenericValidators.TryResolve(ruleType);
-        }
-    }
-
-    public class ThreadSafeCache<TKey, TItem>
-    {
-        private readonly ConcurrentDictionary<TKey, TItem> _cache = new ConcurrentDictionary<TKey, TItem>();
-        private readonly object _lock = new object();
-
-        public TItem GetOrAdd(TKey key, Func<TKey, TItem> itemFactory)
-        {
-            TItem item;
-
-            if (!_cache.TryGetValue(key, out item))
-            {
-                lock (_lock)
-                {
-                    item = _cache.GetOrAdd(key, itemFactory);
-                }
-            }
-
-            return item;
         }
     }
 }
