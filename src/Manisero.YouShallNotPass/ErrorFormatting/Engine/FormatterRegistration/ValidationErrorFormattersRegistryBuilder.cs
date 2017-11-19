@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
@@ -35,15 +33,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
 
     public class ValidationErrorFormattersRegistryBuilder<TFormat> : IValidationErrorFormattersRegistryBuilder<TFormat>
     {
-        private readonly IDictionary<Type, IValidationErrorFormatter<TFormat>> _errorOnlyFormatters;
-        // TODO: Try to get rid of this, consider just having 3-4 dictionaries
-        private readonly IRuleKeyedOperationsRegistryBuilder<IValidationErrorFormatter<TFormat>> _fullFormattersRegistryBuilder;
-
-        public ValidationErrorFormattersRegistryBuilder()
-        {
-            _errorOnlyFormatters = new Dictionary<Type, IValidationErrorFormatter<TFormat>>();
-            _fullFormattersRegistryBuilder = new RuleKeyedOperationsRegistryBuilder<IValidationErrorFormatter<TFormat>>();
-        }
+        private readonly ValidationErrorFormattersRegistry<TFormat> _registry = new ValidationErrorFormattersRegistry<TFormat>();
 
         // Error only
 
@@ -51,7 +41,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class
         {
-            _errorOnlyFormatters.Add(typeof(TError), formatter);
+            _registry.ErrorOnlyFormatters.Add(typeof(TError), formatter);
         }
 
         public void RegisterErrorOnlyGenericFormatter(
@@ -81,7 +71,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _fullFormattersRegistryBuilder.RegisterOperation<TRule, TValue, TError>(formatter);
+            _registry.FullFormatters.Add(typeof(TRule), formatter);
         }
 
         public void RegisterFullGenericFormatter(
@@ -100,20 +90,16 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
                 throw new ArgumentException($"{nameof(formatterOpenGenericType)} must implement {typeof(IValidationErrorFormatter<,,,>)} interface.", nameof(formatterOpenGenericType));
             }
 
-            _fullFormattersRegistryBuilder.RegisterGenericOperation(ruleType.GetGenericTypeDefinition(),
-                                                                    formatterOpenGenericType,
-                                                                    formatterGetter);
+            _registry.FullGenericFormatters.Register(ruleType.GetGenericTypeDefinition(),
+                                                     formatterOpenGenericType,
+                                                     formatterGetter);
         }
 
         // Build
 
         public ValidationErrorFormattersRegistry<TFormat> Build()
         {
-            return new ValidationErrorFormattersRegistry<TFormat>
-            {
-                ErrorOnlyFormatters = _errorOnlyFormatters,
-                FullFormattersRegistry = _fullFormattersRegistryBuilder.Build()
-            };
+            return _registry;
         }
     }
 }
