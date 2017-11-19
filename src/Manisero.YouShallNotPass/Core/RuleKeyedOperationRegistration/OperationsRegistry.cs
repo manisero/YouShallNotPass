@@ -15,10 +15,6 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
         public IDictionary<Type, TOperation> OperationInstances { get; set; }
             = new Dictionary<Type, TOperation>();
 
-        /// <summary>rule type -> operation factory</summary>
-        public IDictionary<Type, Func<TOperation>> OperationFactories { get; set; }
-            = new Dictionary<Type, Func<TOperation>>();
-
         /// <summary>rule generic type definition -> registration</summary>
         public IDictionary<Type, GenericOperationRegistration> GenericOperationFactories { get; set; }
             = new Dictionary<Type, GenericOperationRegistration>();

@@ -25,7 +25,6 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             where TError : class
         {
             return TryGetOperationInstance<TRule, TValue, TError>() ??
-                   TryGetOperationFromFactory<TRule, TValue, TError>() ??
                    TryGetGenericOperation<TRule, TValue, TError>();
         }
 
@@ -34,15 +33,6 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             where TError : class
         {
             return _operationsRegistry.OperationInstances.GetValueOrDefault(typeof(TRule));
-        }
-
-        private TOperation TryGetOperationFromFactory<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var operationFactory = _operationsRegistry.OperationFactories.GetValueOrDefault(typeof(TRule));
-
-            return operationFactory?.Invoke();
         }
         
         private TOperation TryGetGenericOperation<TRule, TValue, TError>()

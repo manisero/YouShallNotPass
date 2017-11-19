@@ -9,11 +9,6 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        void RegisterOperationFactory<TRule, TValue, TError>(
-            Func<TOperation> operationFactory)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class;
-
         /// <param name="operationFactory">concrete operation type => operation</param>
         void RegisterGenericOperationFactory(
             Type ruleGenericDefinition,
@@ -33,14 +28,6 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             where TError : class
         {
             _registry.OperationInstances.Add(typeof(TRule), operation);
-        }
-
-        public void RegisterOperationFactory<TRule, TValue, TError>(
-            Func<TOperation> operationFactory)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            _registry.OperationFactories.Add(typeof(TRule), operationFactory);
         }
 
         public void RegisterGenericOperationFactory(
