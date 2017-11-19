@@ -33,11 +33,13 @@ namespace Manisero.YouShallNotPass
         // Full generic
 
         IValidationEngineBuilder RegisterFullGenericValidator(
-            Type validatorOpenGenericType);
+            Type validatorOpenGenericType,
+            bool asSigleton = true);
 
         IValidationEngineBuilder RegisterFullGenericValidatorFactory(
             Type validatorOpenGenericType,
-            Func<Type, IValidator> validatorFactory);
+            Func<Type, IValidator> validatorFactory,
+            bool asSigleton = true);
 
         // Build
 
@@ -95,19 +97,24 @@ namespace Manisero.YouShallNotPass
         // Full generic
 
         public IValidationEngineBuilder RegisterFullGenericValidator(
-            Type validatorOpenGenericType)
+            Type validatorOpenGenericType,
+            bool asSigleton = true)
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
             RegisterFullGenericValidatorFactory(validatorOpenGenericType,
-                                                type => (IValidator)Activator.CreateInstance(type));
+                                                type => (IValidator)Activator.CreateInstance(type),
+                                                asSigleton);
 
             return this;
         }
 
         public IValidationEngineBuilder RegisterFullGenericValidatorFactory(
             Type validatorOpenGenericType,
-            Func<Type, IValidator> validatorFactory)
+            Func<Type, IValidator> validatorFactory,
+            bool asSigleton = true)
         {
+            // TODO: Handle asSingleton
+
             _validatorsRegistryBuilder.RegisterFullGenericValidator(validatorOpenGenericType, validatorFactory);
             return this;
         }
