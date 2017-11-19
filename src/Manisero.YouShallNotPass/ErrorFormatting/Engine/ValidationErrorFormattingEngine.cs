@@ -25,7 +25,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
             var errorType = validationResult.GetErrorType();
 
             return FormatInternalMethod.Value.InvokeAsGeneric<TFormat>(this,
-                                                                       ruleType, valueType, errorType,
+                                                                       new[] { ruleType, valueType, errorType },
                                                                        validationResult);
         }
 

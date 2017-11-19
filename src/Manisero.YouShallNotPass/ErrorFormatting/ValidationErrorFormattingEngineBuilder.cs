@@ -208,7 +208,11 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory,
             bool asSigleton = true)
         {
-            _formattersRegistryBuilder.RegisterFullGenericFormatter(formatterOpenGenericType, formatterFactory);
+            var formatterGetter = asSigleton
+                ? formatterFactory
+                : formatterType => FullFormatterFactoryWrapper.Create(formatterType, formatterFactory);
+
+            _formattersRegistryBuilder.RegisterFullGenericFormatter(formatterOpenGenericType, formatterGetter);
             return this;
         }
 

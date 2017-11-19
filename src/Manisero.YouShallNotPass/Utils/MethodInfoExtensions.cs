@@ -9,12 +9,12 @@ namespace Manisero.YouShallNotPass.Utils
         public static TResult InvokeAsGeneric<TResult>(
             this MethodInfo method,
             object target,
-            Type typeArg1, Type typeArg2, Type typeArg3,
+            Type[] typeArguments,
             params object[] arguments)
         {
             try
             {
-                return (TResult)method.MakeGenericMethod(typeArg1, typeArg2, typeArg3)
+                return (TResult)method.MakeGenericMethod(typeArguments)
                                       .Invoke(target, arguments);
             }
             catch (TargetInvocationException exception)
