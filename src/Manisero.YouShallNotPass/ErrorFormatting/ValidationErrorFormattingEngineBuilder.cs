@@ -61,11 +61,13 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         // Full generic
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatter(
-            Type formatterOpenGenericType);
+            Type formatterOpenGenericType,
+            bool asSigleton = true);
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatterFactory(
             Type formatterOpenGenericType,
-            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory);
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory,
+            bool asSigleton = true);
 
         // Build
 
@@ -190,7 +192,8 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         // Full generic
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatter(
-            Type formatterOpenGenericType)
+            Type formatterOpenGenericType,
+            bool asSigleton = true)
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
             RegisterFullGenericFormatterFactory(formatterOpenGenericType,
@@ -201,7 +204,8 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatterFactory(
             Type formatterOpenGenericType,
-            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory,
+            bool asSigleton = true)
         {
             _formattersRegistryBuilder.RegisterFullGenericFormatterFactory(formatterOpenGenericType, formatterFactory);
             return this;
