@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration;
-using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
 {
@@ -18,8 +16,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
     {
         private readonly IValidationErrorFormatterResolver<TFormat> _formatterResolver;
 
-        private readonly IDictionary<Type, object> _validatorFuncsCache = new Dictionary<Type, object>();
-
         public ValidationErrorFormattingExecutor(
             IValidationErrorFormatterResolver<TFormat> formatterResolver)
         {
@@ -32,45 +28,14 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var ruleType = typeof(TRule);
+            var formatter = _formatterResolver.TryResolve<TRule, TValue, TError>();
 
-            // TODO: Make this thread-safe (currenlty multiple threads can resolve the same formatter at the same time)
-            var formattingFunc = (Func<ValidationResult<TRule, TValue, TError>, ValidationErrorFormattingContext<TFormat>, TFormat>)_validatorFuncsCache.GetValueOrDefault(ruleType);
-
-            if (formattingFunc == null)
+            if (formatter == null)
             {
-                formattingFunc = GetFormattingFunc<TRule, TValue, TError>();
-
-                if (formattingFunc == null)
-                {
-                    throw new InvalidOperationException($"Unable to find formatter for result of validation of value '{typeof(TValue)}' against rule '{typeof(TRule)}'. (Error: '{typeof(TError)}'.)");
-                }
-
-                _validatorFuncsCache.Add(ruleType, formattingFunc);
+                throw new InvalidOperationException($"Unable to find formatter for result of validation of value '{typeof(TValue)}' against rule '{typeof(TRule)}'. (Error: '{typeof(TError)}'.)");
             }
 
-            return formattingFunc(validationResult, context);
-        }
-
-        public Func<ValidationResult<TRule, TValue, TError>, ValidationErrorFormattingContext<TFormat>, TFormat> GetFormattingFunc<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var errorOnlyFormatter = _formatterResolver.TryResolveErrorOnly<TError>();
-
-            if (errorOnlyFormatter != null)
-            {
-                return (result, context) => errorOnlyFormatter.Format(result.Error, context);
-            }
-
-            var fullFormatter = _formatterResolver.TryResolveFull<TRule, TValue, TError>();
-
-            if (fullFormatter != null)
-            {
-                return (result, context) => fullFormatter.Format(result, context);
-            }
-
-            return null;
+            return formatter.Format(validationResult, context);
         }
     }
 }

@@ -60,4 +60,24 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
             return formatter.Format(error, context);
         }
     }
+
+    public class ErrorOnlyFormatterAsFullFormatterWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
+        where TRule : IValidationRule<TValue, TError>
+        where TError : class
+    {
+        private readonly IValidationErrorFormatter<TError, TFormat> _errorOnlyFormatter;
+
+        public ErrorOnlyFormatterAsFullFormatterWrapper(
+            IValidationErrorFormatter<TError, TFormat> errorOnlyFormatter)
+        {
+            _errorOnlyFormatter = errorOnlyFormatter;
+        }
+
+        public TFormat Format(
+            ValidationResult<TRule, TValue, TError> validationResult,
+            ValidationErrorFormattingContext<TFormat> context)
+        {
+            return _errorOnlyFormatter.Format(validationResult.Error, context);
+        }
+    }
 }
