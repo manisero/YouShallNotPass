@@ -7,8 +7,9 @@ namespace Manisero.YouShallNotPass.Benchmarks
     {
         static void Main(string[] args)
         {
-            BenchmarkRunner.Run<GetCustomAttribute_vs_cache>();
-            BenchmarkRunner.Run<LightLazy_vs_up_front_allocation>();
+            //BenchmarkRunner.Run<GetCustomAttribute_vs_cache>();
+            //BenchmarkRunner.Run<LightLazy_vs_up_front_allocation>();
+            BenchmarkRunner.Run<ThreadSafeCache_lazy_vs_eager>();
         }
     }
 }
