@@ -21,6 +21,7 @@ namespace Manisero.YouShallNotPass.Benchmarks.Core
                 {
                     lock (_lock)
                     {
+                        // itemFactory is executed inside lock
                         item = _cache.GetOrAdd(key, itemFactory);
                     }
                 }
