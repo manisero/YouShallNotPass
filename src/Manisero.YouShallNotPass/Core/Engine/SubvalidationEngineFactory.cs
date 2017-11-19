@@ -9,21 +9,21 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
     public class SubvalidationEngineFactory : ISubvalidationEngineFactory
     {
-        private readonly IValidationRuleMetadataProvider _validationRuleMetadataProvider;
-        private readonly IValidatorResolver _validatorResolver;
+        private readonly IValidationExecutor _validationExecutor;
 
         public SubvalidationEngineFactory(
             ValidatorsRegistry validatorsRegistry)
         {
-            _validationRuleMetadataProvider = new ValidationRuleMetadataProvider();
-            _validatorResolver = new ValidatorResolver(validatorsRegistry);
+            var validationRuleMetadataProvider = new ValidationRuleMetadataProvider();
+            var validatorResolver = new ValidatorResolver(validatorsRegistry);
+
+            _validationExecutor = new ValidationExecutor(validationRuleMetadataProvider,
+                                                         validatorResolver);
         }
 
         public ISubvalidationEngine Create(ValidationData data = null)
         {
-            return new SubvalidationEngine(_validationRuleMetadataProvider,
-                                           _validatorResolver,
-                                           data);
+            return new SubvalidationEngine(_validationExecutor, data);
         }
     }
 }
