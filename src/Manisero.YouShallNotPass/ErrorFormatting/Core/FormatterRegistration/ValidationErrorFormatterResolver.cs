@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Manisero.YouShallNotPass.ErrorFormatting.Formatters;
 using Manisero.YouShallNotPass.Utils;
 
@@ -16,13 +15,13 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
     {
         private readonly ValidationErrorFormattersRegistry<TFormat> _formattersRegistry;
 
-        private readonly IDictionary<Type, IValidationErrorFormatter<TFormat>> _formattersCache;
+        private readonly ThreadSafeCache<Type, IValidationErrorFormatter<TFormat>> _formattersCache;
 
         public ValidationErrorFormatterResolver(
             ValidationErrorFormattersRegistry<TFormat> formattersRegistry)
         {
             _formattersRegistry = formattersRegistry;
-            _formattersCache = new Dictionary<Type, IValidationErrorFormatter<TFormat>>();
+            _formattersCache = new ThreadSafeCache<Type, IValidationErrorFormatter<TFormat>>();
         }
 
         public IValidationErrorFormatter<TRule, TValue, TError, TFormat> TryResolve<TRule, TValue, TError>()
@@ -30,33 +29,21 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
             where TError : class
         {
             var ruleType = typeof(TRule);
-
-            // TODO: Make this thread-safe (currenlty multiple threads can resolve the same formatter at the same time)
-            var formatter = (IValidationErrorFormatter<TRule, TValue, TError, TFormat>)_formattersCache.GetValueOrDefault(ruleType);
-
-            if (formatter == null)
-            {
-                formatter = TryResolveNotCached<TRule, TValue, TError>();
-
-                if (formatter != null)
-                {
-                    _formattersCache.Add(ruleType, formatter);
-                }
-            }
-
-            return formatter;
+            var formatter = _formattersCache.GetOrAdd(ruleType, _ => TryResolveNotCached<TRule, TValue, TError>());
+            
+            return (IValidationErrorFormatter<TRule, TValue, TError, TFormat>)formatter;
         }
 
-        private IValidationErrorFormatter<TRule, TValue, TError, TFormat> TryResolveNotCached<TRule, TValue, TError>()
+        private IValidationErrorFormatter<TFormat> TryResolveNotCached<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var formatter = TryResolveErrorOnly<TRule, TValue, TError>() ??
-                            TryResolveErrorOnlyGeneric<TRule, TValue, TError>() ??
-                            TryResolveFull<TRule, TValue, TError>() ??
-                            TryResolveFullGeneric<TRule, TValue, TError>();
+            var ruleType = typeof(TRule);
 
-            return (IValidationErrorFormatter<TRule, TValue, TError, TFormat>)formatter;
+            return TryResolveErrorOnly<TRule, TValue, TError>() ??
+                   TryResolveErrorOnlyGeneric<TRule, TValue, TError>() ??
+                   TryResolveFull(ruleType) ??
+                   TryResolveFullGeneric(ruleType);
         }
 
         private IValidationErrorFormatter<TFormat> TryResolveErrorOnly<TRule, TValue, TError>()
@@ -83,18 +70,14 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
                 : null;
         }
 
-        private IValidationErrorFormatter<TFormat> TryResolveFull<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
+        private IValidationErrorFormatter<TFormat> TryResolveFull(Type ruleType)
         {
-            return _formattersRegistry.FullFormatters.GetValueOrDefault(typeof(TRule));
+            return _formattersRegistry.FullFormatters.GetValueOrDefault(ruleType);
         }
 
-        private IValidationErrorFormatter<TFormat> TryResolveFullGeneric<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
+        private IValidationErrorFormatter<TFormat> TryResolveFullGeneric(Type ruleType)
         {
-            return _formattersRegistry.FullGenericFormatters.TryResolve(typeof(TRule));
+            return _formattersRegistry.FullGenericFormatters.TryResolve(ruleType);
         }
     }
 }
