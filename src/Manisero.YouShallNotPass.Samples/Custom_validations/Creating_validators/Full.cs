@@ -48,7 +48,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void full_validator()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValidator(new StringValidator());
+            engineBuilder.RegisterFullValidator(new StringValidator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate(Value, Rule);
@@ -60,7 +60,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void full_validator_factory()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValidatorFactory(() => new StringValidator());
+            engineBuilder.RegisterFullValidatorFactory(() => new StringValidator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate(Value, Rule);

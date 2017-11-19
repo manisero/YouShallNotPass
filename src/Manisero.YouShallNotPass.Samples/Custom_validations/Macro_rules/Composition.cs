@@ -47,10 +47,10 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
         public void sample(string password, bool isValid)
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterValidator(new ContainsDigitValidator());
-            builder.RegisterValidator(new ContainsLowerLetterValidator());
-            builder.RegisterValidator(new ContainsUpperLetterValidator());
-            builder.RegisterValidator(new PasswordValidator());
+            builder.RegisterFullValidator(new ContainsDigitValidator());
+            builder.RegisterFullValidator(new ContainsLowerLetterValidator());
+            builder.RegisterFullValidator(new ContainsUpperLetterValidator());
+            builder.RegisterFullValidator(new PasswordValidator());
 
             var engine = builder.Build();
 

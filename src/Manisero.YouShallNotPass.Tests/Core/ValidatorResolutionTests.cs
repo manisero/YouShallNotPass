@@ -13,7 +13,7 @@ namespace Manisero.YouShallNotPass.Tests.Core
         public void resolves_validator_instance()
         {
             var validator = new EmailValidator();
-            var registry = BuildRegistry(x => x.RegisterValidator(validator));
+            var registry = BuildRegistry(x => x.RegisterFullValidator(validator));
 
             var result = registry.TryResolve<EmailValidationRule, string, EmailValidationError>();
 
@@ -23,7 +23,7 @@ namespace Manisero.YouShallNotPass.Tests.Core
         [Fact]
         public void resolves_generic_validator()
         {
-            var registry = BuildRegistry(x => x.RegisterGenericValidatorFactory(typeof(ComplexValidator<>),
+            var registry = BuildRegistry(x => x.RegisterFullGenericValidator(typeof(ComplexValidator<>),
                                                                                 type => (IValidator)Activator.CreateInstance(type)));
 
             var result = registry.TryResolve<ComplexValidationRule<string>, string, ComplexValidationError>();
@@ -34,7 +34,7 @@ namespace Manisero.YouShallNotPass.Tests.Core
         [Fact]
         public void resolves_generic_validator_of_generic_parameter_different_than_IValidators_TValue_parameter()
         {
-            var registry = BuildRegistry(x => x.RegisterGenericValidatorFactory(typeof(CollectionValidator<>),
+            var registry = BuildRegistry(x => x.RegisterFullGenericValidator(typeof(CollectionValidator<>),
                                                                                 type => (IValidator)Activator.CreateInstance(type)));
 
             var result = registry.TryResolve<CollectionValidationRule<int>, IEnumerable<int>, CollectionValidationError>();

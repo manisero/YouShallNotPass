@@ -10,29 +10,29 @@ namespace Manisero.YouShallNotPass
     {
         // Full
 
-        IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(
+        IValidationEngineBuilder RegisterFullValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        IValidationEngineBuilder RegisterAsyncValidator<TRule, TValue, TError>(
+        IValidationEngineBuilder RegisterFullAsyncValidator<TRule, TValue, TError>(
             IAsyncValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        IValidationEngineBuilder RegisterValidatorFactory<TRule, TValue, TError>(
+        IValidationEngineBuilder RegisterFullValidatorFactory<TRule, TValue, TError>(
             Func<IValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
         
-        IValidationEngineBuilder RegisterAsyncValidatorFactory<TRule, TValue, TError>(
+        IValidationEngineBuilder RegisterFullAsyncValidatorFactory<TRule, TValue, TError>(
             Func<IAsyncValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
         // Full generic
 
-        IValidationEngineBuilder RegisterGenericValidatorFactory(
+        IValidationEngineBuilder RegisterFullGenericValidatorFactory(
             Type validatorOpenGenericType,
             Func<Type, IValidator> validatorFactory);
 
@@ -52,36 +52,36 @@ namespace Manisero.YouShallNotPass
 
         // Full
 
-        public IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(
+        public IValidationEngineBuilder RegisterFullValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _validatorsRegistryBuilder.RegisterValidator(validator);
+            _validatorsRegistryBuilder.RegisterFullValidator(validator);
             return this;
         }
 
-        public IValidationEngineBuilder RegisterAsyncValidator<TRule, TValue, TError>(
+        public IValidationEngineBuilder RegisterFullAsyncValidator<TRule, TValue, TError>(
             IAsyncValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _validatorsRegistryBuilder.RegisterAsyncValidator(validator);
+            _validatorsRegistryBuilder.RegisterFullAsyncValidator(validator);
             return this;
         }
 
-        public IValidationEngineBuilder RegisterValidatorFactory<TRule, TValue, TError>(
+        public IValidationEngineBuilder RegisterFullValidatorFactory<TRule, TValue, TError>(
             Func<IValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
             var wrapper = new FullValidatorFactoryWrapper<TRule, TValue, TError>(validatorFactory);
 
-            RegisterValidator(wrapper);
+            RegisterFullValidator(wrapper);
             return this;
         }
 
-        public IValidationEngineBuilder RegisterAsyncValidatorFactory<TRule, TValue, TError>(
+        public IValidationEngineBuilder RegisterFullAsyncValidatorFactory<TRule, TValue, TError>(
             Func<IAsyncValidator<TRule, TValue, TError>> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
@@ -91,11 +91,11 @@ namespace Manisero.YouShallNotPass
         
         // Full generic
 
-        public IValidationEngineBuilder RegisterGenericValidatorFactory(
+        public IValidationEngineBuilder RegisterFullGenericValidatorFactory(
             Type validatorOpenGenericType,
             Func<Type, IValidator> validatorFactory)
         {
-            _validatorsRegistryBuilder.RegisterGenericValidatorFactory(validatorOpenGenericType, validatorFactory);
+            _validatorsRegistryBuilder.RegisterFullGenericValidator(validatorOpenGenericType, validatorFactory);
             return this;
         }
 
@@ -116,28 +116,28 @@ namespace Manisero.YouShallNotPass
 
         private void RegisterDefaultValidators()
         {
-            this.RegisterGenericValidator(typeof(AllValidator<>));
-            this.RegisterGenericValidator(typeof(AnyValidator<>));
-            this.RegisterGenericValidator(typeof(AtLeastNValidator<>));
-            this.RegisterGenericValidator(typeof(CollectionValidator<>));
-            this.RegisterGenericValidator(typeof(CustomValidator<,>));
-            this.RegisterGenericValidator(typeof(ComplexValidator<>));
-            RegisterValidator(new EmailValidator());
-            RegisterValidator(new MinLengthValidator());
-            this.RegisterGenericValidator(typeof(MinValidator<>));
-            RegisterValidator(new NotNullNorWhiteSpaceValidator());
-            this.RegisterGenericValidator(typeof(NotNullValidator<>));
+            this.RegisterFullGenericValidator(typeof(AllValidator<>));
+            this.RegisterFullGenericValidator(typeof(AnyValidator<>));
+            this.RegisterFullGenericValidator(typeof(AtLeastNValidator<>));
+            this.RegisterFullGenericValidator(typeof(CollectionValidator<>));
+            this.RegisterFullGenericValidator(typeof(CustomValidator<,>));
+            this.RegisterFullGenericValidator(typeof(ComplexValidator<>));
+            RegisterFullValidator(new EmailValidator());
+            RegisterFullValidator(new MinLengthValidator());
+            this.RegisterFullGenericValidator(typeof(MinValidator<>));
+            RegisterFullValidator(new NotNullNorWhiteSpaceValidator());
+            this.RegisterFullGenericValidator(typeof(NotNullValidator<>));
         }
     }
 
     public static class ValidationEngineBuilderExtensions
     {
-        public static IValidationEngineBuilder RegisterGenericValidator(
+        public static IValidationEngineBuilder RegisterFullGenericValidator(
             this IValidationEngineBuilder builder,
             Type validatorOpenGenericType)
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
-            builder.RegisterGenericValidatorFactory(validatorOpenGenericType, type => (IValidator)Activator.CreateInstance(type));
+            builder.RegisterFullGenericValidatorFactory(validatorOpenGenericType, type => (IValidator)Activator.CreateInstance(type));
             return builder;
         }
     }

@@ -33,7 +33,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
         public void sample()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterValidator(new UserExistsValidator());
+            builder.RegisterFullValidator(new UserExistsValidator());
 
             var engine = builder.Build();
 
