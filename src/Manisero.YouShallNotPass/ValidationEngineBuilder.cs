@@ -10,9 +10,14 @@ namespace Manisero.YouShallNotPass
     {
         // Value only
 
-        IValidationEngineBuilder RegisterErrorOnlyValidatorFunc<TRule, TValue, TError>(
+        IValidationEngineBuilder RegisterValueOnlyBoolValidatorFunc<TRule, TValue, TError>(
             Func<TValue, bool> validator,
             TError errorInstance)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class;
+
+        IValidationEngineBuilder RegisterValueOnlyValidatorFunc<TRule, TValue, TError>(
+            Func<TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
@@ -65,13 +70,24 @@ namespace Manisero.YouShallNotPass
 
         // Value only
 
-        public IValidationEngineBuilder RegisterErrorOnlyValidatorFunc<TRule, TValue, TError>(
+        public IValidationEngineBuilder RegisterValueOnlyBoolValidatorFunc<TRule, TValue, TError>(
             Func<TValue, bool> validator,
             TError errorInstance)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            throw new NotImplementedException();
+            var wrapper = new ValueOnlyBoolValidatorFuncWrapper<TRule, TValue, TError>(validator, errorInstance);
+
+            return RegisterFullValidator(wrapper);
+        }
+
+        public IValidationEngineBuilder RegisterValueOnlyValidatorFunc<TRule, TValue, TError>(Func<TValue, TError> validator)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var wrapper = new ValueOnlyValidatorFuncWrapper<TRule, TValue,TError>(validator);
+
+            return RegisterFullValidator(wrapper);
         }
 
         // Full
@@ -101,8 +117,7 @@ namespace Manisero.YouShallNotPass
         {
             var wrapper = new FullValidatorFactoryWrapper<TRule, TValue, TError>(validatorFactory);
 
-            RegisterFullValidator(wrapper);
-            return this;
+            return RegisterFullValidator(wrapper);
         }
 
         public IValidationEngineBuilder RegisterFullAsyncValidatorFactory<TRule, TValue, TError>(
@@ -120,11 +135,9 @@ namespace Manisero.YouShallNotPass
             bool asSigleton = true)
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
-            RegisterFullGenericValidatorFactory(validatorOpenGenericType,
-                                                type => (IValidator)Activator.CreateInstance(type),
-                                                asSigleton);
-
-            return this;
+            return RegisterFullGenericValidatorFactory(validatorOpenGenericType,
+                                                       type => (IValidator)Activator.CreateInstance(type),
+                                                       asSigleton);
         }
 
         public IValidationEngineBuilder RegisterFullGenericValidatorFactory(

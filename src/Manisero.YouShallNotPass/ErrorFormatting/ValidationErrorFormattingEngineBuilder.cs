@@ -93,8 +93,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             var wrapper = new ErrorOnlyFormatterFuncWrapper<TError, TFormat>(formatter);
 
-            RegisterErrorOnlyFormatter(wrapper);
-            return this;
+            return RegisterErrorOnlyFormatter(wrapper);
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFuncFactory<TError>(
@@ -103,8 +102,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             var wrapper = new ErrorOnlyFormatterFuncFactoryWrapper<TError, TFormat>(formatterFactory);
 
-            RegisterErrorOnlyFormatter(wrapper);
-            return this;
+            return RegisterErrorOnlyFormatter(wrapper);
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatter<TError>(
@@ -121,8 +119,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             var wrapper = new ErrorOnlyFormatterFactoryWrapper<TError, TFormat>(formatterFactory);
 
-            RegisterErrorOnlyFormatter(wrapper);
-            return this;
+            return RegisterErrorOnlyFormatter(wrapper);
         }
 
         // Error only generic
@@ -132,11 +129,9 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             bool asSigleton = true)
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
-            RegisterErrorOnlyGenericFormatterFactory(formatterOpenGenericType,
-                                                     type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type),
-                                                     asSigleton);
-
-            return this;
+            return RegisterErrorOnlyGenericFormatterFactory(formatterOpenGenericType,
+                                                            type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type),
+                                                            asSigleton);
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatterFactory(
@@ -161,8 +156,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             var wrapper = new ErrorRuleAndValueFormatterWrapper<TRule, TValue, TError, TFormat>(formatter);
 
-            RegisterFullFormatter(wrapper);
-            return this;
+            return RegisterFullFormatter(wrapper);
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFuncFactory<TRule, TValue, TError>(
@@ -172,8 +166,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             var wrapper = new ErrorRuleAndValueFormatterFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
 
-            RegisterFullFormatter(wrapper);
-            return this;
+            return RegisterFullFormatter(wrapper);
         }
 
         // Full
@@ -194,8 +187,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             var wrapper = new FullFormatterFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
 
-            RegisterFullFormatter(wrapper);
-            return this;
+            return RegisterFullFormatter(wrapper);
         }
 
         // Full generic
@@ -205,11 +197,9 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             bool asSigleton = true)
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
-            RegisterFullGenericFormatterFactory(formatterOpenGenericType,
+            return RegisterFullGenericFormatterFactory(formatterOpenGenericType,
                                                 type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type),
                                                 asSigleton);
-
-            return this;
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterFullGenericFormatterFactory(
