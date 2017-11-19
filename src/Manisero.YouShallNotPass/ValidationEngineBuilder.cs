@@ -32,6 +32,9 @@ namespace Manisero.YouShallNotPass
 
         // Full generic
 
+        IValidationEngineBuilder RegisterFullGenericValidator(
+            Type validatorOpenGenericType);
+
         IValidationEngineBuilder RegisterFullGenericValidatorFactory(
             Type validatorOpenGenericType,
             Func<Type, IValidator> validatorFactory);
@@ -88,8 +91,18 @@ namespace Manisero.YouShallNotPass
         {
             throw new NotImplementedException();
         }
-        
+
         // Full generic
+
+        public IValidationEngineBuilder RegisterFullGenericValidator(
+            Type validatorOpenGenericType)
+        {
+            // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
+            RegisterFullGenericValidatorFactory(validatorOpenGenericType,
+                                                type => (IValidator)Activator.CreateInstance(type));
+
+            return this;
+        }
 
         public IValidationEngineBuilder RegisterFullGenericValidatorFactory(
             Type validatorOpenGenericType,
@@ -116,29 +129,17 @@ namespace Manisero.YouShallNotPass
 
         private void RegisterDefaultValidators()
         {
-            this.RegisterFullGenericValidator(typeof(AllValidator<>));
-            this.RegisterFullGenericValidator(typeof(AnyValidator<>));
-            this.RegisterFullGenericValidator(typeof(AtLeastNValidator<>));
-            this.RegisterFullGenericValidator(typeof(CollectionValidator<>));
-            this.RegisterFullGenericValidator(typeof(CustomValidator<,>));
-            this.RegisterFullGenericValidator(typeof(ComplexValidator<>));
+            RegisterFullGenericValidator(typeof(AllValidator<>));
+            RegisterFullGenericValidator(typeof(AnyValidator<>));
+            RegisterFullGenericValidator(typeof(AtLeastNValidator<>));
+            RegisterFullGenericValidator(typeof(CollectionValidator<>));
+            RegisterFullGenericValidator(typeof(CustomValidator<,>));
+            RegisterFullGenericValidator(typeof(ComplexValidator<>));
             RegisterFullValidator(new EmailValidator());
             RegisterFullValidator(new MinLengthValidator());
-            this.RegisterFullGenericValidator(typeof(MinValidator<>));
+            RegisterFullGenericValidator(typeof(MinValidator<>));
             RegisterFullValidator(new NotNullNorWhiteSpaceValidator());
-            this.RegisterFullGenericValidator(typeof(NotNullValidator<>));
-        }
-    }
-
-    public static class ValidationEngineBuilderExtensions
-    {
-        public static IValidationEngineBuilder RegisterFullGenericValidator(
-            this IValidationEngineBuilder builder,
-            Type validatorOpenGenericType)
-        {
-            // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
-            builder.RegisterFullGenericValidatorFactory(validatorOpenGenericType, type => (IValidator)Activator.CreateInstance(type));
-            return builder;
+            RegisterFullGenericValidator(typeof(NotNullValidator<>));
         }
     }
 }
