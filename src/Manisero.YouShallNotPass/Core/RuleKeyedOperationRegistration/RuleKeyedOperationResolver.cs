@@ -1,4 +1,5 @@
-﻿using Manisero.YouShallNotPass.Utils;
+﻿using System;
+using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
 {
@@ -24,24 +25,30 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            return TryGetOperationInstance<TRule, TValue, TError>() ??
-                   TryGetGenericOperation<TRule, TValue, TError>();
-        }
+            var ruleType = typeof(TRule);
 
-        private TOperation TryGetOperationInstance<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            return _operationsRegistry.OperationInstances.GetValueOrDefault(typeof(TRule));
+            var operation = _operationsRegistry.OperationInstances.GetValueOrDefault(ruleType);
+
+            if (operation != null)
+            {
+                return operation;
+            }
+            
+            var genericOperation = TryGetGenericOperation(ruleType);
+
+            if (genericOperation != null)
+            {
+                // TODO: Make it thread-safe
+                _operationsRegistry.OperationInstances.Add(ruleType, genericOperation);
+                return genericOperation;
+            }
+
+            return null;
         }
         
-        private TOperation TryGetGenericOperation<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
+        private TOperation TryGetGenericOperation(Type ruleType)
         {
             // TODO: Make this as fast as possible (e.g. cache factory / operationType) (but don't cache operation returned by factory)
-
-            var ruleType = typeof(TRule);
 
             if (!ruleType.IsGenericType)
             {

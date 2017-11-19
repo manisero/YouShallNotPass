@@ -197,7 +197,8 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
             RegisterFullGenericFormatterFactory(formatterOpenGenericType,
-                                                type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type));
+                                                type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type),
+                                                asSigleton);
 
             return this;
         }
