@@ -10,7 +10,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
 {
     public class Full
     {
-        // Validation
+        // validation
 
         public class StringMultiValidationRule : IValidationRule<string, StringMultiValidationError>
         {

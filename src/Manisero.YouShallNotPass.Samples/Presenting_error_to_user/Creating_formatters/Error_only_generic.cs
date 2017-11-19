@@ -16,8 +16,6 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
                 Error = new MinValidationError<int> { MinValue = 1 }
             };
 
-        // formatters
-
         public class MinValidationErrorFormatter<TValue> : IValidationErrorFormatter<MinValidationError<TValue>, string>
             where TValue : IComparable<TValue>
         {
