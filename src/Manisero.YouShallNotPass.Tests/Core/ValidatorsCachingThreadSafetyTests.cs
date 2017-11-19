@@ -18,6 +18,7 @@ namespace Manisero.YouShallNotPass.Tests.Core
 
             public Validator()
             {
+                // TODO: Try to avoid using delay
                 Task.Delay(100).Wait();
                 Interlocked.Increment(ref InstancesCount);
             }

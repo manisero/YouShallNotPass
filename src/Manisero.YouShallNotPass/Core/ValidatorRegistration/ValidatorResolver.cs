@@ -15,12 +15,12 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
     {
         private readonly ValidatorsRegistry _validatorsRegistry;
 
-        private readonly ConcurrentDictionary<Type, IValidator> _validatorsCache;
+        private readonly ThreadSafeCache<Type, IValidator> _validatorsCache;
 
         public ValidatorResolver(ValidatorsRegistry validatorsRegistry)
         {
             _validatorsRegistry = validatorsRegistry;
-            _validatorsCache = new ConcurrentDictionary<Type, IValidator>();
+            _validatorsCache = new ThreadSafeCache<Type, IValidator>();
         }
 
         public IValidator<TRule, TValue, TError> TryResolve<TRule, TValue, TError>()
@@ -47,6 +47,27 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
         private IValidator TryResolveFullGeneric(Type ruleType)
         {
             return _validatorsRegistry.FullGenericValidators.TryResolve(ruleType);
+        }
+    }
+
+    public class ThreadSafeCache<TKey, TItem>
+    {
+        private readonly ConcurrentDictionary<TKey, TItem> _cache = new ConcurrentDictionary<TKey, TItem>();
+        private readonly object _lock = new object();
+
+        public TItem GetOrAdd(TKey key, Func<TKey, TItem> itemFactory)
+        {
+            TItem item;
+
+            if (!_cache.TryGetValue(key, out item))
+            {
+                lock (_lock)
+                {
+                    item = _cache.GetOrAdd(key, itemFactory);
+                }
+            }
+
+            return item;
         }
     }
 }
