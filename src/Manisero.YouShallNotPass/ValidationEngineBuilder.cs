@@ -2,11 +2,14 @@
 using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.ValidatorRegistration;
 using Manisero.YouShallNotPass.Validations;
+using Manisero.YouShallNotPass.Validations.Wrappers;
 
 namespace Manisero.YouShallNotPass
 {
     public interface IValidationEngineBuilder
     {
+        // Full
+
         IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
@@ -27,9 +30,13 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
+        // Full generic
+
         IValidationEngineBuilder RegisterGenericValidatorFactory(
             Type validatorOpenGenericType,
             Func<Type, IValidator> validatorFactory);
+
+        // Build
 
         IValidationEngine Build(bool registerDefaultValidators = true);
     }
@@ -42,6 +49,8 @@ namespace Manisero.YouShallNotPass
         {
             _validatorsRegistryBuilder = new ValidatorsRegistryBuilder();
         }
+
+        // Full
 
         public IValidationEngineBuilder RegisterValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
@@ -66,7 +75,9 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _validatorsRegistryBuilder.RegisterValidatorFactory(validatorFactory);
+            var wrapper = new FullValidatorFactoryWrapper<TRule, TValue, TError>(validatorFactory);
+
+            RegisterValidator(wrapper);
             return this;
         }
 
@@ -75,10 +86,11 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _validatorsRegistryBuilder.RegisterAsyncValidatorFactory(validatorFactory);
-            return this;
+            throw new NotImplementedException();
         }
         
+        // Full generic
+
         public IValidationEngineBuilder RegisterGenericValidatorFactory(
             Type validatorOpenGenericType,
             Func<Type, IValidator> validatorFactory)
@@ -86,6 +98,8 @@ namespace Manisero.YouShallNotPass
             _validatorsRegistryBuilder.RegisterGenericValidatorFactory(validatorOpenGenericType, validatorFactory);
             return this;
         }
+
+        // Build
 
         public IValidationEngine Build(bool registerDefaultValidators = true)
         {

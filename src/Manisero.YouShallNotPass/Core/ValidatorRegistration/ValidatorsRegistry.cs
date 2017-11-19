@@ -14,9 +14,6 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
         /// <summary>rule type -> validator instance</summary>
         public IDictionary<Type, IValidator> ValidatorInstances { get; set; }
 
-        /// <summary>rule type -> validator factory</summary>
-        public IDictionary<Type, Func<IValidator>> ValidatorFactories { get; set; }
-
         /// <summary>rule generic type definition -> registration</summary>
         public IDictionary<Type, GenericValidatorRegistration> GenericValidatorFactories { get; set; }
     }

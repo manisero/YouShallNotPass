@@ -23,7 +23,6 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
             where TError : class
         {
             return TryGetValidatorInstance<TRule, TValue, TError>() ??
-                   TryGetValidatorFromFactory<TRule, TValue, TError>() ??
                    TryGetGenericValidatorOfGenericRule<TRule, TValue, TError>();
         }
 
@@ -39,20 +38,6 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
             }
 
             return (IValidator<TRule, TValue, TError>)validator;
-        }
-
-        private IValidator<TRule, TValue, TError> TryGetValidatorFromFactory<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var validatorFactory = _validatorsRegistry.ValidatorFactories.GetValueOrDefault(typeof(TRule));
-
-            if (validatorFactory == null)
-            {
-                return null;
-            }
-
-            return (IValidator<TRule, TValue, TError>)validatorFactory();
         }
 
         private IValidator<TRule, TValue, TError> TryGetGenericValidatorOfGenericRule<TRule, TValue, TError>()

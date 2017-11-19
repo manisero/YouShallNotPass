@@ -21,17 +21,6 @@ namespace Manisero.YouShallNotPass.Tests.Core
         }
 
         [Fact]
-        public void resolves_validator_from_factory()
-        {
-            var validator = new EmailValidator();
-            var registry = BuildRegistry(x => x.RegisterValidatorFactory(() => validator));
-
-            var result = registry.TryResolve<EmailValidationRule, string, EmailValidationError>();
-
-            result.Should().Be(validator);
-        }
-
-        [Fact]
         public void resolves_generic_validator()
         {
             var registry = BuildRegistry(x => x.RegisterGenericValidatorFactory(typeof(ComplexValidator<>),
