@@ -28,11 +28,13 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         // Error only generic
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatter(
-            Type formatterOpenGenericType);
+            Type formatterOpenGenericType,
+            bool asSigleton = true);
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatterFactory(
             Type formatterOpenGenericType,
-            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory);
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory,
+            bool asSigleton = true);
 
         // Error rule and value
 
@@ -126,21 +128,28 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
         // Error only generic
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatter(
-            Type formatterOpenGenericType)
+            Type formatterOpenGenericType,
+            bool asSigleton = true)
         {
             // TODO: Instead of using Activator, go for faster solution (e.g. construct lambda)
             RegisterErrorOnlyGenericFormatterFactory(formatterOpenGenericType,
-                                                     type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type));
+                                                     type => (IValidationErrorFormatter<TFormat>)Activator.CreateInstance(type),
+                                                     asSigleton);
 
             return this;
         }
 
         public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyGenericFormatterFactory(
             Type formatterOpenGenericType,
-            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory)
+            Func<Type, IValidationErrorFormatter<TFormat>> formatterFactory,
+            bool asSigleton = true)
         {
-            // TODO: Decide whether it should be separate method, or there should be single RegisterGenericFormatterFactory for each type of formatter
-            throw new NotImplementedException();
+            var formatterGetter = asSigleton
+                ? formatterFactory
+                : formatterType => ErrorOnlyFormatterFactoryWrapper.Create(formatterType, formatterFactory);
+
+            _formattersRegistryBuilder.RegisterErrorOnlyGenericFormatter(formatterOpenGenericType, formatterGetter);
+            return this;
         }
 
         // Error rule and value
