@@ -14,7 +14,9 @@ TODO
   - probably should be addressed in Rule builder's design
   - or can be achieved by AllValidator
 - make internal classes internal
-- use ETW to report failed validations?
+- use ETW to report failed (or all) validations?
+  - so that user can track which rule is violated most often
+    - and improve UX based on that (add better description on form etc.)
 - registering rules
   - so that while passing value, user does not have to pass rule
 - rule builder
