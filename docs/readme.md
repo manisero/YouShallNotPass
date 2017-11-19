@@ -4,7 +4,6 @@ YouShallNotPass
 TODO
 ---
 
-- write more tests testing engine
 - write more tests testing individual rules
 - while caching results in classes, care for thread safety
   - and benchmark to check if caches really help
@@ -16,22 +15,13 @@ TODO
   - or can be achieved by AllValidator
 - make internal classes internal
 - use ETW to report failed validations?
-- validation rules (and errors) should be POCOs without Action / Func properties
-  - but this may be too limiting
-  - consider some conversion of rule (or error) to "Descriptor" (which could be serialized to json)
 - registering rules
   - so that while passing value, user does not have to pass rule
 - rule builder
   - fleunt api for building rules
 - approach to displaying validation errors in real scenario (e.g. web app)
 - consider allowing validators to return custom result, e.g. AnyValidator could return violated rules (although at least one rule passed, so there is no error)
-- consider possibility to register Func instead of IValidator / IValidationErrorFormatter
-  - but keep the interfaces, they are good for generic validators / formatters
 - use MethodInfoExtensions in Core.Engine
-- use RuleKeyedOperationResolver in Core.Engine
-- consider implementing validator / formatter factories as feature outside engine
-  - factory would be wrapped by sigle-instance wrapper
-    - wrapper would accept factory in constructor and ivoke it in Validate / Format method
 - unify naming of validations, organize them in folders (e.g. StringValidations)
 
 
