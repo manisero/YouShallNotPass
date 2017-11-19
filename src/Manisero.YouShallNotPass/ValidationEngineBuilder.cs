@@ -113,9 +113,11 @@ namespace Manisero.YouShallNotPass
             Func<Type, IValidator> validatorFactory,
             bool asSigleton = true)
         {
-            // TODO: Handle asSingleton
+            var validatorGetter = asSigleton
+                ? validatorFactory
+                : validatorType => FullValidatorFactoryWrapper.Create(validatorType, validatorFactory);
 
-            _validatorsRegistryBuilder.RegisterFullGenericValidator(validatorOpenGenericType, validatorFactory);
+            _validatorsRegistryBuilder.RegisterFullGenericValidator(validatorOpenGenericType, validatorGetter);
             return this;
         }
 
