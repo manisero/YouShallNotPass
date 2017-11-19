@@ -27,29 +27,12 @@ namespace Manisero.YouShallNotPass.Core.RuleKeyedOperationRegistration
         {
             var ruleType = typeof(TRule);
 
-            var operation = _operationsRegistry.Operations.GetValueOrDefault(ruleType);
-
-            if (operation != null)
-            {
-                return operation;
-            }
-            
-            var genericOperation = TryGetGenericOperation(ruleType);
-
-            if (genericOperation != null)
-            {
-                // TODO: Make it thread-safe
-                _operationsRegistry.Operations.Add(ruleType, genericOperation);
-                return genericOperation;
-            }
-
-            return null;
+            return _operationsRegistry.Operations.GetValueOrDefault(ruleType) ??
+                   TryGetGenericOperation(ruleType);
         }
         
         private TOperation TryGetGenericOperation(Type ruleType)
         {
-            // TODO: Make this as fast as possible (e.g. cache factory / operationType) (but don't cache operation returned by factory)
-
             if (!ruleType.IsGenericType)
             {
                 return null;
