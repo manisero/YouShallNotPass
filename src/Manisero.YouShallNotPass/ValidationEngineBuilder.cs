@@ -8,6 +8,14 @@ namespace Manisero.YouShallNotPass
 {
     public interface IValidationEngineBuilder
     {
+        // Value only
+
+        IValidationEngineBuilder RegisterErrorOnlyValidatorFunc<TRule, TValue, TError>(
+            Func<TValue, bool> validator,
+            TError errorInstance)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class;
+
         // Full
 
         IValidationEngineBuilder RegisterFullValidator<TRule, TValue, TError>(
@@ -53,6 +61,17 @@ namespace Manisero.YouShallNotPass
         public ValidationEngineBuilder()
         {
             _validatorsRegistryBuilder = new ValidatorsRegistryBuilder();
+        }
+
+        // Value only
+
+        public IValidationEngineBuilder RegisterErrorOnlyValidatorFunc<TRule, TValue, TError>(
+            Func<TValue, bool> validator,
+            TError errorInstance)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            throw new NotImplementedException();
         }
 
         // Full
