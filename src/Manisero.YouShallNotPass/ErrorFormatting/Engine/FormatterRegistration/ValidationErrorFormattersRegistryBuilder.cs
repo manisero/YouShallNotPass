@@ -60,8 +60,9 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
                 throw new ArgumentException($"{nameof(formatterOpenGenericType)} must implement {typeof(IValidationErrorFormatter<,>)} interface.", nameof(formatterOpenGenericType));
             }
 
-            // TODO: Register errorType -> formatterGetter
-            throw new NotImplementedException();
+            _registry.ErrorOnlyGenericFormatters.Register(errorType.GetGenericTypeDefinition(),
+                                                          formatterOpenGenericType,
+                                                          formatterGetter);
         }
 
         // Full

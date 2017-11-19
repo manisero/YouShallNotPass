@@ -52,6 +52,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
             where TError : class
         {
             var formatter = TryResolveErrorOnly<TRule, TValue, TError>() ??
+                            TryResolveErrorOnlyGeneric<TRule, TValue, TError>() ??
                             TryResolveFull<TRule, TValue, TError>() ??
                             TryResolveFullGeneric<TRule, TValue, TError>();
 
@@ -64,6 +65,18 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
         {
             var formatter = (IValidationErrorFormatter<TError, TFormat>)_formattersRegistry.ErrorOnlyFormatters
                                                                                            .GetValueOrDefault(typeof(TError));
+
+            return formatter != null
+                ? new ErrorOnlyFormatterAsFullFormatterWrapper<TRule, TValue, TError, TFormat>(formatter)
+                : null;
+        }
+
+        private IValidationErrorFormatter<TFormat> TryResolveErrorOnlyGeneric<TRule, TValue, TError>()
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var formatter = (IValidationErrorFormatter<TError, TFormat>)_formattersRegistry.ErrorOnlyGenericFormatters
+                                                                                           .TryResolve(typeof(TError));
 
             return formatter != null
                 ? new ErrorOnlyFormatterAsFullFormatterWrapper<TRule, TValue, TError, TFormat>(formatter)
