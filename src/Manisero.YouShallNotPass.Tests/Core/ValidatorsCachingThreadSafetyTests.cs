@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
@@ -7,43 +8,42 @@ namespace Manisero.YouShallNotPass.Tests.Core
 {
     public class ValidatorsCachingThreadSafetyTests
     {
-        public class Rule<TValue> : IValidationRule<TValue, Error>
+        public class Rule<TValue> : IValidationRule<TValue, object>
         {
         }
 
-        public class Error
+        public class Validator<TValue> : IValidator<Rule<TValue>, TValue, object>
         {
-            public Guid ValidatorId { get; set; }
-        }
+            public static int InstancesCount;
 
-        public class Validator<TValue> : IValidator<Rule<TValue>, TValue, Error>
-        {
-            private readonly Guid _id = Guid.NewGuid();
-
-            public Error Validate(TValue value, Rule<TValue> rule, ValidationContext context)
-                => new Error { ValidatorId = _id };
+            public Validator()
+            {
+                //Task.Delay(100).Wait();
+                Interlocked.Increment(ref InstancesCount);
+            }
+            
+            public object Validate(TValue value, Rule<TValue> rule, ValidationContext context) => null;
         }
 
         public static readonly Rule<int> ValidationRule = new Rule<int>();
         public const int Value = 1;
 
         [Fact]
-        public void test()
+        public void singleton_generic_validator_is_created_only_once()
         {
-            var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullGenericValidatorFactory(typeof(Validator<>),
-                                                              type => (IValidator)Activator.CreateInstance(type));
+            var engine = new ValidationEngineBuilder()
+                .RegisterFullGenericValidatorFactory(typeof(Validator<>),
+                                                     type => (IValidator)Activator.CreateInstance(type))
+                .Build();
 
-            var engine = engineBuilder.Build();
-
-            var validation1 = Task.Run(() => engine.Validate<Rule<int>, int, Error>(Value, ValidationRule));
-            var validation2 = Task.Run(() => engine.Validate<Rule<int>, int, Error>(Value, ValidationRule));
+            var validation1 = Task.Run(() => ExecuteValidation(engine));
+            var validation2 = Task.Run(() => ExecuteValidation(engine));
             Task.WaitAll(validation1, validation2);
-
-            var result1 = validation1.Result;
-            var result2 = validation2.Result;
-
-            result2.Error.ValidatorId.Should().Be(result1.Error.ValidatorId);
+            
+            Validator<int>.InstancesCount.Should().Be(1);
         }
+
+        private void ExecuteValidation(IValidationEngine engine)
+            => engine.Validate<Rule<int>, int, object>(Value, ValidationRule);
     }
 }

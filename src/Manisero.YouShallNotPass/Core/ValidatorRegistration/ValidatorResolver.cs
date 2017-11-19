@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
@@ -15,12 +15,12 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
     {
         private readonly ValidatorsRegistry _validatorsRegistry;
 
-        private readonly IDictionary<Type, IValidator> _validatorsCache;
+        private readonly ConcurrentDictionary<Type, IValidator> _validatorsCache;
 
         public ValidatorResolver(ValidatorsRegistry validatorsRegistry)
         {
             _validatorsRegistry = validatorsRegistry;
-            _validatorsCache = new Dictionary<Type, IValidator>();
+            _validatorsCache = new ConcurrentDictionary<Type, IValidator>();
         }
 
         public IValidator<TRule, TValue, TError> TryResolve<TRule, TValue, TError>()
@@ -28,45 +28,25 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
             where TError : class
         {
             var ruleType = typeof(TRule);
-
-            // TODO: Make this thread-safe (currenlty multiple threads can resolve the same validator at the same time)
-            var validator = (IValidator<TRule, TValue, TError>)_validatorsCache.GetValueOrDefault(ruleType);
-
-            if (validator == null)
-            {
-                validator = TryResolveNotCached<TRule, TValue, TError>();
-
-                if (validator != null)
-                {
-                    _validatorsCache.Add(ruleType, validator);
-                }
-            }
-
-            return validator;
-        }
-
-        private IValidator<TRule, TValue, TError> TryResolveNotCached<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var validator = TryResolveFull<TRule, TValue, TError>() ??
-                            TryResolveFullGeneric<TRule, TValue, TError>();
+            var validator = _validatorsCache.GetOrAdd(ruleType, x => TryResolveNotCached(ruleType));
 
             return (IValidator<TRule, TValue, TError>)validator;
         }
 
-        private IValidator TryResolveFull<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
+        private IValidator TryResolveNotCached(Type ruleType)
         {
-            return _validatorsRegistry.FullValidators.GetValueOrDefault(typeof(TRule));
+            return TryResolveFull(ruleType) ??
+                   TryResolveFullGeneric(ruleType);
         }
 
-        private IValidator TryResolveFullGeneric<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
+        private IValidator TryResolveFull(Type ruleType)
         {
-            return _validatorsRegistry.FullGenericValidators.TryResolve(typeof(TRule));
+            return _validatorsRegistry.FullValidators.GetValueOrDefault(ruleType);
+        }
+
+        private IValidator TryResolveFullGeneric(Type ruleType)
+        {
+            return _validatorsRegistry.FullGenericValidators.TryResolve(ruleType);
         }
     }
 }
