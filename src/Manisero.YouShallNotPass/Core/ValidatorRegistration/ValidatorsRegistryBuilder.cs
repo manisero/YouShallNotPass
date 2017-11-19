@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Manisero.YouShallNotPass.Utils;
 
-namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
     public interface IValidatorsRegistryBuilder
     {

@@ -1,6 +1,6 @@
 ﻿using System;
-using Manisero.YouShallNotPass.ErrorFormatting.Engine;
-using Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration;
+using Manisero.YouShallNotPass.ErrorFormatting.Core.Engine;
+using Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration;
 using Manisero.YouShallNotPass.ErrorFormatting.Formatters;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting

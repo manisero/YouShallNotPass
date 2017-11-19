@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
     public class ValidatorsRegistry
     {

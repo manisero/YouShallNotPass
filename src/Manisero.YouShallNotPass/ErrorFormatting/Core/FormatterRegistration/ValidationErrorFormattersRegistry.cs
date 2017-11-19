@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Manisero.YouShallNotPass.Utils;
 
-namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
+namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
 {
     public class ValidationErrorFormattersRegistry<TFormat>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Manisero.YouShallNotPass.Utils;
 
-namespace Manisero.YouShallNotPass.ErrorFormatting.Engine.FormatterRegistration
+namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
 {
     public interface IValidationErrorFormattersRegistryBuilder<TFormat>
     {

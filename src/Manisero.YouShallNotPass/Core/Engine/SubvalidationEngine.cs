@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
-using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
+using Manisero.YouShallNotPass.Core.ValidatorRegistration;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.Engine

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Manisero.YouShallNotPass.Core.Engine.ValidatorRegistration;
+using Manisero.YouShallNotPass.Core.ValidatorRegistration;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 

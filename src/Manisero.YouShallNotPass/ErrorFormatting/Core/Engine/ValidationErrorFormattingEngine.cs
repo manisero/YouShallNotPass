@@ -2,7 +2,7 @@
 using System.Reflection;
 using Manisero.YouShallNotPass.Utils;
 
-namespace Manisero.YouShallNotPass.ErrorFormatting.Engine
+namespace Manisero.YouShallNotPass.ErrorFormatting.Core.Engine
 {
     public class ValidationErrorFormattingEngine<TFormat> : IValidationErrorFormattingEngine<TFormat>
     {
