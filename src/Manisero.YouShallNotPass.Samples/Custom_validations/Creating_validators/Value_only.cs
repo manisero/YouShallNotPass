@@ -7,15 +7,13 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
 {
     public class Value_only
     {
+        // bool validator func
+
         public class NotEmptyValidationRule : IValidationRule<string, EmptyValidationError>
         {
         }
-        
-        public static readonly NotEmptyValidationRule Rule = new NotEmptyValidationRule();
 
-        private const string Value = "";
-
-        // bool validator func
+        public static readonly NotEmptyValidationRule NotEmptyRule = new NotEmptyValidationRule();
 
         private static readonly Func<string, bool> BoolValidatorFunc = x => !string.IsNullOrEmpty(x);
 
@@ -27,26 +25,37 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
                                                                                                                    new EmptyValidationError());
 
             var engine = engineBuilder.Build();
-            var result = engine.Validate(Value, Rule);
+            var result = engine.Validate(string.Empty, NotEmptyRule);
 
             result.HasError().Should().BeTrue();
         }
 
         // validator func
 
-        private static readonly Func<string, EmptyValidationError> ValidatorFunc
-            = x => string.IsNullOrEmpty(x)
-                ? EmptyValidationError.Some
-                : EmptyValidationError.None;
+        public class EvenLengthValidationRule : IValidationRule<string, EvenLengthValidationError>
+        {
+        }
+
+        public class EvenLengthValidationError
+        {
+            public int ActualLength { get; set; }
+        }
+
+        public static readonly EvenLengthValidationRule EvenLengthRule = new EvenLengthValidationRule();
+
+        private static readonly Func<string, EvenLengthValidationError> ValidatorFunc
+            = x => x.Length % 2 != 0
+                ? new EvenLengthValidationError { ActualLength = x.Length }
+                : null;
 
         [Fact]
         public void value_only_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueOnlyValidatorFunc<NotEmptyValidationRule, string, EmptyValidationError>(ValidatorFunc);
+            engineBuilder.RegisterValueOnlyValidatorFunc<EvenLengthValidationRule, string, EvenLengthValidationError>(ValidatorFunc);
 
             var engine = engineBuilder.Build();
-            var result = engine.Validate(Value, Rule);
+            var result = engine.Validate("a", EvenLengthRule);
 
             result.HasError().Should().BeTrue();
         }

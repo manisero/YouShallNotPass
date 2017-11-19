@@ -21,6 +21,19 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
+        // Value and rule
+
+        IValidationEngineBuilder RegisterValueAndRuleBoolValidatorFunc<TRule, TValue, TError>(
+            Func<TValue, TRule, bool> validator,
+            TError errorInstance)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class;
+
+        IValidationEngineBuilder RegisterValueAndRuleValidatorFunc<TRule, TValue, TError>(
+            Func<TValue, TRule, TError> validator)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class;
+
         // Full
 
         IValidationEngineBuilder RegisterFullValidator<TRule, TValue, TError>(
@@ -86,6 +99,28 @@ namespace Manisero.YouShallNotPass
             where TError : class
         {
             var wrapper = new ValueOnlyValidatorFuncWrapper<TRule, TValue,TError>(validator);
+
+            return RegisterFullValidator(wrapper);
+        }
+
+        // Value and rule
+
+        public IValidationEngineBuilder RegisterValueAndRuleBoolValidatorFunc<TRule, TValue, TError>(
+            Func<TValue, TRule, bool> validator, TError errorInstance)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var wrapper = new ValueAndRuleBoolValidatorFuncWrapper<TRule, TValue, TError>(validator, errorInstance);
+
+            return RegisterFullValidator(wrapper);
+        }
+
+        public IValidationEngineBuilder RegisterValueAndRuleValidatorFunc<TRule, TValue, TError>(
+            Func<TValue, TRule, TError> validator)
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var wrapper = new ValueAndRuleValidatorFuncWrapper<TRule, TValue, TError>(validator);
 
             return RegisterFullValidator(wrapper);
         }
