@@ -1,4 +1,6 @@
-﻿using Manisero.YouShallNotPass.Utils;
+﻿using System;
+using System.Collections.Generic;
+using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
@@ -13,71 +15,58 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
     {
         private readonly ValidatorsRegistry _validatorsRegistry;
 
+        private readonly IDictionary<Type, IValidator> _validatorsCache;
+
         public ValidatorResolver(ValidatorsRegistry validatorsRegistry)
         {
             _validatorsRegistry = validatorsRegistry;
+            _validatorsCache = new Dictionary<Type, IValidator>();
         }
 
         public IValidator<TRule, TValue, TError> TryResolve<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            return TryGetValidatorInstance<TRule, TValue, TError>() ??
-                   TryGetGenericValidatorOfGenericRule<TRule, TValue, TError>();
-        }
+            var ruleType = typeof(TRule);
 
-        private IValidator<TRule, TValue, TError> TryGetValidatorInstance<TRule, TValue, TError>()
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var validator = _validatorsRegistry.ValidatorInstances.GetValueOrDefault(typeof(TRule));
+            // TODO: Make this thread-safe (currenlty multiple threads can resolve the same validator at the same time)
+            var validator = (IValidator<TRule, TValue, TError>)_validatorsCache.GetValueOrDefault(ruleType);
 
             if (validator == null)
             {
-                return null;
+                validator = TryResolveNotCached<TRule, TValue, TError>();
+
+                if (validator != null)
+                {
+                    _validatorsCache.Add(ruleType, validator);
+                }
             }
+
+            return validator;
+        }
+
+        private IValidator<TRule, TValue, TError> TryResolveNotCached<TRule, TValue, TError>()
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            var validator = TryResolveFull<TRule, TValue, TError>() ??
+                            TryResolveFullGeneric<TRule, TValue, TError>();
 
             return (IValidator<TRule, TValue, TError>)validator;
         }
 
-        private IValidator<TRule, TValue, TError> TryGetGenericValidatorOfGenericRule<TRule, TValue, TError>()
+        private IValidator TryResolveFull<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            // TODO: Make this as fast as possible (e.g. cache factory / validatorType) (but don't cache validator returned by factory)
+            return _validatorsRegistry.FullValidators.GetValueOrDefault(typeof(TRule));
+        }
 
-            var ruleType = typeof(TRule);
-
-            if (!ruleType.IsGenericType)
-            {
-                return null;
-            }
-            
-            var ruleGenericDefinition = ruleType.GetGenericTypeDefinition();
-
-            var registration = _validatorsRegistry.GenericValidatorFactories.GetValueOrNull(ruleGenericDefinition);
-
-            if (registration == null)
-            {
-                return null;
-            }
-
-            // Assumptions:
-            // - if validator has n generic type parameters, then rule has at least n generic parameters
-            // - rule's first n generic type parameters are the same as validator's generic type parameters
-
-            var validatorOpenGenericType = registration.Value.ValidatorOpenGenericType;
-            var validatorTypeParameters = validatorOpenGenericType.GetGenericArguments();
-
-            if (ruleType.GenericTypeArguments.Length < validatorTypeParameters.Length)
-            {
-                return null;
-            }
-
-            var validatorTypeArguments = ruleType.GenericTypeArguments.GetRange(0, validatorTypeParameters.Length);
-            var validatorType = validatorOpenGenericType.MakeGenericType(validatorTypeArguments);
-
-            return (IValidator<TRule, TValue, TError>)registration.Value.Factory(validatorType);
+        private IValidator TryResolveFullGeneric<TRule, TValue, TError>()
+            where TRule : IValidationRule<TValue, TError>
+            where TError : class
+        {
+            return _validatorsRegistry.FullGenericValidators.TryResolve(typeof(TRule));
         }
     }
 }

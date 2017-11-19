@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
@@ -31,8 +30,7 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 
     public class ValidatorsRegistryBuilder : IValidatorsRegistryBuilder
     {
-        private readonly IDictionary<Type, IValidator> _validatorInstances = new Dictionary<Type, IValidator>();
-        private readonly IDictionary<Type, ValidatorsRegistry.GenericValidatorRegistration> _genericValidatorFactories = new Dictionary<Type, ValidatorsRegistry.GenericValidatorRegistration>();
+        private readonly ValidatorsRegistry _registry = new ValidatorsRegistry();
 
         // Full
 
@@ -41,7 +39,7 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _validatorInstances.Add(typeof(TRule), validator);
+            _registry.FullValidators.Add(typeof(TRule), validator);
         }
 
         public void RegisterFullAsyncValidator<TRule, TValue, TError>(
@@ -60,23 +58,16 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
             {
                 throw new ArgumentException($"{nameof(validatorOpenGenericType)} is not a generic type definition (a.k.a. open generic type). Use standard registration method for it.", nameof(validatorOpenGenericType));
             }
-            
-            var registration = new ValidatorsRegistry.GenericValidatorRegistration
-            {
-                ValidatorOpenGenericType = validatorOpenGenericType,
-                Factory = validatorGetter
-            };
 
-            var iValidatorImplementation = validatorOpenGenericType.GetGenericInterfaceDefinitionImplementation(typeof(IValidator<,,>));
-            
-            if (iValidatorImplementation != null)
-            {
-                var ruleType = iValidatorImplementation.GenericTypeArguments[ValidatorInterfaceConstants.TRuleTypeParameterPosition];
-                var ruleGenericDefinition = ruleType.GetGenericTypeDefinition();
+            var ruleType = validatorOpenGenericType.GetGenericInterfaceTypeArgument(typeof(IValidator<,,>), 0);
 
-                _genericValidatorFactories.Add(ruleGenericDefinition, registration);
+            if (ruleType != null)
+            {
+                _registry.FullGenericValidators.Register(ruleType.GetGenericTypeDefinition(),
+                                                         validatorOpenGenericType,
+                                                         validatorGetter);
             }
-
+            
             // TODO: Also, if validatorOpenGenericType implements IAsyncValidator, register as IAsyncValidator
             // TODO: Else, throw exception?
         }
@@ -85,11 +76,7 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 
         public ValidatorsRegistry Build()
         {
-            return new ValidatorsRegistry
-            {
-                ValidatorInstances = _validatorInstances,
-                GenericValidatorFactories = _genericValidatorFactories
-            };
+            return _registry;
         }
     }
 }
