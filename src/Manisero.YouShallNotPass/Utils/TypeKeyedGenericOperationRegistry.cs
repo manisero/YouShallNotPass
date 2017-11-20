@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Manisero.YouShallNotPass.Utils
 {
-    public class TypeKeyedGenericOperationRegistry<TOperation>
+    internal class TypeKeyedGenericOperationRegistry<TOperation>
         where TOperation : class
     {
         private struct Registration

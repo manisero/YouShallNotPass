@@ -4,7 +4,7 @@ using System.Runtime.ExceptionServices;
 
 namespace Manisero.YouShallNotPass.Utils
 {
-    public static class MethodInfoExtensions
+    internal static class MethodInfoExtensions
     {
         public static TResult InvokeAsGeneric<TResult>(
             this MethodInfo method,

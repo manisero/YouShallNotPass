@@ -2,7 +2,7 @@
 
 namespace Manisero.YouShallNotPass.Utils
 {
-    public static class ArrayExtensions
+    internal static class ArrayExtensions
     {
         public static TItem[] GetRange<TItem>(this TItem[] array, int startIndex, int count)
         {

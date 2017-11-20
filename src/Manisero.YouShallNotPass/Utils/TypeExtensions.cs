@@ -2,7 +2,7 @@
 
 namespace Manisero.YouShallNotPass.Utils
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static Type GetGenericInterfaceDefinitionImplementation(this Type type, Type interfaceDefinition)
         {

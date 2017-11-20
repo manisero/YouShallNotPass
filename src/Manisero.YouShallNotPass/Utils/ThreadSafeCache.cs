@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace Manisero.YouShallNotPass.Utils
 {
-    public class ThreadSafeCache<TKey, TItem>
+    internal class ThreadSafeCache<TKey, TItem>
     {
         private readonly ConcurrentDictionary<TKey, Lazy<TItem>> _cache = new ConcurrentDictionary<TKey, Lazy<TItem>>();
         private readonly object _lock = new object();

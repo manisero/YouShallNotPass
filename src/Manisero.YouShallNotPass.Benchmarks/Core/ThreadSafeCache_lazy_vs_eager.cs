@@ -41,7 +41,7 @@ namespace Manisero.YouShallNotPass.Benchmarks.Core
         }
 
         [Benchmark(Baseline = true)]
-        public ThreadSafeCache_Eager<int, Item> eager()
+        public object eager()
         {
             var cache = new ThreadSafeCache_Eager<int, Item>();
 
@@ -53,7 +53,7 @@ namespace Manisero.YouShallNotPass.Benchmarks.Core
         }
 
         [Benchmark]
-        public ThreadSafeCache<int, Item> lazy()
+        public object lazy()
         {
             var cache = new ThreadSafeCache<int, Item>();
 
