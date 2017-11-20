@@ -13,7 +13,6 @@ TODO
 - check if it will be convenient to create shared validation rules (e.g. for creation / update of same type - update would have couple additional rules)
   - probably should be addressed in Rule builder's design
   - or can be achieved by AllValidator
-- make internal classes internal
 - use ETW to report failed (or all) validations?
   - so that user can track which rule is violated most often
     - and improve UX based on that (add better description on form etc.)
