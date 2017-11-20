@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Manisero.YouShallNotPass.Core.RuleRegistration;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.Engine
@@ -11,13 +12,16 @@ namespace Manisero.YouShallNotPass.Core.Engine
             () => typeof(SubvalidationEngine).GetMethod(nameof(ValidateInternalGeneric),
                                                         BindingFlags.Instance | BindingFlags.NonPublic));
 
+        private readonly IValidationRuleResolver _validationRuleResolver;
         private readonly IValidationExecutor _validationExecutor;
         private readonly ValidationContext _context;
 
         public SubvalidationEngine(
+            IValidationRuleResolver validationRuleResolver,
             IValidationExecutor validationExecutor,
             ValidationData data = null)
         {
+            _validationRuleResolver = validationRuleResolver;
             _validationExecutor = validationExecutor;
 
             _context = new ValidationContext
@@ -26,6 +30,47 @@ namespace Manisero.YouShallNotPass.Core.Engine
                 Data = data ?? (IReadonlyValidationData)EmptyValidationData.Instance
             };
         }
+
+        // Value only
+
+        public IValidationResult Validate(object value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value), $"Unable to determine {nameof(value)} type as {nameof(value)} is null. If you are not sure {nameof(value)} is not null, use {nameof(Validate)}(value, valueType) method instead.");
+            }
+
+            var rule = GetRule(value.GetType());
+            return Validate(value, rule);
+        }
+
+        public IValidationResult Validate(object value, Type valueType)
+        {
+            var rule = GetRule(valueType);
+            return Validate(value, rule);
+        }
+
+        public IValidationResult Validate<TValue>(TValue value)
+        {
+            var rule = GetRule(typeof(TValue));
+
+            // TODO: Avoid casting
+            return Validate((object)value, rule);
+        }
+
+        private IValidationRule GetRule(Type valueType)
+        {
+            var rule = _validationRuleResolver.TryResolve(valueType);
+
+            if (rule == null)
+            {
+                // TODO: Throw exception
+            }
+
+            return rule;
+        }
+
+        // Value and rule
 
         public IValidationResult Validate(object value, IValidationRule rule)
         {

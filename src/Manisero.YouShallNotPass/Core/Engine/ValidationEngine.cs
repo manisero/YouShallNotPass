@@ -13,6 +13,28 @@ namespace Manisero.YouShallNotPass.Core.Engine
             _subvalidationEngineFactory = subvalidationEngineFactory;
         }
 
+        // Value only
+
+        public IValidationResult Validate(object value, ValidationData data = null)
+        {
+            var subvalidationEngine = _subvalidationEngineFactory.Create(data);
+            return subvalidationEngine.Validate(value);
+        }
+
+        public IValidationResult Validate(object value, Type valueType, ValidationData data = null)
+        {
+            var subvalidationEngine = _subvalidationEngineFactory.Create(data);
+            return subvalidationEngine.Validate(value, valueType);
+        }
+
+        public IValidationResult Validate<TValue>(TValue value, ValidationData data = null)
+        {
+            var subvalidationEngine = _subvalidationEngineFactory.Create(data);
+            return subvalidationEngine.Validate(value);
+        }
+
+        // Value and rule
+
         public IValidationResult Validate(
             object value,
             IValidationRule rule,

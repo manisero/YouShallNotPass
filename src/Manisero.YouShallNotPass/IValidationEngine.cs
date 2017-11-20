@@ -1,9 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Manisero.YouShallNotPass
 {
     public interface IValidationEngine
     {
+        // Value only
+
+        IValidationResult Validate(object value, ValidationData data = null);
+
+        IValidationResult Validate(object value, Type valueType, ValidationData data = null);
+
+        IValidationResult Validate<TValue>(TValue value, ValidationData data = null);
+
+        // Value and rule
+
         IValidationResult Validate(object value, IValidationRule rule, ValidationData data = null);
 
         /// <summary>Will use sync validator if async one not found.</summary>
@@ -28,6 +39,16 @@ namespace Manisero.YouShallNotPass
 
     public interface ISubvalidationEngine
     {
+        // Value only
+
+        IValidationResult Validate(object value);
+
+        IValidationResult Validate(object value, Type valueType);
+
+        IValidationResult Validate<TValue>(TValue value);
+
+        // Value and rule
+
         IValidationResult Validate(object value, IValidationRule rule);
 
         /// <summary>Will use sync validator if async one not found.</summary>

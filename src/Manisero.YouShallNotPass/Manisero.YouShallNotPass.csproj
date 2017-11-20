@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Core\Engine\SubvalidationEngineFactory.cs" />
     <Compile Include="Core\Engine\ValidationExecutor.cs" />
+    <Compile Include="Core\RuleRegistration\ValidationRuleResolver.cs" />
     <Compile Include="Core\RuleRegistration\ValidationRulesRegistry.cs" />
     <Compile Include="Core\RuleRegistration\ValidationRulesRegistryBuilder.cs" />
     <Compile Include="Utils\ThreadSafeCache.cs" />
