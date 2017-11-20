@@ -2,12 +2,12 @@
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
-    public interface ISubvalidationEngineFactory
+    internal interface ISubvalidationEngineFactory
     {
         ISubvalidationEngine Create(ValidationData data = null);
     }
 
-    public class SubvalidationEngineFactory : ISubvalidationEngineFactory
+    internal class SubvalidationEngineFactory : ISubvalidationEngineFactory
     {
         private readonly IValidationExecutor _validationExecutor;
 

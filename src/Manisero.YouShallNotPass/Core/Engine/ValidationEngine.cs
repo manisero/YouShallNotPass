@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
-    public class ValidationEngine : IValidationEngine
+    internal class ValidationEngine : IValidationEngine
     {
         private readonly ISubvalidationEngineFactory _subvalidationEngineFactory;
 

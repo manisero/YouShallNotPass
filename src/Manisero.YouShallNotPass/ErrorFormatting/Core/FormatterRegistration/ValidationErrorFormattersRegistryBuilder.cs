@@ -3,7 +3,7 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
 {
-    public interface IValidationErrorFormattersRegistryBuilder<TFormat>
+    internal interface IValidationErrorFormattersRegistryBuilder<TFormat>
     {
         // Error only
 
@@ -31,7 +31,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
         ValidationErrorFormattersRegistry<TFormat> Build();
     }
 
-    public class ValidationErrorFormattersRegistryBuilder<TFormat> : IValidationErrorFormattersRegistryBuilder<TFormat>
+    internal class ValidationErrorFormattersRegistryBuilder<TFormat> : IValidationErrorFormattersRegistryBuilder<TFormat>
     {
         private readonly ValidationErrorFormattersRegistry<TFormat> _registry = new ValidationErrorFormattersRegistry<TFormat>();
 

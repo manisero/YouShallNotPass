@@ -4,12 +4,12 @@ using System.Reflection;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
-    public interface IValidationRuleMetadataProvider
+    internal interface IValidationRuleMetadataProvider
     {
         bool ValidatesNull(Type ruleType);
     }
 
-    public class ValidationRuleMetadataProvider : IValidationRuleMetadataProvider
+    internal class ValidationRuleMetadataProvider : IValidationRuleMetadataProvider
     {
         private readonly ConcurrentDictionary<Type, bool> _validatesNullCache = new ConcurrentDictionary<Type, bool>();
 

@@ -3,14 +3,14 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
-    public interface IValidatorResolver
+    internal interface IValidatorResolver
     {
         IValidator<TRule, TValue, TError> TryResolve<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }
 
-    public class ValidatorResolver : IValidatorResolver
+    internal class ValidatorResolver : IValidatorResolver
     {
         private readonly ValidatorsRegistry _validatorsRegistry;
 

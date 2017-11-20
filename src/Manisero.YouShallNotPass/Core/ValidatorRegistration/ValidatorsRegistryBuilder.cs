@@ -3,7 +3,7 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
-    public interface IValidatorsRegistryBuilder
+    internal interface IValidatorsRegistryBuilder
     {
         // Full
 
@@ -28,7 +28,7 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
         ValidatorsRegistry Build();
     }
 
-    public class ValidatorsRegistryBuilder : IValidatorsRegistryBuilder
+    internal class ValidatorsRegistryBuilder : IValidatorsRegistryBuilder
     {
         private readonly ValidatorsRegistry _registry = new ValidatorsRegistry();
 

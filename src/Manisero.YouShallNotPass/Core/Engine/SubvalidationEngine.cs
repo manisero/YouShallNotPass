@@ -5,7 +5,7 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
-    public class SubvalidationEngine : ISubvalidationEngine
+    internal class SubvalidationEngine : ISubvalidationEngine
     {
         private static readonly Lazy<MethodInfo> ValidateInternalGenericMethod = new Lazy<MethodInfo>(
             () => typeof(SubvalidationEngine).GetMethod(nameof(ValidateInternalGeneric),

@@ -3,7 +3,7 @@ using Manisero.YouShallNotPass.Core.ValidatorRegistration;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
-    public interface IValidationExecutor
+    internal interface IValidationExecutor
     {
         ValidationResult<TRule, TValue, TError> Execute<TRule, TValue, TError>(
             TValue value,
@@ -13,7 +13,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
             where TError : class;
     }
 
-    public class ValidationExecutor : IValidationExecutor
+    internal class ValidationExecutor : IValidationExecutor
     {
         private readonly IValidationRuleMetadataProvider _validationRuleMetadataProvider;
         private readonly IValidatorResolver _validatorResolver;

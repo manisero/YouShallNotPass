@@ -4,7 +4,7 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Core.Engine
 {
-    public class ValidationErrorFormattingEngine<TFormat> : IValidationErrorFormattingEngine<TFormat>
+    internal class ValidationErrorFormattingEngine<TFormat> : IValidationErrorFormattingEngine<TFormat>
     {
         private static readonly Lazy<MethodInfo> FormatInternalMethod = new Lazy<MethodInfo>(
             () => typeof(ValidationErrorFormattingEngine<TFormat>).GetMethod(nameof(FormatInternal),

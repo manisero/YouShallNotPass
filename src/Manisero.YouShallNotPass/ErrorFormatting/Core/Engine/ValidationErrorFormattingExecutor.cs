@@ -3,7 +3,7 @@ using Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Core.Engine
 {
-    public interface IValidationErrorFormattingExecutor<TFormat>
+    internal interface IValidationErrorFormattingExecutor<TFormat>
     {
         TFormat Execute<TRule, TValue, TError>(
             ValidationResult<TRule, TValue, TError> validationResult,
@@ -12,7 +12,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Core.Engine
             where TError : class;
     }
 
-    public class ValidationErrorFormattingExecutor<TFormat> : IValidationErrorFormattingExecutor<TFormat>
+    internal class ValidationErrorFormattingExecutor<TFormat> : IValidationErrorFormattingExecutor<TFormat>
     {
         private readonly IValidationErrorFormatterResolver<TFormat> _formatterResolver;
 

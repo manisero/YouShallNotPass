@@ -4,7 +4,7 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
 {
-    public class ValidationErrorFormattersRegistry<TFormat>
+    internal class ValidationErrorFormattersRegistry<TFormat>
     {
         public IDictionary<Type, IValidationErrorFormatter<TFormat>> ErrorOnlyFormatters { get; set; }
             = new Dictionary<Type, IValidationErrorFormatter<TFormat>>();

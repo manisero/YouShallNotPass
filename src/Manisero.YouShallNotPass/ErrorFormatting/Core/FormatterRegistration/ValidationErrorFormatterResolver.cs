@@ -4,14 +4,14 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration
 {
-    public interface IValidationErrorFormatterResolver<TFormat>
+    internal interface IValidationErrorFormatterResolver<TFormat>
     {
         IValidationErrorFormatter<TRule, TValue, TError, TFormat> TryResolve<TRule, TValue, TError>()
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
     }
 
-    public class ValidationErrorFormatterResolver<TFormat> : IValidationErrorFormatterResolver<TFormat>
+    internal class ValidationErrorFormatterResolver<TFormat> : IValidationErrorFormatterResolver<TFormat>
     {
         private readonly ValidationErrorFormattersRegistry<TFormat> _formattersRegistry;
 

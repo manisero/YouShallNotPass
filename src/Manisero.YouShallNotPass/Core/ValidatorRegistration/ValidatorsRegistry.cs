@@ -4,7 +4,7 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
-    public class ValidatorsRegistry
+    internal class ValidatorsRegistry
     {
         public IDictionary<Type, IValidator> FullValidators { get; set; }
             = new Dictionary<Type, IValidator>();
