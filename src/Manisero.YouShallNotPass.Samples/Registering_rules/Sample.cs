@@ -19,13 +19,20 @@ namespace Manisero.YouShallNotPass.Samples.Registering_rules
             }
         };
 
+        public static readonly CreateUserCommand Command = new CreateUserCommand
+        {
+            UserId = 0
+        };
+
         [Fact]
         public void sample()
         {
             var engineBuilder = new ValidationEngineBuilder();
+            engineBuilder.RegisterValidationRule(typeof(CreateUserCommand), Rule);
+
             var engine = engineBuilder.Build();
 
-            //engine.RegisterRule(Rule);
+            //engine.Validate(Command);
         }
     }
 }

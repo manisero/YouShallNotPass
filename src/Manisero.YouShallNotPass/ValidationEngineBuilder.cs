@@ -1,5 +1,6 @@
 ﻿using System;
 using Manisero.YouShallNotPass.Core.Engine;
+using Manisero.YouShallNotPass.Core.RuleRegistration;
 using Manisero.YouShallNotPass.Core.ValidatorRegistration;
 using Manisero.YouShallNotPass.Validations;
 using Manisero.YouShallNotPass.Validations.Wrappers;
@@ -8,7 +9,11 @@ namespace Manisero.YouShallNotPass
 {
     public interface IValidationEngineBuilder
     {
-        // Value only
+        // Validation rules
+
+        IValidationEngineBuilder RegisterValidationRule(Type valueType, IValidationRule rule);
+
+        // Value only validators
 
         IValidationEngineBuilder RegisterValueOnlyBoolValidatorFunc<TRule, TValue, TError>(
             Func<TValue, bool> validator,
@@ -21,7 +26,7 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        // Value and rule
+        // Value and rule validators
 
         IValidationEngineBuilder RegisterValueAndRuleBoolValidatorFunc<TRule, TValue, TError>(
             Func<TValue, TRule, bool> validator,
@@ -34,7 +39,7 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        // Full
+        // Full validators
 
         IValidationEngineBuilder RegisterFullValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
@@ -56,7 +61,7 @@ namespace Manisero.YouShallNotPass
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        // Full generic
+        // Full generic validators
 
         IValidationEngineBuilder RegisterFullGenericValidator(
             Type validatorOpenGenericType,
@@ -74,14 +79,24 @@ namespace Manisero.YouShallNotPass
 
     public class ValidationEngineBuilder : IValidationEngineBuilder
     {
+        private readonly IValidationRulesRegistryBuilder _validationRulesRegistryBuilder;
         private readonly IValidatorsRegistryBuilder _validatorsRegistryBuilder;
 
         public ValidationEngineBuilder()
         {
+            _validationRulesRegistryBuilder = new ValidationRulesRegistryBuilder();
             _validatorsRegistryBuilder = new ValidatorsRegistryBuilder();
         }
 
-        // Value only
+        // Validation rules
+
+        public IValidationEngineBuilder RegisterValidationRule(Type valueType, IValidationRule rule)
+        {
+            _validationRulesRegistryBuilder.RegisterRule(valueType, rule);
+            return this;
+        }
+
+        // Value only validators
 
         public IValidationEngineBuilder RegisterValueOnlyBoolValidatorFunc<TRule, TValue, TError>(
             Func<TValue, bool> validator,
@@ -103,7 +118,7 @@ namespace Manisero.YouShallNotPass
             return RegisterFullValidator(wrapper);
         }
 
-        // Value and rule
+        // Value and rule validators
 
         public IValidationEngineBuilder RegisterValueAndRuleBoolValidatorFunc<TRule, TValue, TError>(
             Func<TValue, TRule, bool> validator, TError errorInstance)
@@ -125,7 +140,7 @@ namespace Manisero.YouShallNotPass
             return RegisterFullValidator(wrapper);
         }
 
-        // Full
+        // Full validators
 
         public IValidationEngineBuilder RegisterFullValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
@@ -163,7 +178,7 @@ namespace Manisero.YouShallNotPass
             throw new NotImplementedException();
         }
 
-        // Full generic
+        // Full generic validators
 
         public IValidationEngineBuilder RegisterFullGenericValidator(
             Type validatorOpenGenericType,
