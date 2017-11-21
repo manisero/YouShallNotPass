@@ -16,8 +16,8 @@ TODO
 - use ETW to report failed (or all) validations?
   - so that user can track which rule is violated most often
     - and improve UX based on that (add better description on form etc.)
-- registering rules
-  - so that while passing value, user does not have to pass rule
+- consider registering rules by names
+  - so that user can register multiple rules for single type
 - rule builder
   - fleunt api for building rules
 - approach to displaying validation errors in real scenario (e.g. web app)

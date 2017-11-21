@@ -26,13 +26,53 @@ namespace Manisero.YouShallNotPass.Samples.Registering_rules
         };
 
         [Fact]
-        public void sample()
+        public void registering_rule()
         {
             var engineBuilder = new ValidationEngineBuilder();
             engineBuilder.RegisterValidationRule(typeof(CreateUserCommand), Rule);
 
             var engine = engineBuilder.Build();
             var result = engine.Validate(Command);
+
+            result.HasError().Should().BeTrue();
+        }
+
+        [Fact]
+        public void validation_using_registered_rule()
+        {
+            var engineBuilder = new ValidationEngineBuilder();
+            engineBuilder.RegisterValidationRule(typeof(CreateUserCommand), Rule);
+
+            var engine = engineBuilder.Build();
+            var result = engine.Validate(Command);
+
+            result.HasError().Should().BeTrue();
+        }
+
+        [Fact]
+        public void validating_value_of_unknown_type()
+        {
+            var engine = new ValidationEngineBuilder()
+                .RegisterValidationRule(typeof(CreateUserCommand), Rule)
+                .Build();
+
+            object value = Command;
+
+            var result = engine.Validate(value);
+
+            result.HasError().Should().BeTrue();
+        }
+
+        [Fact]
+        public void validating_value_of_unknown_type___specifying_type()
+        {
+            var engine = new ValidationEngineBuilder()
+                .RegisterValidationRule(typeof(CreateUserCommand), Rule)
+                .Build();
+
+            object value = Command;
+
+            var result = engine.Validate(value, typeof(CreateUserCommand));
 
             result.HasError().Should().BeTrue();
         }
