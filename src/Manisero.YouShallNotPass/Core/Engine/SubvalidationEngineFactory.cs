@@ -1,4 +1,5 @@
-﻿using Manisero.YouShallNotPass.Core.ValidatorRegistration;
+﻿using Manisero.YouShallNotPass.Core.RuleRegistration;
+using Manisero.YouShallNotPass.Core.ValidatorRegistration;
 
 namespace Manisero.YouShallNotPass.Core.Engine
 {
@@ -9,11 +10,15 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
     internal class SubvalidationEngineFactory : ISubvalidationEngineFactory
     {
+        private readonly IValidationRuleResolver _validationRuleResolver;
         private readonly IValidationExecutor _validationExecutor;
 
         public SubvalidationEngineFactory(
+            ValidationRulesRegistry validationRulesRegistry,
             ValidatorsRegistry validatorsRegistry)
         {
+            _validationRuleResolver = new ValidationRuleResolver(validationRulesRegistry);
+
             var validationRuleMetadataProvider = new ValidationRuleMetadataProvider();
             var validatorResolver = new ValidatorResolver(validatorsRegistry);
 
@@ -23,7 +28,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         public ISubvalidationEngine Create(ValidationData data = null)
         {
-            return new SubvalidationEngine(_validationExecutor, data);
+            return new SubvalidationEngine(_validationRuleResolver, _validationExecutor, data);
         }
     }
 }

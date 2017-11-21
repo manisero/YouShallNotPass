@@ -211,9 +211,10 @@ namespace Manisero.YouShallNotPass
             {
                 RegisterDefaultValidators();
             }
-            
+
+            var validationRulesRegistry = _validationRulesRegistryBuilder.Build();
             var validatorsRegistry = _validatorsRegistryBuilder.Build();
-            var subvalidationEngineFactory = new SubvalidationEngineFactory(validatorsRegistry);
+            var subvalidationEngineFactory = new SubvalidationEngineFactory(validationRulesRegistry, validatorsRegistry);
 
             return new ValidationEngine(subvalidationEngineFactory);
         }

@@ -5,6 +5,8 @@ namespace Manisero.YouShallNotPass.Core.RuleRegistration
     internal interface IValidationRulesRegistryBuilder
     {
         void RegisterRule(Type valueType, IValidationRule rule);
+
+        ValidationRulesRegistry Build();
     }
 
     internal class ValidationRulesRegistryBuilder : IValidationRulesRegistryBuilder
@@ -14,6 +16,11 @@ namespace Manisero.YouShallNotPass.Core.RuleRegistration
         public void RegisterRule(Type valueType, IValidationRule rule)
         {
             _registry.Rules.Add(valueType, rule);
+        }
+
+        public ValidationRulesRegistry Build()
+        {
+            return _registry;
         }
     }
 }

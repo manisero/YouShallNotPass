@@ -37,7 +37,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         {
             if (value == null)
             {
-                throw new ArgumentNullException(nameof(value), $"Unable to determine {nameof(value)} type as {nameof(value)} is null. If you are not sure {nameof(value)} is not null, use {nameof(Validate)}(value, valueType) method instead.");
+                throw new ArgumentNullException(nameof(value), $"Unable to determine {nameof(value)} type as {nameof(value)} is null. When you are not sure {nameof(value)} is not null, use {nameof(Validate)}(value, valueType) method instead.");
             }
 
             var rule = GetRule(value.GetType());
@@ -53,8 +53,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
         public IValidationResult Validate<TValue>(TValue value)
         {
             var rule = GetRule(typeof(TValue));
-
-            // TODO: Avoid casting
+            
             return Validate((object)value, rule);
         }
 

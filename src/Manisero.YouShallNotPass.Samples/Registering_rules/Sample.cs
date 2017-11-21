@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentAssertions;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -31,8 +32,9 @@ namespace Manisero.YouShallNotPass.Samples.Registering_rules
             engineBuilder.RegisterValidationRule(typeof(CreateUserCommand), Rule);
 
             var engine = engineBuilder.Build();
+            var result = engine.Validate(Command);
 
-            //engine.Validate(Command);
+            result.HasError().Should().BeTrue();
         }
     }
 }
