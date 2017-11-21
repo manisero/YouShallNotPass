@@ -6,6 +6,6 @@ namespace Manisero.YouShallNotPass.Core.RuleRegistration
     internal class ValidationRulesRegistry
     {
         /// <summary>value type -> rule</summary>
-        public IDictionary<Type, IValidationRule> Rules { get; set; }
+        public IDictionary<Type, IValidationRule> Rules { get; set; } = new Dictionary<Type, IValidationRule>();
     }
 }

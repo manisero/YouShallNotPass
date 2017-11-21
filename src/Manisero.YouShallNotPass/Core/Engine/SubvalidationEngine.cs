@@ -63,7 +63,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
             if (rule == null)
             {
-                // TODO: Throw exception
+                throw new InvalidOperationException($"Unable to find validation rule for value of type '{valueType}'.");
             }
 
             return rule;
