@@ -35,38 +35,55 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         public IValidationResult Validate(object value)
         {
+            return TryValidate(value) ?? ThrowRuleNotFound(value.GetType());
+        }
+
+        public IValidationResult TryValidate(object value)
+        {
             if (value == null)
             {
                 throw new ArgumentNullException(nameof(value), $"Unable to determine {nameof(value)} type as {nameof(value)} is null. When you are not sure {nameof(value)} is not null, use {nameof(Validate)}(value, valueType) method instead.");
             }
 
-            var rule = GetRule(value.GetType());
-            return Validate(value, rule);
+            return TryValidate(value, value.GetType());
         }
 
         public IValidationResult Validate(object value, Type valueType)
         {
-            var rule = GetRule(valueType);
-            return Validate(value, rule);
+            return TryValidate(value, valueType) ?? ThrowRuleNotFound(valueType);
+        }
+
+        public IValidationResult TryValidate(object value, Type valueType)
+        {
+            var rule = TryGetRule(valueType);
+
+            return rule != null
+                ? Validate(value, rule)
+                : null;
         }
 
         public IValidationResult Validate<TValue>(TValue value)
         {
-            var rule = GetRule(typeof(TValue));
-            
-            return Validate((object)value, rule);
+            return TryValidate(value) ?? ThrowRuleNotFound(typeof(TValue));
         }
 
-        private IValidationRule GetRule(Type valueType)
+        public IValidationResult TryValidate<TValue>(TValue value)
         {
-            var rule = _validationRuleResolver.TryResolve(valueType);
+            var rule = TryGetRule(typeof(TValue));
 
-            if (rule == null)
-            {
-                throw new InvalidOperationException($"Unable to find validation rule for value of type '{valueType}'.");
-            }
+            return rule != null
+                ? Validate((object)value, rule)
+                : null;
+        }
 
-            return rule;
+        private IValidationRule TryGetRule(Type valueType)
+        {
+            return _validationRuleResolver.TryResolve(valueType);
+        }
+
+        private IValidationResult ThrowRuleNotFound(Type valueType)
+        {
+            throw new InvalidOperationException($"Unable to find validation rule for value of type '{valueType}'.");
         }
 
         // Value and rule

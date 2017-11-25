@@ -9,9 +9,15 @@ namespace Manisero.YouShallNotPass
 
         IValidationResult Validate(object value, ValidationData data = null);
 
+        IValidationResult TryValidate(object value, ValidationData data = null);
+
         IValidationResult Validate(object value, Type valueType, ValidationData data = null);
 
+        IValidationResult TryValidate(object value, Type valueType, ValidationData data = null);
+
         IValidationResult Validate<TValue>(TValue value, ValidationData data = null);
+
+        IValidationResult TryValidate<TValue>(TValue value, ValidationData data = null);
 
         // Value and rule
 
@@ -43,9 +49,15 @@ namespace Manisero.YouShallNotPass
 
         IValidationResult Validate(object value);
 
+        IValidationResult TryValidate(object value);
+
         IValidationResult Validate(object value, Type valueType);
 
+        IValidationResult TryValidate(object value, Type valueType);
+
         IValidationResult Validate<TValue>(TValue value);
+
+        IValidationResult TryValidate<TValue>(TValue value);
 
         // Value and rule
 

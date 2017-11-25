@@ -22,7 +22,7 @@ namespace Manisero.YouShallNotPass.Samples.Registering_rules
 
             var result = engine.TryValidate(Command);
 
-            result.HasError().Should().BeTrue();
+            result.Should().BeNull();
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace Manisero.YouShallNotPass.Samples.Registering_rules
 
             var result = engine.TryValidate(value);
 
-            result.HasError().Should().BeTrue();
+            result.Should().BeNull();
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Manisero.YouShallNotPass.Samples.Registering_rules
 
             var result = engine.TryValidate(value, typeof(CreateUserCommand));
 
-            result.HasError().Should().BeTrue();
+            result.Should().BeNull();
         }
     }
 }

@@ -84,7 +84,8 @@
     <Compile Include="Presenting_error_to_user\Creating_formatters\Error_only.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Complex_object_validation.cs" />
-    <Compile Include="Registering_rules\Sample.cs" />
+    <Compile Include="Registering_rules\Validating_when_not_sure_if_rule_registered.cs" />
+    <Compile Include="Registering_rules\Registering_rules_and_validating.cs" />
     <Compile Include="Utils\EmptyValidationError.cs" />
   </ItemGroup>
   <ItemGroup>
