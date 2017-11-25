@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Manisero.YouShallNotPass.Samples.Registering_rules
 {
-    public class Sample
+    public class Registering_rules_and_validating
     {
         public class CreateUserCommand
         {
