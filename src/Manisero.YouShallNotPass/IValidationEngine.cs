@@ -5,6 +5,10 @@ namespace Manisero.YouShallNotPass
 {
     public interface IValidationEngine
     {
+        // CanValidate
+
+        bool CanValidate(Type valueType);
+
         // Value only
 
         IValidationResult Validate(object value, ValidationData data = null);
@@ -45,6 +49,10 @@ namespace Manisero.YouShallNotPass
 
     public interface ISubvalidationEngine
     {
+        // CanValidate
+
+        bool CanValidate(Type valueType);
+
         // Value only
 
         IValidationResult Validate(object value);

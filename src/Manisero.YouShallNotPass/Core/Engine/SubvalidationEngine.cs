@@ -31,6 +31,13 @@ namespace Manisero.YouShallNotPass.Core.Engine
             };
         }
 
+        // CanValidate
+
+        public bool CanValidate(Type valueType)
+        {
+            return TryGetRule(valueType) != null;
+        }
+
         // Value only
 
         public IValidationResult Validate(object value)
@@ -69,11 +76,7 @@ namespace Manisero.YouShallNotPass.Core.Engine
 
         public IValidationResult TryValidate<TValue>(TValue value)
         {
-            var rule = TryGetRule(typeof(TValue));
-
-            return rule != null
-                ? Validate((object)value, rule)
-                : null;
+            return TryValidate(value, typeof(TValue));
         }
 
         private IValidationRule TryGetRule(Type valueType)

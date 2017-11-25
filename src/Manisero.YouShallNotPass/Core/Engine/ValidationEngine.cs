@@ -13,6 +13,15 @@ namespace Manisero.YouShallNotPass.Core.Engine
             _subvalidationEngineFactory = subvalidationEngineFactory;
         }
 
+        // CanValidate
+
+        public bool CanValidate(Type valueType)
+        {
+            // TODO: Consider avoiding subvalidationEngine creation
+            var subvalidationEngine = _subvalidationEngineFactory.Create();
+            return subvalidationEngine.CanValidate(valueType);
+        }
+
         // Value only
 
         public IValidationResult Validate(object value, ValidationData data = null)
