@@ -16,7 +16,7 @@ namespace Manisero.YouShallNotPass.Validations
         public IValidationResult Violation { get; set; }
     }
 
-    public class PropertyValidator<TOwner, TValue> : IValidator<MemberValidationRule<TOwner, TValue>, TOwner, MemberValidationError>
+    public class MemberValidator<TOwner, TValue> : IValidator<MemberValidationRule<TOwner, TValue>, TOwner, MemberValidationError>
     {
         public MemberValidationError Validate(TOwner value, MemberValidationRule<TOwner, TValue> rule, ValidationContext context)
         {
