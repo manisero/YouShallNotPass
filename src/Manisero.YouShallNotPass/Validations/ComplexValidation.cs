@@ -7,23 +7,23 @@ namespace Manisero.YouShallNotPass.Validations
 {
     public class ComplexValidationRule<TItem> : IValidationRule<TItem, ComplexValidationError>
     {
+        public IValidationRule<TItem> OverallRule { get; set; }
+
         /// <summary>property name -> rule</summary>
         public IDictionary<string, IValidationRule> MemberRules { get; set; }
-        
-        public IValidationRule<TItem> OverallRule { get; set; }
     }
 
     public class ComplexValidationError
     {
         public static readonly Func<ComplexValidationError> Constructor = () => new ComplexValidationError
         {
-            MemberValidationErrors = new Dictionary<string, IValidationResult>()
+            MemberViolations = new Dictionary<string, IValidationResult>()
         };
 
+        public IValidationResult OverallViolation { get; set; }
+
         /// <summary>property name (only invalid properties) -> validation result</summary>
-        public IDictionary<string, IValidationResult> MemberValidationErrors { get; set; }
-        
-        public IValidationResult OverallValidationError { get; set; }
+        public IDictionary<string, IValidationResult> MemberViolations { get; set; }
     }
 
     public class ComplexValidator<TItem> : IValidator<ComplexValidationRule<TItem>, TItem, ComplexValidationError>,
@@ -32,6 +32,16 @@ namespace Manisero.YouShallNotPass.Validations
         public ComplexValidationError Validate(TItem value, ComplexValidationRule<TItem> rule, ValidationContext context)
         {
             var error = LightLazy.Create(ComplexValidationError.Constructor);
+
+            if (rule.OverallRule != null)
+            {
+                var overallResult = context.Engine.Validate(value, rule.OverallRule);
+
+                if (overallResult.HasError())
+                {
+                    error.Item.OverallViolation = overallResult;
+                }
+            }
 
             if (rule.MemberRules != null)
             {
@@ -46,18 +56,8 @@ namespace Manisero.YouShallNotPass.Validations
 
                     if (memberResult.HasError())
                     {
-                        error.Item.MemberValidationErrors.Add(propertyName, memberResult);
+                        error.Item.MemberViolations.Add(propertyName, memberResult);
                     }
-                }
-            }
-
-            if (rule.OverallRule != null)
-            {
-                var overallResult = context.Engine.Validate(value, rule.OverallRule);
-
-                if (overallResult.HasError())
-                {
-                    error.Item.OverallValidationError = overallResult;
                 }
             }
 

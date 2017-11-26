@@ -14,11 +14,11 @@ namespace Manisero.YouShallNotPass.Validations
     {
         public static readonly Func<CollectionValidationError> Constructor = () => new CollectionValidationError
         {
-            ItemValidationResults = new Dictionary<int, IValidationResult>()
+            Violations = new Dictionary<int, IValidationResult>()
         };
 
         /// <summary>item index (only invalid items) -> validation result</summary>
-        public IDictionary<int, IValidationResult> ItemValidationResults { get; set; }
+        public IDictionary<int, IValidationResult> Violations { get; set; }
     }
 
     public class CollectionValidator<TItem> : IValidator<CollectionValidationRule<TItem>, IEnumerable<TItem>, CollectionValidationError>,
@@ -38,7 +38,7 @@ namespace Manisero.YouShallNotPass.Validations
 
                 if (itemResult.HasError())
                 {
-                    error.Item.ItemValidationResults.Add(itemIndex, itemResult);
+                    error.Item.Violations.Add(itemIndex, itemResult);
                 }
 
                 itemIndex++;

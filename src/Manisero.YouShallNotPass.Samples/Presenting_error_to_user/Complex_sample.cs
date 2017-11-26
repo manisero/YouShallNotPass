@@ -24,6 +24,10 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
         public static readonly ComplexValidationRule<CreateUserCommand> CreateUserCommandValidationRule = new ComplexValidationRule<CreateUserCommand>
         {
+            OverallRule = new CustomValidationRule<CreateUserCommand, CreateUserCommandOverallValidationError>
+            {
+                Validator = (value, context) => new CreateUserCommandOverallValidationError()
+            },
             MemberRules = new Dictionary<string, IValidationRule>
             {
                 [nameof(CreateUserCommand.Email)] = new AllValidationRule<string>
@@ -36,10 +40,6 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
                 },
                 [nameof(CreateUserCommand.FirstName)] = new NotNullNorWhiteSpaceValidationRule(),
                 [nameof(CreateUserCommand.LastName)] = new NotNullNorWhiteSpaceValidationRule()
-            },
-            OverallRule = new CustomValidationRule<CreateUserCommand, CreateUserCommandOverallValidationError>
-            {
-                Validator = (value, context) => new CreateUserCommandOverallValidationError()
             }
         };
 
@@ -53,9 +53,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             {
                 var error = validationResult.Error;
 
-                if (error.OverallValidationError != null)
+                if (error.OverallViolation != null)
                 {
-                    var lines = context.Engine.Format(error.OverallValidationError);
+                    var lines = context.Engine.Format(error.OverallViolation);
 
                     foreach (var line in lines)
                     {
@@ -63,7 +63,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
                     }
                 }
 
-                foreach (var memberError in error.MemberValidationErrors)
+                foreach (var memberError in error.MemberViolations)
                 {
                     yield return $"{memberError.Key} is invalid:";
 
