@@ -11,6 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manisero.YouShallNotPass.Be
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manisero.YouShallNotPass.Samples", "Manisero.YouShallNotPass.Samples\Manisero.YouShallNotPass.Samples.csproj", "{459ED9CD-A2D2-486D-8A77-C97496D79461}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manisero.YouShallNotPass.ErrorMessages", "Manisero.YouShallNotPass.ErrorMessages\Manisero.YouShallNotPass.ErrorMessages.csproj", "{CFB40917-738F-4990-B89F-0D74848A23DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Implementation", "1. Implementation", "{E536505A-5E92-4D10-A517-CA570407F7F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Tests", "2. Tests", "{09A9F9B7-B03A-42C5-BA34-64C5A1A0EE81}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Benchmarks", "3. Benchmarks", "{4FC4F074-9B37-4FE7-8200-436D1B2531FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,9 +41,20 @@ Global
 		{459ED9CD-A2D2-486D-8A77-C97496D79461}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{459ED9CD-A2D2-486D-8A77-C97496D79461}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{459ED9CD-A2D2-486D-8A77-C97496D79461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFB40917-738F-4990-B89F-0D74848A23DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFB40917-738F-4990-B89F-0D74848A23DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFB40917-738F-4990-B89F-0D74848A23DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFB40917-738F-4990-B89F-0D74848A23DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{65A5D4A6-0993-4207-98E8-D7A35FC05264} = {E536505A-5E92-4D10-A517-CA570407F7F1}
+		{089E6862-E3C7-4FE3-ABFB-0D64D713F80B} = {09A9F9B7-B03A-42C5-BA34-64C5A1A0EE81}
+		{C894F125-FED1-493A-8440-7584AC551492} = {4FC4F074-9B37-4FE7-8200-436D1B2531FB}
+		{459ED9CD-A2D2-486D-8A77-C97496D79461} = {09A9F9B7-B03A-42C5-BA34-64C5A1A0EE81}
+		{CFB40917-738F-4990-B89F-0D74848A23DC} = {E536505A-5E92-4D10-A517-CA570407F7F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {636D1E2B-99AC-4E41-AFA8-1FEC84D46A0B}
