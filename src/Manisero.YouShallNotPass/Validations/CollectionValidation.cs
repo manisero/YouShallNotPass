@@ -59,7 +59,7 @@ namespace Manisero.YouShallNotPass.Validations
         }
 
         public static Rule<TItem> Collection<TItem>(
-            this ValidationRuleBuilder<TItem> builder,
+            this ValidationRuleBuilder<IEnumerable<TItem>> builder,
             Func<ValidationRuleBuilder<TItem>, IValidationRule<TItem>> itemRule)
             => new Rule<TItem>
             {

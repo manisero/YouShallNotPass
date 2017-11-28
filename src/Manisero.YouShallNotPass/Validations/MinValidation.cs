@@ -26,7 +26,7 @@ namespace Manisero.YouShallNotPass.Validations
             }
         }
 
-        public static Rule<TValue> MinLength<TValue>(this ValidationRuleBuilder<string> builder, TValue minValue)
+        public static Rule<TValue> Min<TValue>(this ValidationRuleBuilder<TValue> builder, TValue minValue)
             where TValue : IComparable<TValue>
             => new Rule<TValue> { MinValue = minValue };
     }

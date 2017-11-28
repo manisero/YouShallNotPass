@@ -22,7 +22,7 @@
             }
         }
 
-        public static Rule<TValue> NotNullLength<TValue>(this ValidationRuleBuilder<string> builder)
+        public static Rule<TValue> NotNull<TValue>(this ValidationRuleBuilder<TValue> builder)
             => new Rule<TValue>();
     }
 }
