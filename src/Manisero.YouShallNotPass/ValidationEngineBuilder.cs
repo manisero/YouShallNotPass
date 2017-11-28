@@ -221,7 +221,7 @@ namespace Manisero.YouShallNotPass
 
         private void RegisterDefaultValidators()
         {
-            RegisterFullGenericValidator(typeof(AllValidator<>));
+            RegisterFullGenericValidator(typeof(AllValidation.Validator<>));
             RegisterFullGenericValidator(typeof(AnyValidator<>));
             RegisterFullGenericValidator(typeof(AtLeastNValidator<>));
             RegisterFullGenericValidator(typeof(CollectionValidator<>));

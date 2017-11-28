@@ -30,7 +30,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             },
             MemberRules = new Dictionary<string, IValidationRule>
             {
-                [nameof(CreateUserCommand.Email)] = new AllValidationRule<string>
+                [nameof(CreateUserCommand.Email)] = new AllValidation.Rule<string>
                 {
                     Rules = new List<IValidationRule<string>>
                     {
@@ -77,10 +77,10 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             }
         }
 
-        public class AllValidationErrorFormatter<TValue> : IValidationErrorFormatter<AllValidationRule<TValue>, TValue, AllValidationError, IEnumerable<string>>
+        public class AllValidationErrorFormatter<TValue> : IValidationErrorFormatter<AllValidation.Rule<TValue>, TValue, AllValidation.Error, IEnumerable<string>>
         {
             public IEnumerable<string> Format(
-                ValidationResult<AllValidationRule<TValue>, TValue, AllValidationError> validationResult,
+                ValidationResult<AllValidation.Rule<TValue>, TValue, AllValidation.Error> validationResult,
                 ValidationErrorFormattingContext<IEnumerable<string>> context)
             {
                 foreach (var violation in validationResult.Error.Violations.Values)

@@ -1,42 +1,55 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    [ValidatesNull]
-    public class AllValidationRule<TValue> : IValidationRule<TValue, AllValidationError>
+    public static class AllValidation
     {
-        public ICollection<IValidationRule<TValue>> Rules { get; set; }
-    }
-
-    public class AllValidationError
-    {
-        /// <summary>rule index (only violated rules) -> validation result</summary>
-        public IDictionary<int, IValidationResult> Violations { get; set; }
-    }
-
-    public class AllValidator<TValue> : IValidator<AllValidationRule<TValue>, TValue, AllValidationError>
-    {
-        public AllValidationError Validate(TValue value, AllValidationRule<TValue> rule, ValidationContext context)
+        [ValidatesNull]
+        public class Rule<TValue> : IValidationRule<TValue, Error>
         {
-            var violations = LightLazy.Create(() => new Dictionary<int, IValidationResult>());
-            var ruleIndex = 0;
+            public ICollection<IValidationRule<TValue>> Rules { get; set; }
+        }
 
-            foreach (var subRule in rule.Rules)
+        public class Error
+        {
+            /// <summary>rule index (only violated rules) -> validation result</summary>
+            public IDictionary<int, IValidationResult> Violations { get; set; }
+        }
+
+        public class Validator<TValue> : IValidator<Rule<TValue>, TValue, Error>
+        {
+            public Error Validate(TValue value, Rule<TValue> rule, ValidationContext context)
             {
-                var subResult = context.Engine.Validate(value, subRule);
+                var violations = LightLazy.Create(() => new Dictionary<int, IValidationResult>());
+                var ruleIndex = 0;
 
-                if (subResult.HasError())
+                foreach (var subRule in rule.Rules)
                 {
-                    violations.Item.Add(ruleIndex, subResult);
+                    var subResult = context.Engine.Validate(value, subRule);
+
+                    if (subResult.HasError())
+                    {
+                        violations.Item.Add(ruleIndex, subResult);
+                    }
+
+                    ruleIndex++;
                 }
 
-                ruleIndex++;
+                return violations.ItemConstructed
+                    ? new Error { Violations = violations.Item }
+                    : null;
             }
-
-            return violations.ItemConstructed
-                ? new AllValidationError { Violations = violations.Item }
-                : null;
         }
+
+        public static Rule<TValue> All<TValue>(
+            this ValidationRuleBuilder<TValue> builder,
+            params Func<ValidationRuleBuilder<TValue>, IValidationRule<TValue>>[] rules)
+            => new Rule<TValue>
+            {
+                Rules = rules.Select(x => x(ValidationRuleBuilder<TValue>.Instance)).ToArray()
+            };
     }
 }
