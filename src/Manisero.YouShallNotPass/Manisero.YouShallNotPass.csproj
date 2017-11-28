@@ -70,6 +70,7 @@
     <Compile Include="Core\Engine\SubvalidationEngine.cs" />
     <Compile Include="Utils\MethodInfoExtensions.cs" />
     <Compile Include="ValidationData.cs" />
+    <Compile Include="ValidationRuleBuilder.cs" />
     <Compile Include="Validations\AnyValidation.cs" />
     <Compile Include="Validations\AllValidation.cs" />
     <Compile Include="Validations\AtLeastNValidation.cs" />
