@@ -17,12 +17,11 @@ namespace Manisero.YouShallNotPass.Samples
         }
 
         private static readonly IValidationRule<Item> Rule = new ValidationRuleBuilder<Item>()
-            .All(
-                b => b.Member(x => x.Id, b1 => b1.Min(1)),
-                b => b.Member(x => x.Email, b1 => b1.Email()),
-                b => b.Member(x => x.SecondEmail, b1 => b1.Email()),
-                b => b.Member(x => x.ChildIds, new CollectionValidation.Rule<int> { ItemRule = new MinValidation.Rule<int> { MinValue = 1 } }),
-                b => b.Member(x => x.Age, b1 => b1.NotNull()));
+            .All(b => b.Member(x => x.Id, b1 => b1.Min(1)),
+                 b => b.Member(x => x.Email, b1 => b1.Email()),
+                 b => b.Member(x => x.SecondEmail, b1 => b1.Email()),
+                 b => b.Member(x => x.ChildIds, new CollectionValidation.Rule<int> { ItemRule = new MinValidation.Rule<int> { MinValue = 1 } }),
+                 b => b.Member(x => x.Age, b1 => b1.NotNull()));
 
         [Fact]
         public void valid_item___no_error()
