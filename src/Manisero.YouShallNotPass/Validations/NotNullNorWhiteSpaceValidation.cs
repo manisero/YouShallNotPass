@@ -21,5 +21,8 @@
                     : null;
             }
         }
+
+        public static Rule NotNullNorWhiteSpace(this ValidationRuleBuilder<string> builder)
+            => new Rule();
     }
 }

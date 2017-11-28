@@ -57,5 +57,13 @@ namespace Manisero.YouShallNotPass.Validations
                 throw new NotImplementedException();
             }
         }
+
+        public static Rule<TItem> Collection<TItem>(
+            this ValidationRuleBuilder<TItem> builder,
+            Func<ValidationRuleBuilder<TItem>, IValidationRule<TItem>> itemRule)
+            => new Rule<TItem>
+            {
+                ItemRule = itemRule(ValidationRuleBuilder<TItem>.Instance)
+            };
     }
 }

@@ -45,6 +45,7 @@
     <Compile Include="Core\RuleRegistration\ValidationRuleResolver.cs" />
     <Compile Include="Core\RuleRegistration\ValidationRulesRegistry.cs" />
     <Compile Include="Core\RuleRegistration\ValidationRulesRegistryBuilder.cs" />
+    <Compile Include="Utils\ExpressionExtensions.cs" />
     <Compile Include="Utils\ThreadSafeCache.cs" />
     <Compile Include="ErrorFormatting\Core\FormatterRegistration\ValidationErrorFormatterResolver.cs" />
     <Compile Include="ErrorFormatting\Core\FormatterRegistration\ValidationErrorFormattersRegistry.cs" />

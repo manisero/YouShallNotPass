@@ -21,5 +21,8 @@
                     : null;
             }
         }
+
+        public static Rule MinLength(this ValidationRuleBuilder<string> builder, int minLength)
+            => new Rule { MinLength = minLength };
     }
 }

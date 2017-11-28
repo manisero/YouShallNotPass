@@ -26,5 +26,8 @@
                 return value.Split('@').Length == 2;
             }
         }
+
+        public static Rule Email(this ValidationRuleBuilder<string> builder)
+            => new Rule();
     }
 }

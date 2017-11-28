@@ -21,5 +21,8 @@
                     : null;
             }
         }
+
+        public static Rule<TValue> NotNullLength<TValue>(this ValidationRuleBuilder<string> builder)
+            => new Rule<TValue>();
     }
 }

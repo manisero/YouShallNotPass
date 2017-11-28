@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq.Expressions;
+using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -30,5 +32,36 @@ namespace Manisero.YouShallNotPass.Validations
                     : null;
             }
         }
+
+        public static Rule<TOwner, TValue> Member<TOwner, TValue>(
+            this ValidationRuleBuilder<TOwner> builder,
+            Expression<Func<TOwner, TValue>> valueGetter,
+            IValidationRule<TValue> valueValidationRule)
+            => builder.Member(valueGetter.ToMemberName(), valueGetter.Compile(), valueValidationRule);
+
+        public static Rule<TOwner, TValue> Member<TOwner, TValue>(
+            this ValidationRuleBuilder<TOwner> builder,
+            Expression<Func<TOwner, TValue>> valueGetter,
+            Func<ValidationRuleBuilder<TValue>, IValidationRule<TValue>> valueValidationRule)
+            => builder.Member(valueGetter, valueValidationRule(ValidationRuleBuilder<TValue>.Instance));
+
+        public static Rule<TOwner, TValue> Member<TOwner, TValue>(
+            this ValidationRuleBuilder<TOwner> builder,
+            string memberName,
+            Func<TOwner, TValue> valueGetter,
+            Func<ValidationRuleBuilder<TValue>, IValidationRule<TValue>> valueValidationRule)
+            => builder.Member(memberName, valueGetter, valueValidationRule(ValidationRuleBuilder<TValue>.Instance));
+
+        public static Rule<TOwner, TValue> Member<TOwner, TValue>(
+            this ValidationRuleBuilder<TOwner> builder,
+            string memberName,
+            Func<TOwner, TValue> valueGetter,
+            IValidationRule<TValue> valueValidationRule)
+            => new Rule<TOwner, TValue>
+            {
+                MemberName = memberName,
+                ValueGetter = valueGetter,
+                ValueValidationRule = valueValidationRule
+            };
     }
 }

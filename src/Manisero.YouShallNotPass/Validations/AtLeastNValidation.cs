@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations
@@ -48,5 +50,15 @@ namespace Manisero.YouShallNotPass.Validations
                     : null;
             }
         }
+
+        public static Rule<TValue> AtLeastN<TValue>(
+            this ValidationRuleBuilder<TValue> builder,
+            int n,
+            params Func<ValidationRuleBuilder<TValue>, IValidationRule<TValue>>[] rules)
+            => new Rule<TValue>
+            {
+                Rules = rules.Select(x => x(ValidationRuleBuilder<TValue>.Instance)).ToArray(),
+                N = n
+            };
     }
 }
