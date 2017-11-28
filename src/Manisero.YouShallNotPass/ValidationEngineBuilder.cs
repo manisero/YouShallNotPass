@@ -222,17 +222,17 @@ namespace Manisero.YouShallNotPass
         private void RegisterDefaultValidators()
         {
             RegisterFullGenericValidator(typeof(AllValidation.Validator<>));
-            RegisterFullGenericValidator(typeof(AnyValidator<>));
-            RegisterFullGenericValidator(typeof(AtLeastNValidator<>));
-            RegisterFullGenericValidator(typeof(CollectionValidator<>));
-            RegisterFullGenericValidator(typeof(CustomValidator<,>));
-            RegisterFullGenericValidator(typeof(ComplexValidator<>));
-            RegisterFullValidator(new EmailValidator());
-            RegisterFullGenericValidator(typeof(MemberValidator<,>));
-            RegisterFullValidator(new MinLengthValidator());
-            RegisterFullGenericValidator(typeof(MinValidator<>));
-            RegisterFullValidator(new NotNullNorWhiteSpaceValidator());
-            RegisterFullGenericValidator(typeof(NotNullValidator<>));
+            RegisterFullGenericValidator(typeof(AnyValidation.Validator<>));
+            RegisterFullGenericValidator(typeof(AtLeastNValidation.Validator<>));
+            RegisterFullGenericValidator(typeof(CollectionValidation.Validator<>));
+            RegisterFullGenericValidator(typeof(CustomValidation.Validator<,>));
+            RegisterFullGenericValidator(typeof(ComplexValidation.Validator<>));
+            RegisterFullValidator(new EmailValidation.Validator());
+            RegisterFullGenericValidator(typeof(MemberValidation.Validator<,>));
+            RegisterFullValidator(new MinLengthValidation.Validator());
+            RegisterFullGenericValidator(typeof(MinValidation.Validator<>));
+            RegisterFullValidator(new NotNullNorWhiteSpaceValidation.Validator());
+            RegisterFullGenericValidator(typeof(NotNullValidation.Validator<>));
         }
     }
 }

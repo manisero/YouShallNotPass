@@ -9,9 +9,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
     {
         // Password validation
 
-        public class PasswordValidationRule : IValidationRule<string, AtLeastNValidationError>
+        public class PasswordValidationRule : IValidationRule<string, AtLeastNValidation.Error>
         {
-            private static readonly AtLeastNValidationRule<string> _innerRule = new AtLeastNValidationRule<string>
+            private static readonly AtLeastNValidation.Rule<string> _innerRule = new AtLeastNValidation.Rule<string>
             {
                 Rules = new List<IValidationRule<string>>
                 {
@@ -22,14 +22,14 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
                 N = 2
             };
 
-            public AtLeastNValidationRule<string> InnerRule => _innerRule;
+            public AtLeastNValidation.Rule<string> InnerRule => _innerRule;
         }
 
-        public class PasswordValidator : IValidator<PasswordValidationRule, string, AtLeastNValidationError>
+        public class PasswordValidator : IValidator<PasswordValidationRule, string, AtLeastNValidation.Error>
         {
-            public AtLeastNValidationError Validate(string value, PasswordValidationRule rule, ValidationContext context)
+            public AtLeastNValidation.Error Validate(string value, PasswordValidationRule rule, ValidationContext context)
             {
-                var innerValidationResult = context.Engine.Validate<AtLeastNValidationRule<string>, string, AtLeastNValidationError>(value, rule.InnerRule);
+                var innerValidationResult = context.Engine.Validate<AtLeastNValidation.Rule<string>, string, AtLeastNValidation.Error>(value, rule.InnerRule);
 
                 return innerValidationResult.HasError()
                     ? innerValidationResult.Error

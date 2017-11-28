@@ -7,7 +7,7 @@ namespace Manisero.YouShallNotPass.Tests.Validations
 {
     public class MinValidationTests
     {
-        private static readonly MinValidationRule<int> Rule = new MinValidationRule<int>
+        private static readonly MinValidation.Rule<int> Rule = new MinValidation.Rule<int>
         {
             MinValue = 2
         };

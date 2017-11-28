@@ -44,8 +44,8 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         {
             Rules = new List<IValidationRule<string>>
             {
-                new NotNullNorWhiteSpaceValidationRule(),
-                new MinLengthValidationRule { MinLength = 1 }
+                new NotNullNorWhiteSpaceValidation.Rule(),
+                new MinLengthValidation.Rule { MinLength = 1 }
             }
         };
 

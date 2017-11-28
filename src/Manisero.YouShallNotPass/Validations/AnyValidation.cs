@@ -3,45 +3,48 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    [ValidatesNull]
-    public class AnyValidationRule<TValue> : IValidationRule<TValue, AnyValidationError>
+    public static class AnyValidation
     {
-        public ICollection<IValidationRule<TValue>> Rules { get; set; }
-    }
-
-    public class AnyValidationError
-    {
-        /// <summary>rule index (only violated rules) -> validation result</summary>
-        public IDictionary<int, IValidationResult> Violations { get; set; }
-    }
-
-    public class AnyValidator<TValue> : IValidator<AnyValidationRule<TValue>, TValue, AnyValidationError>
-    {
-        public AnyValidationError Validate(TValue value, AnyValidationRule<TValue> rule, ValidationContext context)
+        [ValidatesNull]
+        public class Rule<TValue> : IValidationRule<TValue, Error>
         {
-            if (rule.Rules.Count == 0)
+            public ICollection<IValidationRule<TValue>> Rules { get; set; }
+        }
+
+        public class Error
+        {
+            /// <summary>rule index (only violated rules) -> validation result</summary>
+            public IDictionary<int, IValidationResult> Violations { get; set; }
+        }
+
+        public class Validator<TValue> : IValidator<Rule<TValue>, TValue, Error>
+        {
+            public Error Validate(TValue value, Rule<TValue> rule, ValidationContext context)
             {
-                return new AnyValidationError { Violations = new Dictionary<int, IValidationResult>() };
-            }
-
-            var violations = LightLazy.Create(() => new Dictionary<int, IValidationResult>());
-            var ruleIndex = 0;
-
-            foreach (var subRule in rule.Rules)
-            {
-                var subResult = context.Engine.Validate(value, subRule);
-
-                if (subResult.HasError())
+                if (rule.Rules.Count == 0)
                 {
-                    violations.Item.Add(ruleIndex, subResult);
+                    return new Error { Violations = new Dictionary<int, IValidationResult>() };
                 }
 
-                ruleIndex++;
-            }
+                var violations = LightLazy.Create(() => new Dictionary<int, IValidationResult>());
+                var ruleIndex = 0;
 
-            return violations.ItemConstructed && violations.Item.Count == rule.Rules.Count
-                ? new AnyValidationError { Violations = violations.Item }
-                : null;
+                foreach (var subRule in rule.Rules)
+                {
+                    var subResult = context.Engine.Validate(value, subRule);
+
+                    if (subResult.HasError())
+                    {
+                        violations.Item.Add(ruleIndex, subResult);
+                    }
+
+                    ruleIndex++;
+                }
+
+                return violations.ItemConstructed && violations.Item.Count == rule.Rules.Count
+                    ? new Error { Violations = violations.Item }
+                    : null;
+            }
         }
     }
 }

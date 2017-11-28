@@ -7,7 +7,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
 {
     public class Instance
     {
-        private static readonly AtLeastNValidationRule<string> PasswordValidationRule = new AtLeastNValidationRule<string>
+        private static readonly AtLeastNValidation.Rule<string> PasswordValidationRule = new AtLeastNValidation.Rule<string>
         {
             Rules = new List<IValidationRule<string>>
             {

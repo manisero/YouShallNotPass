@@ -2,30 +2,33 @@
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    public class MemberValidationRule<TOwner, TValue> : IValidationRule<TOwner, MemberValidationError>
+    public static class MemberValidation
     {
-        public string MemberName { get; set; }
-
-        public Func<TOwner, TValue> ValueGetter { get; set; }
-
-        public IValidationRule<TValue> ValueValidationRule { get; set; }
-    }
-
-    public class MemberValidationError
-    {
-        public IValidationResult Violation { get; set; }
-    }
-
-    public class MemberValidator<TOwner, TValue> : IValidator<MemberValidationRule<TOwner, TValue>, TOwner, MemberValidationError>
-    {
-        public MemberValidationError Validate(TOwner value, MemberValidationRule<TOwner, TValue> rule, ValidationContext context)
+        public class Rule<TOwner, TValue> : IValidationRule<TOwner, Error>
         {
-            var memberValue = rule.ValueGetter(value);
-            var validationResult = context.Engine.Validate(memberValue, rule.ValueValidationRule);
+            public string MemberName { get; set; }
 
-            return validationResult.HasError()
-                ? new MemberValidationError { Violation = validationResult }
-                : null;
+            public Func<TOwner, TValue> ValueGetter { get; set; }
+
+            public IValidationRule<TValue> ValueValidationRule { get; set; }
+        }
+
+        public class Error
+        {
+            public IValidationResult Violation { get; set; }
+        }
+
+        public class Validator<TOwner, TValue> : IValidator<Rule<TOwner, TValue>, TOwner, Error>
+        {
+            public Error Validate(TOwner value, Rule<TOwner, TValue> rule, ValidationContext context)
+            {
+                var memberValue = rule.ValueGetter(value);
+                var validationResult = context.Engine.Validate(memberValue, rule.ValueValidationRule);
+
+                return validationResult.HasError()
+                    ? new Error { Violation = validationResult }
+                    : null;
+            }
         }
     }
 }

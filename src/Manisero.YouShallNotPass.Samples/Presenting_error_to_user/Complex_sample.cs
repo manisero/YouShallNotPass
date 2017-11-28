@@ -22,9 +22,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
         {
         }
 
-        public static readonly ComplexValidationRule<CreateUserCommand> CreateUserCommandValidationRule = new ComplexValidationRule<CreateUserCommand>
+        public static readonly ComplexValidation.Rule<CreateUserCommand> CreateUserCommandValidationRule = new ComplexValidation.Rule<CreateUserCommand>
         {
-            OverallRule = new CustomValidationRule<CreateUserCommand, CreateUserCommandOverallValidationError>
+            OverallRule = new CustomValidation.Rule<CreateUserCommand, CreateUserCommandOverallValidationError>
             {
                 Validator = (value, context) => new CreateUserCommandOverallValidationError()
             },
@@ -34,21 +34,21 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
                 {
                     Rules = new List<IValidationRule<string>>
                     {
-                        new NotNullValidationRule<string>(),
-                        new EmailValidationRule()
+                        new NotNullValidation.Rule<string>(),
+                        new EmailValidation.Rule()
                     }
                 },
-                [nameof(CreateUserCommand.FirstName)] = new NotNullNorWhiteSpaceValidationRule(),
-                [nameof(CreateUserCommand.LastName)] = new NotNullNorWhiteSpaceValidationRule()
+                [nameof(CreateUserCommand.FirstName)] = new NotNullNorWhiteSpaceValidation.Rule(),
+                [nameof(CreateUserCommand.LastName)] = new NotNullNorWhiteSpaceValidation.Rule()
             }
         };
 
         // formatters
 
-        public class ComplexValidatonErrorFormatter<TValue> : IValidationErrorFormatter<ComplexValidationRule<TValue>, TValue, ComplexValidationError, IEnumerable<string>>
+        public class ComplexValidatonErrorFormatter<TValue> : IValidationErrorFormatter<ComplexValidation.Rule<TValue>, TValue, ComplexValidation.Error, IEnumerable<string>>
         {
             public IEnumerable<string> Format(
-                ValidationResult<ComplexValidationRule<TValue>, TValue, ComplexValidationError> validationResult,
+                ValidationResult<ComplexValidation.Rule<TValue>, TValue, ComplexValidation.Error> validationResult,
                 ValidationErrorFormattingContext<IEnumerable<string>> context)
             {
                 var error = validationResult.Error;
@@ -104,9 +104,9 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<IEnumerable<string>>();
             formattingEngineBuilder.RegisterFullGenericFormatter(typeof(AllValidationErrorFormatter<>));
             formattingEngineBuilder.RegisterFullGenericFormatter(typeof(ComplexValidatonErrorFormatter<>));
-            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidationError>(_ => new[] { "Value should be an e-mail address." });
-            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<NotNullNorWhiteSpaceValidationError>(_ => new[] { "Value is required and cannot be empty nor consist of only white space characters." });
-            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<NotNullValidationError>(_ => new[] { "Value is required." });
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidation.Error>(_ => new[] { "Value should be an e-mail address." });
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<NotNullNorWhiteSpaceValidation.Error>(_ => new[] { "Value is required and cannot be empty nor consist of only white space characters." });
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<NotNullValidation.Error>(_ => new[] { "Value is required." });
             formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<CreateUserCommandOverallValidationError>(_ => new[] { "Command is generally invalid." });
             var formattingEngine = formattingEngineBuilder.Build();
 

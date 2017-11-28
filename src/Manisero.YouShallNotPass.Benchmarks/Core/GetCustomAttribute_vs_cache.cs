@@ -8,7 +8,7 @@ namespace Manisero.YouShallNotPass.Benchmarks.Core
 {
     public class GetCustomAttribute_vs_cache
     {
-        private static readonly Type CheckedType = typeof(EmailValidationRule);
+        private static readonly Type CheckedType = typeof(EmailValidation.Rule);
 
         private ConcurrentDictionary<Type, bool> _cache;
 

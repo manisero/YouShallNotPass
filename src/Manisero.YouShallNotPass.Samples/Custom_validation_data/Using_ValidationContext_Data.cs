@@ -55,12 +55,12 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
 
         // UpdateUserCommand validation rule
 
-        public static readonly IValidationRule<UpdateUserCommand> UpdateUserCommandValidationRule = new ComplexValidationRule<UpdateUserCommand>
+        public static readonly IValidationRule<UpdateUserCommand> UpdateUserCommandValidationRule = new ComplexValidation.Rule<UpdateUserCommand>
         {
             OverallRule = new UserExistsValidationRule(),
             MemberRules = new Dictionary<string, IValidationRule>
             {
-                [nameof(UpdateUserCommand.UserId)] = new MinValidationRule<int>
+                [nameof(UpdateUserCommand.UserId)] = new MinValidation.Rule<int>
                 {
                     MinValue = 1
                 }

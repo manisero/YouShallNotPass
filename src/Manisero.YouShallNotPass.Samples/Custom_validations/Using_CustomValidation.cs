@@ -10,7 +10,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
     {
         // ContainsDigit validation
 
-        public static readonly CustomValidationRule<string, EmptyValidationError> ContainsDigitValidationRule = new CustomValidationRule<string, EmptyValidationError>
+        public static readonly CustomValidation.Rule<string, EmptyValidationError> ContainsDigitValidationRule = new CustomValidation.Rule<string, EmptyValidationError>
         {
             Validator = (value, context) => value.Any(char.IsDigit)
                 ? EmptyValidationError.None

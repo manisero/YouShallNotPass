@@ -29,8 +29,8 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
                 {
                     Rules = new List<IValidationRule<string>>
                     {
-                        new NotNullNorWhiteSpaceValidationRule(),
-                        new EmailValidationRule()
+                        new NotNullNorWhiteSpaceValidation.Rule(),
+                        new EmailValidation.Rule()
                     }
                 },
                 Value = "a",
@@ -38,17 +38,17 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
                 {
                     Violations = new List<IValidationResult>
                     {
-                        new ValidationResult<NotNullNorWhiteSpaceValidationRule, string, NotNullNorWhiteSpaceValidationError>
+                        new ValidationResult<NotNullNorWhiteSpaceValidation.Rule, string, NotNullNorWhiteSpaceValidation.Error>
                         {
-                            Rule = new NotNullNorWhiteSpaceValidationRule(),
+                            Rule = new NotNullNorWhiteSpaceValidation.Rule(),
                             Value = "a",
-                            Error = new NotNullNorWhiteSpaceValidationError()
+                            Error = new NotNullNorWhiteSpaceValidation.Error()
                         },
-                        new ValidationResult<EmailValidationRule, string, EmailValidationError>
+                        new ValidationResult<EmailValidation.Rule, string, EmailValidation.Error>
                         {
-                            Rule = new EmailValidationRule(),
+                            Rule = new EmailValidation.Rule(),
                             Value = "a",
-                            Error = new EmailValidationError()
+                            Error = new EmailValidation.Error()
                         }
                     }
                 }
@@ -69,10 +69,10 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
             }
         }
 
-        public static readonly Func<NotNullNorWhiteSpaceValidationError, string> NotNullNorWhiteSpaceValidationErrorFormatter =
+        public static readonly Func<NotNullNorWhiteSpaceValidation.Error, string> NotNullNorWhiteSpaceValidationErrorFormatter =
             _ => "Value cannot be null nor white space.";
 
-        public static readonly Func<EmailValidationError, string> EmailValidationErrorFormatter =
+        public static readonly Func<EmailValidation.Error, string> EmailValidationErrorFormatter =
             _ => "Value should be an e-mail.";
 
         [Fact]

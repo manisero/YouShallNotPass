@@ -5,68 +5,71 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    public class ComplexValidationRule<TItem> : IValidationRule<TItem, ComplexValidationError>
+    public static class ComplexValidation
     {
-        public IValidationRule<TItem> OverallRule { get; set; }
-
-        /// <summary>property name -> rule</summary>
-        public IDictionary<string, IValidationRule> MemberRules { get; set; }
-    }
-
-    public class ComplexValidationError
-    {
-        public static readonly Func<ComplexValidationError> Constructor = () => new ComplexValidationError
+        public class Rule<TItem> : IValidationRule<TItem, Error>
         {
-            MemberViolations = new Dictionary<string, IValidationResult>()
-        };
+            public IValidationRule<TItem> OverallRule { get; set; }
 
-        public IValidationResult OverallViolation { get; set; }
-
-        /// <summary>property name (only invalid properties) -> validation result</summary>
-        public IDictionary<string, IValidationResult> MemberViolations { get; set; }
-    }
-
-    public class ComplexValidator<TItem> : IValidator<ComplexValidationRule<TItem>, TItem, ComplexValidationError>,
-                                           IAsyncValidator<ComplexValidationRule<TItem>, TItem, ComplexValidationError>
-    {
-        public ComplexValidationError Validate(TItem value, ComplexValidationRule<TItem> rule, ValidationContext context)
-        {
-            var error = LightLazy.Create(ComplexValidationError.Constructor);
-
-            if (rule.OverallRule != null)
-            {
-                var overallResult = context.Engine.Validate(value, rule.OverallRule);
-
-                if (overallResult.HasError())
-                {
-                    error.Item.OverallViolation = overallResult;
-                }
-            }
-
-            if (rule.MemberRules != null)
-            {
-                foreach (var memberRule in rule.MemberRules)
-                {
-                    var propertyName = memberRule.Key;
-                    var propertyRule = memberRule.Value;
-
-                    // TODO: Cache property getter
-                    var propertyValue = value.GetType().GetProperty(propertyName).GetValue(value);
-                    var memberResult = context.Engine.Validate(propertyValue, propertyRule);
-
-                    if (memberResult.HasError())
-                    {
-                        error.Item.MemberViolations.Add(propertyName, memberResult);
-                    }
-                }
-            }
-
-            return error.ItemOrNull;
+            /// <summary>property name -> rule</summary>
+            public IDictionary<string, IValidationRule> MemberRules { get; set; }
         }
 
-        public Task<ComplexValidationError> ValidateAsync(TItem value, ComplexValidationRule<TItem> rule, ValidationContext context)
+        public class Error
         {
-            throw new NotImplementedException();
+            public static readonly Func<Error> Constructor = () => new Error
+            {
+                MemberViolations = new Dictionary<string, IValidationResult>()
+            };
+
+            public IValidationResult OverallViolation { get; set; }
+
+            /// <summary>property name (only invalid properties) -> validation result</summary>
+            public IDictionary<string, IValidationResult> MemberViolations { get; set; }
+        }
+
+        public class Validator<TItem> : IValidator<Rule<TItem>, TItem, Error>,
+                                        IAsyncValidator<Rule<TItem>, TItem, Error>
+        {
+            public Error Validate(TItem value, Rule<TItem> rule, ValidationContext context)
+            {
+                var error = LightLazy.Create(Error.Constructor);
+
+                if (rule.OverallRule != null)
+                {
+                    var overallResult = context.Engine.Validate(value, rule.OverallRule);
+
+                    if (overallResult.HasError())
+                    {
+                        error.Item.OverallViolation = overallResult;
+                    }
+                }
+
+                if (rule.MemberRules != null)
+                {
+                    foreach (var memberRule in rule.MemberRules)
+                    {
+                        var propertyName = memberRule.Key;
+                        var propertyRule = memberRule.Value;
+
+                        // TODO: Cache property getter
+                        var propertyValue = value.GetType().GetProperty(propertyName).GetValue(value);
+                        var memberResult = context.Engine.Validate(propertyValue, propertyRule);
+
+                        if (memberResult.HasError())
+                        {
+                            error.Item.MemberViolations.Add(propertyName, memberResult);
+                        }
+                    }
+                }
+
+                return error.ItemOrNull;
+            }
+
+            public Task<Error> ValidateAsync(TItem value, Rule<TItem> rule, ValidationContext context)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

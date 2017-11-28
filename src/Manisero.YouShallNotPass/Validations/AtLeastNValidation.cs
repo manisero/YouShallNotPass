@@ -3,47 +3,50 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    [ValidatesNull]
-    public class AtLeastNValidationRule<TValue> : IValidationRule<TValue, AtLeastNValidationError>
+    public static class AtLeastNValidation
     {
-        public ICollection<IValidationRule<TValue>> Rules { get; set; }
-
-        public int N { get; set; }
-    }
-
-    public class AtLeastNValidationError
-    {
-        /// <summary>rule index (only violated rules) -> validation result</summary>
-        public IDictionary<int, IValidationResult> Violations { get; set; }
-    }
-
-    public class AtLeastNValidator<TValue> : IValidator<AtLeastNValidationRule<TValue>, TValue, AtLeastNValidationError>
-    {
-        public AtLeastNValidationError Validate(TValue value, AtLeastNValidationRule<TValue> rule, ValidationContext context)
+        [ValidatesNull]
+        public class Rule<TValue> : IValidationRule<TValue, Error>
         {
-            var violations = LightLazy.Create(() => new Dictionary<int, IValidationResult>());
-            var ruleIndex = 0;
-            var passed = 0;
+            public ICollection<IValidationRule<TValue>> Rules { get; set; }
 
-            foreach (var subRule in rule.Rules)
+            public int N { get; set; }
+        }
+
+        public class Error
+        {
+            /// <summary>rule index (only violated rules) -> validation result</summary>
+            public IDictionary<int, IValidationResult> Violations { get; set; }
+        }
+
+        public class Validator<TValue> : IValidator<Rule<TValue>, TValue, Error>
+        {
+            public Error Validate(TValue value, Rule<TValue> rule, ValidationContext context)
             {
-                var subResult = context.Engine.Validate(value, subRule);
+                var violations = LightLazy.Create(() => new Dictionary<int, IValidationResult>());
+                var ruleIndex = 0;
+                var passed = 0;
 
-                if (subResult.HasError())
+                foreach (var subRule in rule.Rules)
                 {
-                    violations.Item.Add(ruleIndex, subResult);
-                }
-                else
-                {
-                    passed++;
+                    var subResult = context.Engine.Validate(value, subRule);
+
+                    if (subResult.HasError())
+                    {
+                        violations.Item.Add(ruleIndex, subResult);
+                    }
+                    else
+                    {
+                        passed++;
+                    }
+
+                    ruleIndex++;
                 }
 
-                ruleIndex++;
+                return passed < rule.N
+                    ? new Error { Violations = violations.Item }
+                    : null;
             }
-
-            return passed < rule.N
-                ? new AtLeastNValidationError { Violations = violations.Item }
-                : null;
         }
     }
 }

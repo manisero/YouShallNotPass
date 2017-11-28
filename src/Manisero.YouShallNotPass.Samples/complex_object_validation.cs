@@ -16,24 +16,24 @@ namespace Manisero.YouShallNotPass.Samples
             public int? Age { get; set; }
         }
 
-        private static readonly ComplexValidationRule<Item> Rule = new ComplexValidationRule<Item>
+        private static readonly ComplexValidation.Rule<Item> Rule = new ComplexValidation.Rule<Item>
         {
             MemberRules = new Dictionary<string, IValidationRule>
             {
-                [nameof(Item.Id)] = new MinValidationRule<int>
+                [nameof(Item.Id)] = new MinValidation.Rule<int>
                 {
                     MinValue = 1
                 },
-                [nameof(Item.Email)] = new EmailValidationRule(),
-                [nameof(Item.SecondEmail)] = new EmailValidationRule(),
-                [nameof(Item.ChildIds)] = new CollectionValidationRule<int>
+                [nameof(Item.Email)] = new EmailValidation.Rule(),
+                [nameof(Item.SecondEmail)] = new EmailValidation.Rule(),
+                [nameof(Item.ChildIds)] = new CollectionValidation.Rule<int>
                 {
-                    ItemRule = new MinValidationRule<int>
+                    ItemRule = new MinValidation.Rule<int>
                     {
                         MinValue = 1
                     }
                 },
-                [nameof(Item.Age)] = new NotNullValidationRule<int?>()
+                [nameof(Item.Age)] = new NotNullValidation.Rule<int?>()
             }
         };
 

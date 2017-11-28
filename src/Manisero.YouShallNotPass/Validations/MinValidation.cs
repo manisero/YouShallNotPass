@@ -2,25 +2,28 @@
 
 namespace Manisero.YouShallNotPass.Validations
 {
-    public class MinValidationRule<TValue> : IValidationRule<TValue, MinValidationError<TValue>>
-        where TValue : IComparable<TValue>
+    public static class MinValidation
     {
-        public TValue MinValue { get; set; }
-    }
-
-    public class MinValidationError<TValue>
-    {
-        public TValue MinValue { get; set; }
-    }
-
-    public class MinValidator<TValue> : IValidator<MinValidationRule<TValue>, TValue, MinValidationError<TValue>>
-        where TValue : IComparable<TValue>
-    {
-        public MinValidationError<TValue> Validate(TValue value, MinValidationRule<TValue> rule, ValidationContext context)
+        public class Rule<TValue> : IValidationRule<TValue, Error<TValue>>
+            where TValue : IComparable<TValue>
         {
-            return value.CompareTo(rule.MinValue) < 0
-                ? new MinValidationError<TValue> { MinValue = rule.MinValue }
-                : null;
+            public TValue MinValue { get; set; }
+        }
+
+        public class Error<TValue>
+        {
+            public TValue MinValue { get; set; }
+        }
+
+        public class Validator<TValue> : IValidator<Rule<TValue>, TValue, Error<TValue>>
+            where TValue : IComparable<TValue>
+        {
+            public Error<TValue> Validate(TValue value, Rule<TValue> rule, ValidationContext context)
+            {
+                return value.CompareTo(rule.MinValue) < 0
+                    ? new Error<TValue> { MinValue = rule.MinValue }
+                    : null;
+            }
         }
     }
 }

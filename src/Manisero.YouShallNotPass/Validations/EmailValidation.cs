@@ -1,27 +1,30 @@
 ﻿namespace Manisero.YouShallNotPass.Validations
 {
-    public class EmailValidationRule : IValidationRule<string, EmailValidationError>
+    public static class EmailValidation
     {
-    }
-
-    public class EmailValidationError
-    {
-        public static readonly EmailValidationError Instance = new EmailValidationError();
-    }
-
-    public class EmailValidator : IValidator<EmailValidationRule, string, EmailValidationError>
-    {
-        public EmailValidationError Validate(string value, EmailValidationRule rule, ValidationContext context)
+        public class Rule : IValidationRule<string, Error>
         {
-            return IsEmail(value)
-                ? null
-                : EmailValidationError.Instance;
         }
 
-        private bool IsEmail(string value)
+        public class Error
         {
-            // TODO: Provide some serious implementation
-            return value.Split('@').Length == 2;
+            public static readonly Error Instance = new Error();
+        }
+
+        public class Validator : IValidator<Rule, string, Error>
+        {
+            public Error Validate(string value, Rule rule, ValidationContext context)
+            {
+                return IsEmail(value)
+                    ? null
+                    : Error.Instance;
+            }
+
+            private bool IsEmail(string value)
+            {
+                // TODO: Provide some serious implementation
+                return value.Split('@').Length == 2;
+            }
         }
     }
 }

@@ -17,10 +17,10 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
             
-            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidationError>(_ => EmailValidationErrorMessage);
+            formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidation.Error>(_ => EmailValidationErrorMessage);
             var formattingEngine = formattingEngineBuilder.Build();
 
-            var validationResult = validationEngine.Validate("a", new EmailValidationRule());
+            var validationResult = validationEngine.Validate("a", new EmailValidation.Rule());
 
             validationResult.HasError().Should().BeTrue("Validation is expected to fail.");
 

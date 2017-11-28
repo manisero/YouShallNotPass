@@ -11,7 +11,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
 
         // Password validation
 
-        public class PasswordValidationRule : AtLeastNValidationRule<string>
+        public class PasswordValidationRule : AtLeastNValidation.Rule<string>
         {
             private static readonly ICollection<IValidationRule<string>> _rules = new List<IValidationRule<string>>
             {

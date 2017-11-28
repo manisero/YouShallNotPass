@@ -1,22 +1,25 @@
 ﻿namespace Manisero.YouShallNotPass.Validations
 {
-    [ValidatesNull]
-    public class NotNullValidationRule<TValue> : IValidationRule<TValue, NotNullValidationError>
+    public static class NotNullValidation
     {
-    }
-
-    public class NotNullValidationError
-    {
-        public static readonly NotNullValidationError Instance = new NotNullValidationError();
-    }
-
-    public class NotNullValidator<TValue> : IValidator<NotNullValidationRule<TValue>, TValue, NotNullValidationError>
-    {
-        public NotNullValidationError Validate(TValue value, NotNullValidationRule<TValue> rule, ValidationContext context)
+        [ValidatesNull]
+        public class Rule<TValue> : IValidationRule<TValue, Error>
         {
-            return value == null
-                ? NotNullValidationError.Instance
-                : null;
+        }
+
+        public class Error
+        {
+            public static readonly Error Instance = new Error();
+        }
+
+        public class Validator<TValue> : IValidator<Rule<TValue>, TValue, Error>
+        {
+            public Error Validate(TValue value, Rule<TValue> rule, ValidationContext context)
+            {
+                return value == null
+                    ? Error.Instance
+                    : null;
+            }
         }
     }
 }

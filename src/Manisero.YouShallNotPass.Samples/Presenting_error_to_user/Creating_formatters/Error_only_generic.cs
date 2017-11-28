@@ -8,12 +8,12 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
 {
     public class Error_only_generic
     {
-        public static readonly ValidationResult<MinValidationRule<int>, int, MinValidationError<int>> ValidationResult =
-            new ValidationResult<MinValidationRule<int>, int, MinValidationError<int>>
+        public static readonly ValidationResult<MinValidation.Rule<int>, int, MinValidation.Error<int>> ValidationResult =
+            new ValidationResult<MinValidation.Rule<int>, int, MinValidation.Error<int>>
             {
-                Rule = new MinValidationRule<int> { MinValue = 1 },
+                Rule = new MinValidation.Rule<int> { MinValue = 1 },
                 Value = 0,
-                Error = new MinValidationError<int> { MinValue = 1 }
+                Error = new MinValidation.Error<int> { MinValue = 1 }
             };
 
         public class Error
@@ -22,13 +22,13 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
             public string Message { get; set; }
         }
 
-        public class MinValidationErrorFormatter<TValue> : IValidationErrorFormatter<MinValidationError<TValue>, Error>
+        public class MinValidationErrorFormatter<TValue> : IValidationErrorFormatter<MinValidation.Error<TValue>, Error>
             where TValue : IComparable<TValue>
         {
             private readonly Guid _id = Guid.NewGuid();
 
             public Error Format(
-                MinValidationError<TValue> error,
+                MinValidation.Error<TValue> error,
                 ValidationErrorFormattingContext<Error> context)
                 => new Error
                 {

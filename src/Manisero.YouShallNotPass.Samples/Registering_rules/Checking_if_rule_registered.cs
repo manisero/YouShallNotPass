@@ -12,11 +12,11 @@ namespace Manisero.YouShallNotPass.Samples.Registering_rules
             public int UserId { get; set; }
         }
 
-        public static readonly ComplexValidationRule<Registering_rules_and_validating.CreateUserCommand> Rule = new ComplexValidationRule<Registering_rules_and_validating.CreateUserCommand>
+        public static readonly ComplexValidation.Rule<CreateUserCommand> Rule = new ComplexValidation.Rule<CreateUserCommand>
         {
             MemberRules = new Dictionary<string, IValidationRule>
             {
-                [nameof(Registering_rules_and_validating.CreateUserCommand.UserId)] = new MinValidationRule<int> { MinValue = 1 }
+                [nameof(CreateUserCommand.UserId)] = new MinValidation.Rule<int> { MinValue = 1 }
             }
         };
 

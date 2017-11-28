@@ -8,15 +8,15 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
 {
     public class Error_rule_and_value
     {
-        public static readonly ValidationResult<MinLengthValidationRule, string, MinLengthValidationError> ValidationResult
-            = new ValidationResult<MinLengthValidationRule, string, MinLengthValidationError>
+        public static readonly ValidationResult<MinLengthValidation.Rule, string, MinLengthValidation.Error> ValidationResult
+            = new ValidationResult<MinLengthValidation.Rule, string, MinLengthValidation.Error>
             {
-                Rule = new MinLengthValidationRule { MinLength = 2 },
+                Rule = new MinLengthValidation.Rule { MinLength = 2 },
                 Value = "a",
-                Error = MinLengthValidationError.Instance
+                Error = MinLengthValidation.Error.Instance
             };
 
-        private static readonly Func<MinLengthValidationError, MinLengthValidationRule, string, string> FormatterFunc =
+        private static readonly Func<MinLengthValidation.Error, MinLengthValidation.Rule, string, string> FormatterFunc =
             (e, r, v) => $"Value has {v.Length} characters(s), while should have at least {r.MinLength}.";
 
         [Fact]
