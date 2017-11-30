@@ -1,4 +1,4 @@
-*__Caution:__ please note that YouShallNotPass is still in alpha stage. The concept proved promising though, and you are encouraged to play around with it. (Please give feedback if you do so! Write an email - you'll find the address [here](https://github.com/manisero) - or create an [issue](https://github.com/manisero/YouShallNotPass/issues).) But be warned that API, features, and built-in validations are subject to change.*
+*__Caution:__ please note that YouShallNotPass is in alpha stage. The concept proved promising though, and you are encouraged to play around with it. (Please give feedback if you do so! Write an email - you'll find the address [here](https://github.com/manisero) - or create an [issue](https://github.com/manisero/YouShallNotPass/issues).) But please be aware that API, features, and built-in validations are subject to change.*
 
 # YouShallNotPass
 
