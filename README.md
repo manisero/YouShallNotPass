@@ -37,7 +37,7 @@ So what does structured validation give you?
 
 1. Install [Manisero.YouShallNotPass](https://www.nuget.org/packages/Manisero.YouShallNotPass/) NuGet package.
 
-2. Find data you want to validate:
+2. Find data type you want to validate:
 
 ```C#
 public class CreateUserCommand
@@ -56,7 +56,7 @@ var rule = new ValidationRuleBuilder<CreateUserCommand>()
         b => b.Member(x => x.Age, b1 => b1.Min(0))); // Age is greater than or equal to 0
 ```
 
-4. Create ValidationEngine (*it's here where you register your rules and validators - more in docs*):
+4. Create ValidationEngine (*it's here where you register your rules and custom validators - more in docs*):
 
 ```C#
 var validationEngine = new ValidationEngineBuilder();
