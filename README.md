@@ -1,3 +1,5 @@
+*__Caution:__ please note that YouShallNotPass is still in alpha stage. The concept proved promising though, and you are encouraged to play around with it. (Please give feedback if you do so! Write an email - you'll find the address [here](https://github.com/manisero) - or create an [issue](https://github.com/manisero/YouShallNotPass/issues).) But be warned that API, features, and built-in validations are subject to change.*
+
 # YouShallNotPass
 
 _**What is the hardest part of user input validation? It's not checking if the input is valid - it's telling the user what exactly is wrong!**_
@@ -31,7 +33,7 @@ So what does structured validation give you?
 - In a web application, you can serialize your rules and pass them to the client app - this way the server app will become the source of truth about validation rules, avoiding duplicating validation logic on both sides (*this feature is not fully supported yet*).
 - You can track validation errors (by their codes) to see which rules fail most frequently. You can then improve user experience of your application (e.g. provide better description to the problematic form field) to help users provide valid values.
 
-## How to use it
+## How to use
 
 1. Install [Manisero.YouShallNotPass](https://www.nuget.org/packages/Manisero.YouShallNotPass/) NuGet package.
 
@@ -101,4 +103,5 @@ You'll find more samples in the docs.
 ## More
 
 - Docs: [TODO].
+- Samples: as the docs are not yet ready, you can check [samples written in form of unit tests](https://github.com/manisero/YouShallNotPass/tree/master/src/Manisero.YouShallNotPass.Samples) - feel free to execute them!
 - Sample web application demonstrating usage of YouShallNotPass: [YouShallNotPass.SampleApp](https://github.com/manisero/YouShallNotPass.SampleApp).
