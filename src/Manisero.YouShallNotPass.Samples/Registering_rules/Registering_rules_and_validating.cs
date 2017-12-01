@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -12,13 +11,8 @@ namespace Manisero.YouShallNotPass.Samples.Registering_rules
             public int UserId { get; set; }
         }
 
-        public static readonly ComplexValidation.Rule<CreateUserCommand> Rule = new ComplexValidation.Rule<CreateUserCommand>
-        {
-            MemberRules = new Dictionary<string, IValidationRule>
-            {
-                [nameof(CreateUserCommand.UserId)] = new MinValidation.Rule<int> { MinValue = 1 }
-            }
-        };
+        public static readonly IValidationRule<CreateUserCommand> Rule = new ValidationRuleBuilder<CreateUserCommand>()
+            .Member(x => x.UserId, b => b.Min(1));
 
         public static readonly CreateUserCommand Command = new CreateUserCommand
         {
