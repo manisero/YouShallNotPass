@@ -33,57 +33,17 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
                 = _ => new Error();
         }
 
-        public static readonly ComplexValidation.Rule<CreateUserCommand> CreateUserCommandValidationRule = new ComplexValidation.Rule<CreateUserCommand>
-        {
-            OverallRule = new CreateUserCommandOverallValidation.Rule(),
-            MemberRules = new Dictionary<string, IValidationRule>
-            {
-                [nameof(CreateUserCommand.Email)] = new AllValidation.Rule<string>
-                {
-                    Rules = new List<IValidationRule<string>>
-                    {
-                        new NotNullValidation.Rule<string>(),
-                        new EmailValidation.Rule()
-                    }
-                },
-                [nameof(CreateUserCommand.FirstName)] = new NotNullNorWhiteSpaceValidation.Rule(),
-                [nameof(CreateUserCommand.LastName)] = new NotNullNorWhiteSpaceValidation.Rule()
-            }
-        };
+        public static readonly IValidationRule<CreateUserCommand> CreateUserCommandValidationRule = new ValidationRuleBuilder<CreateUserCommand>()
+            .All(_ => new CreateUserCommandOverallValidation.Rule(),
+                 b => b.Member(
+                     x => x.Email,
+                     b1 => b1.All(
+                         b2 => b2.NotNull(),
+                         b2 => b2.Email())),
+                 b => b.Member(x => x.FirstName, b1 => b1.NotNullNorWhiteSpace()),
+                 b => b.Member(x => x.LastName, b1 => b1.NotNullNorWhiteSpace()));
 
         // formatters
-
-        public class ComplexValidatonErrorFormatter<TValue> : IValidationErrorFormatter<ComplexValidation.Rule<TValue>, TValue, ComplexValidation.Error, IEnumerable<string>>
-        {
-            public IEnumerable<string> Format(
-                ValidationResult<ComplexValidation.Rule<TValue>, TValue, ComplexValidation.Error> validationResult,
-                ValidationErrorFormattingContext<IEnumerable<string>> context)
-            {
-                var error = validationResult.Error;
-
-                if (error.OverallViolation != null)
-                {
-                    var lines = context.Engine.Format(error.OverallViolation);
-
-                    foreach (var line in lines)
-                    {
-                        yield return $"{line}";
-                    }
-                }
-
-                foreach (var memberError in error.MemberViolations)
-                {
-                    yield return $"{memberError.Key} is invalid:";
-
-                    var lines = context.Engine.Format(memberError.Value);
-
-                    foreach (var line in lines)
-                    {
-                        yield return $"    {line}";
-                    }
-                }
-            }
-        }
 
         public class AllValidationErrorFormatter<TValue> : IValidationErrorFormatter<AllValidation.Rule<TValue>, TValue, AllValidation.Error, IEnumerable<string>>
         {
@@ -97,8 +57,25 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
                     foreach (var line in lines)
                     {
-                        yield return $"- {line}";
+                        yield return line;
                     }
+                }
+            }
+        }
+
+        public class MemberValidationErrorFormatter<TOwner, TValue> : IValidationErrorFormatter<MemberValidation.Rule<TOwner, TValue>, TOwner, MemberValidation.Error, IEnumerable<string>>
+        {
+            public IEnumerable<string> Format(
+                ValidationResult<MemberValidation.Rule<TOwner, TValue>, TOwner, MemberValidation.Error> validationResult,
+                ValidationErrorFormattingContext<IEnumerable<string>> context)
+            {
+                yield return $"{validationResult.Rule.MemberName} is invalid:";
+
+                var lines = context.Engine.Format(validationResult.Error.Violation);
+
+                foreach (var line in lines)
+                {
+                    yield return $"    {line}";
                 }
             }
         }
@@ -111,8 +88,8 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
 
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<IEnumerable<string>>();
             formattingEngineBuilder.RegisterFullGenericFormatter(typeof(AllValidationErrorFormatter<>));
-            formattingEngineBuilder.RegisterFullGenericFormatter(typeof(ComplexValidatonErrorFormatter<>));
             formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<EmailValidation.Error>(_ => new[] { "Value should be an e-mail address." });
+            formattingEngineBuilder.RegisterFullGenericFormatter(typeof(MemberValidationErrorFormatter<,>));
             formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<NotNullNorWhiteSpaceValidation.Error>(_ => new[] { "Value is required and cannot be empty nor consist of only white space characters." });
             formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<NotNullValidation.Error>(_ => new[] { "Value is required." });
             formattingEngineBuilder.RegisterErrorOnlyFormatterFunc<CreateUserCommandOverallValidation.Error>(_ => new[] { "Command is generally invalid." });
