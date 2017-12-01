@@ -225,7 +225,6 @@ namespace Manisero.YouShallNotPass
             RegisterFullGenericValidator(typeof(AnyValidation.Validator<>));
             RegisterFullGenericValidator(typeof(AtLeastNValidation.Validator<>));
             RegisterFullGenericValidator(typeof(CollectionValidation.Validator<>));
-            RegisterFullGenericValidator(typeof(ComplexValidation.Validator<>));
             RegisterFullValidator(new EmailValidation.Validator());
             RegisterFullGenericValidator(typeof(MemberValidation.Validator<,>));
             RegisterFullValidator(new MinLengthValidation.Validator());
