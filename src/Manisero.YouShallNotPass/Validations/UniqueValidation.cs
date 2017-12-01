@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Manisero.YouShallNotPass.Utils;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -40,5 +42,14 @@ namespace Manisero.YouShallNotPass.Validations
 
         public static Rule<TItem> Unique<TItem>(this ValidationRuleBuilder<IEnumerable<TItem>> builder)
             => new Rule<TItem>();
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> Unique
+            = x => x.RegisterFullGenericValidator(typeof(UniqueValidation.Validator<>));
     }
 }

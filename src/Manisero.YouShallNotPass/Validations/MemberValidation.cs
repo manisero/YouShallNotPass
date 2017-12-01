@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using Manisero.YouShallNotPass.Utils;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -63,5 +64,14 @@ namespace Manisero.YouShallNotPass.Validations
                 ValueGetter = valueGetter,
                 ValueValidationRule = valueValidationRule
             };
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> Member
+            = x => x.RegisterFullGenericValidator(typeof(MemberValidation.Validator<,>));
     }
 }

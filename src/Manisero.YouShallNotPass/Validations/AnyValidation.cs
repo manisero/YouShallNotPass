@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Manisero.YouShallNotPass.Utils;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -56,5 +57,14 @@ namespace Manisero.YouShallNotPass.Validations
             {
                 Rules = rules.Select(x => x(ValidationRuleBuilder<TValue>.Instance)).ToArray()
             };
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> Any
+            = x => x.RegisterFullGenericValidator(typeof(AnyValidation.Validator<>));
     }
 }

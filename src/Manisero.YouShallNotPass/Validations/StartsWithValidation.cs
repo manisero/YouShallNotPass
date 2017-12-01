@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -37,5 +39,14 @@ namespace Manisero.YouShallNotPass.Validations
             {
                 Value = value
             };
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> StartsWith
+            = x => x.RegisterFullGenericValidator(typeof(StartsWithValidation.Validator<>));
     }
 }

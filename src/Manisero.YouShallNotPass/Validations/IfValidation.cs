@@ -1,4 +1,5 @@
 ﻿using System;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -41,5 +42,14 @@ namespace Manisero.YouShallNotPass.Validations
                 Condition = condition,
                 ThenRule = thenRule(ValidationRuleBuilder<TValue>.Instance)
             };
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> If
+            = x => x.RegisterFullGenericValidator(typeof(IfValidation.Validator<>));
     }
 }

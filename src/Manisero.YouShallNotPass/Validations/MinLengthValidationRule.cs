@@ -1,4 +1,7 @@
-﻿namespace Manisero.YouShallNotPass.Validations
+﻿using System;
+using Manisero.YouShallNotPass.Validations;
+
+namespace Manisero.YouShallNotPass.Validations
 {
     public static class MinLengthValidation
     {
@@ -24,5 +27,14 @@
 
         public static Rule MinLength(this ValidationRuleBuilder<string> builder, int minLength)
             => new Rule { MinLength = minLength };
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> MinLength
+            = x => x.RegisterFullValidator(new MinLengthValidation.Validator());
     }
 }

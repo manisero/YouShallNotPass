@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -29,5 +31,14 @@ namespace Manisero.YouShallNotPass.Validations
         public static Rule<TItem> NotEmpty<TItem>(
             this ValidationRuleBuilder<IEnumerable<TItem>> builder)
             => new Rule<TItem>();
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> NotEmpty
+            = x => x.RegisterFullGenericValidator(typeof(NotEmptyValidation.Validator<>));
     }
 }

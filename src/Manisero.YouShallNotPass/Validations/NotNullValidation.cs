@@ -1,4 +1,7 @@
-﻿namespace Manisero.YouShallNotPass.Validations
+﻿using System;
+using Manisero.YouShallNotPass.Validations;
+
+namespace Manisero.YouShallNotPass.Validations
 {
     public static class NotNullValidation
     {
@@ -24,5 +27,14 @@
 
         public static Rule<TValue> NotNull<TValue>(this ValidationRuleBuilder<TValue> builder)
             => new Rule<TValue>();
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> NotNull
+            = x => x.RegisterFullGenericValidator(typeof(NotNullValidation.Validator<>));
     }
 }

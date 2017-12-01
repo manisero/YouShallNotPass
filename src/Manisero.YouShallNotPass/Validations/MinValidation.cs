@@ -1,4 +1,5 @@
 ﻿using System;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -29,5 +30,14 @@ namespace Manisero.YouShallNotPass.Validations
         public static Rule<TValue> Min<TValue>(this ValidationRuleBuilder<TValue> builder, TValue minValue)
             where TValue : IComparable<TValue>
             => new Rule<TValue> { MinValue = minValue };
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> Min
+            = x => x.RegisterFullGenericValidator(typeof(MinValidation.Validator<>));
     }
 }

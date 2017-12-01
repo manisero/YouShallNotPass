@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Manisero.YouShallNotPass.Utils;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Validations
 {
@@ -65,5 +66,14 @@ namespace Manisero.YouShallNotPass.Validations
             {
                 ItemRule = itemRule(ValidationRuleBuilder<TItem>.Instance)
             };
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> Collection
+            = x => x.RegisterFullGenericValidator(typeof(CollectionValidation.Validator<>));
     }
 }

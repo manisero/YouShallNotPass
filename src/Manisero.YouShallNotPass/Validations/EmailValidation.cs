@@ -1,4 +1,7 @@
-﻿namespace Manisero.YouShallNotPass.Validations
+﻿using System;
+using Manisero.YouShallNotPass.Validations;
+
+namespace Manisero.YouShallNotPass.Validations
 {
     public static class EmailValidation
     {
@@ -29,5 +32,14 @@
 
         public static Rule Email(this ValidationRuleBuilder<string> builder)
             => new Rule();
+    }
+}
+
+namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
+{
+    internal static partial class DefaultValidatorsRegistrar
+    {
+        private static readonly Action<IValidationEngineBuilder> Email
+            = x => x.RegisterFullValidator(new EmailValidation.Validator());
     }
 }

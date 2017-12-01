@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
@@ -15,16 +14,6 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
                 var registration = (Action<IValidationEngineBuilder>)field.GetValue(null);
                 registration(builder);
             }
-
-            builder.RegisterFullGenericValidator(typeof(AnyValidation.Validator<>));
-            builder.RegisterFullGenericValidator(typeof(AtLeastNValidation.Validator<>));
-            builder.RegisterFullGenericValidator(typeof(CollectionValidation.Validator<>));
-            builder.RegisterFullValidator(new EmailValidation.Validator());
-            builder.RegisterFullGenericValidator(typeof(MemberValidation.Validator<,>));
-            builder.RegisterFullValidator(new MinLengthValidation.Validator());
-            builder.RegisterFullGenericValidator(typeof(MinValidation.Validator<>));
-            builder.RegisterFullValidator(new NotNullNorWhiteSpaceValidation.Validator());
-            builder.RegisterFullGenericValidator(typeof(NotNullValidation.Validator<>));
         }
     }
 }
