@@ -8,32 +8,33 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
 {
     public class Full
     {
-        // validation
-
-        public class StringValidationRule : IValidationRule<string, EmptyValidationError>
+        public static class StringValidation
         {
-            public ICollection<IValidationRule<string>> Rules { get; set; }
-        }
-
-        public class StringValidator : IValidator<StringValidationRule, string, EmptyValidationError>
-        {
-            public EmptyValidationError Validate(string value, StringValidationRule rule, ValidationContext context)
+            public class Rule : IValidationRule<string, EmptyValidationError>
             {
-                foreach (var subrule in rule.Rules)
+                public ICollection<IValidationRule<string>> Rules { get; set; }
+            }
+
+            public class Validator : IValidator<Rule, string, EmptyValidationError>
+            {
+                public EmptyValidationError Validate(string value, Rule rule, ValidationContext context)
                 {
-                    var subresult = context.Engine.Validate(value, subrule);
-
-                    if (subresult.HasError())
+                    foreach (var subrule in rule.Rules)
                     {
-                        return EmptyValidationError.Some;
-                    }
-                }
+                        var subresult = context.Engine.Validate(value, subrule);
 
-                return EmptyValidationError.None;
+                        if (subresult.HasError())
+                        {
+                            return EmptyValidationError.Some;
+                        }
+                    }
+
+                    return EmptyValidationError.None;
+                }
             }
         }
 
-        public static readonly StringValidationRule Rule = new StringValidationRule
+        public static readonly StringValidation.Rule Rule = new StringValidation.Rule
         {
             Rules = new List<IValidationRule<string>>
             {
@@ -48,7 +49,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void full_validator()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullValidator(new StringValidator());
+            engineBuilder.RegisterFullValidator(new StringValidation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate(Value, Rule);
@@ -60,7 +61,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void full_validator_factory()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullValidatorFactory(() => new StringValidator());
+            engineBuilder.RegisterFullValidatorFactory(() => new StringValidation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate(Value, Rule);

@@ -8,39 +8,40 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
 {
     public class Full_generic
     {
-        // validation
-
-        public class AllValidationRule<TValue> : IValidationRule<TValue, AllValidationError>
+        public static class AllValidation
         {
-            public ICollection<IValidationRule<TValue>> Rules { get; set; }
-        }
-
-        public class AllValidationError
-        {
-            public Guid ValidatorId { get; set; }
-        }
-
-        public class AllValidator<TValue> : IValidator<AllValidationRule<TValue>, TValue, AllValidationError>
-        {
-            private readonly Guid _id = Guid.NewGuid();
-
-            public AllValidationError Validate(TValue value, AllValidationRule<TValue> rule, ValidationContext context)
+            public class Rule<TValue> : IValidationRule<TValue, Error>
             {
-                foreach (var subrule in rule.Rules)
+                public ICollection<IValidationRule<TValue>> Rules { get; set; }
+            }
+
+            public class Error
+            {
+                public Guid ValidatorId { get; set; }
+            }
+
+            public class Validator<TValue> : IValidator<Rule<TValue>, TValue, Error>
+            {
+                private readonly Guid _id = Guid.NewGuid();
+
+                public Error Validate(TValue value, Rule<TValue> rule, ValidationContext context)
                 {
-                    var subresult = context.Engine.Validate(value, subrule);
-
-                    if (subresult.HasError())
+                    foreach (var subrule in rule.Rules)
                     {
-                        return new AllValidationError { ValidatorId = _id };
-                    }
-                }
+                        var subresult = context.Engine.Validate(value, subrule);
 
-                return null;
+                        if (subresult.HasError())
+                        {
+                            return new Error { ValidatorId = _id };
+                        }
+                    }
+
+                    return null;
+                }
             }
         }
 
-        public static readonly AllValidationRule<string> Rule = new AllValidationRule<string>
+        public static readonly AllValidation.Rule<string> Rule = new AllValidation.Rule<string>
         {
             Rules = new List<IValidationRule<string>>
             {
@@ -55,14 +56,14 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void full_generic_validator_singleton()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullGenericValidator(typeof(AllValidator<>));
+            engineBuilder.RegisterFullGenericValidator(typeof(AllValidation.Validator<>));
 
             var engine = engineBuilder.Build();
 
-            var result1 = engine.Validate<AllValidationRule<string>, string, AllValidationError>(Value, Rule);
+            var result1 = engine.Validate<AllValidation.Rule<string>, string, AllValidation.Error>(Value, Rule);
             result1.HasError().Should().BeTrue();
 
-            var result2 = engine.Validate<AllValidationRule<string>, string, AllValidationError>(Value, Rule);
+            var result2 = engine.Validate<AllValidation.Rule<string>, string, AllValidation.Error>(Value, Rule);
             result2.Error.ValidatorId.Should().Be(result1.Error.ValidatorId);
         }
 
@@ -70,14 +71,14 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void full_generic_validator_per_resolve()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullGenericValidator(typeof(AllValidator<>), false);
+            engineBuilder.RegisterFullGenericValidator(typeof(AllValidation.Validator<>), false);
 
             var engine = engineBuilder.Build();
 
-            var result1 = engine.Validate<AllValidationRule<string>, string, AllValidationError>(Value, Rule);
+            var result1 = engine.Validate<AllValidation.Rule<string>, string, AllValidation.Error>(Value, Rule);
             result1.HasError().Should().BeTrue();
 
-            var result2 = engine.Validate<AllValidationRule<string>, string, AllValidationError>(Value, Rule);
+            var result2 = engine.Validate<AllValidation.Rule<string>, string, AllValidation.Error>(Value, Rule);
             result2.Error.ValidatorId.Should().NotBe(result1.Error.ValidatorId);
         }
 
@@ -87,15 +88,15 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
             var engineBuilder = new ValidationEngineBuilder();
 
             // You may want to replace below lambda with your DI Container usage
-            engineBuilder.RegisterFullGenericValidatorFactory(typeof(AllValidator<>),
+            engineBuilder.RegisterFullGenericValidatorFactory(typeof(AllValidation.Validator<>),
                                                               type => (IValidator)Activator.CreateInstance(type));
 
             var engine = engineBuilder.Build();
 
-            var result1 = engine.Validate<AllValidationRule<string>, string, AllValidationError>(Value, Rule);
+            var result1 = engine.Validate<AllValidation.Rule<string>, string, AllValidation.Error>(Value, Rule);
             result1.HasError().Should().BeTrue();
 
-            var result2 = engine.Validate<AllValidationRule<string>, string, AllValidationError>(Value, Rule);
+            var result2 = engine.Validate<AllValidation.Rule<string>, string, AllValidation.Error>(Value, Rule);
             result2.Error.ValidatorId.Should().Be(result1.Error.ValidatorId);
         }
 
@@ -105,16 +106,16 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
             var engineBuilder = new ValidationEngineBuilder();
 
             // You may want to replace below lambda with your DI Container usage
-            engineBuilder.RegisterFullGenericValidatorFactory(typeof(AllValidator<>),
+            engineBuilder.RegisterFullGenericValidatorFactory(typeof(AllValidation.Validator<>),
                                                               type => (IValidator)Activator.CreateInstance(type),
                                                               false);
 
             var engine = engineBuilder.Build();
 
-            var result1 = engine.Validate<AllValidationRule<string>, string, AllValidationError>(Value, Rule);
+            var result1 = engine.Validate<AllValidation.Rule<string>, string, AllValidation.Error>(Value, Rule);
             result1.HasError().Should().BeTrue();
 
-            var result2 = engine.Validate<AllValidationRule<string>, string, AllValidationError>(Value, Rule);
+            var result2 = engine.Validate<AllValidation.Rule<string>, string, AllValidation.Error>(Value, Rule);
             result2.Error.ValidatorId.Should().NotBe(result1.Error.ValidatorId);
         }
     }
