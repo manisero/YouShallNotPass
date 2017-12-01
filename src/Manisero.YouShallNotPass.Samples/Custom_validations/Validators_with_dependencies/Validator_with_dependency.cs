@@ -20,26 +20,29 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
 
         // UniqueUsername validation
 
-        public class UniqueUsernameValidationRule : IValidationRule<string, EmptyValidationError>
+        public static class UniqueUsernameValidation
         {
-        }
-
-        public class UniqueUsernameValidator : IValidator<UniqueUsernameValidationRule, string, EmptyValidationError>
-        {
-            private readonly IUserRepository _userRepository;
-
-            public UniqueUsernameValidator(IUserRepository userRepository)
+            public class Rule : IValidationRule<string, EmptyValidationError>
             {
-                _userRepository = userRepository;
             }
 
-            public EmptyValidationError Validate(string value, UniqueUsernameValidationRule rule, ValidationContext context)
+            public class Validator : IValidator<Rule, string, EmptyValidationError>
             {
-                var isDuplicate = _userRepository.UserExists(value);
+                private readonly IUserRepository _userRepository;
 
-                return isDuplicate
-                    ? EmptyValidationError.Some
-                    : EmptyValidationError.None;
+                public Validator(IUserRepository userRepository)
+                {
+                    _userRepository = userRepository;
+                }
+
+                public EmptyValidationError Validate(string value, Rule rule, ValidationContext context)
+                {
+                    var isDuplicate = _userRepository.UserExists(value);
+
+                    return isDuplicate
+                        ? EmptyValidationError.Some
+                        : EmptyValidationError.None;
+                }
             }
         }
 
@@ -49,11 +52,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
             var builder = new ValidationEngineBuilder();
 
             // You may want to replace below lambda with your DI Container usage
-            builder.RegisterFullValidatorFactory(() => new UniqueUsernameValidator(new UserRepository()));
+            builder.RegisterFullValidatorFactory(() => new UniqueUsernameValidation.Validator(new UserRepository()));
 
             var engine = builder.Build();
 
-            var rule = new UniqueUsernameValidationRule();
+            var rule = new UniqueUsernameValidation.Rule();
 
             var result = engine.Validate("user1", rule);
 

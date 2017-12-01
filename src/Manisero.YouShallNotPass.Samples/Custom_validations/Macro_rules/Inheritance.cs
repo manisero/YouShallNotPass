@@ -13,9 +13,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
         {
             private static readonly ICollection<IValidationRule<string>> _rules = new List<IValidationRule<string>>
             {
-                new ContainsDigitValidationRule(),
-                new ContainsLowerLetterValidationRule(),
-                new ContainsUpperLetterValidationRule()
+                new ContainsDigitValidation.Rule(),
+                new ContainsLowerLetterValidation.Rule(),
+                new ContainsUpperLetterValidation.Rule()
             };
 
             public PasswordValidationRule()
@@ -35,9 +35,9 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
         public void sample(string password, bool isValid)
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterFullValidator(new ContainsDigitValidator());
-            builder.RegisterFullValidator(new ContainsLowerLetterValidator());
-            builder.RegisterFullValidator(new ContainsUpperLetterValidator());
+            builder.RegisterFullValidator(new ContainsDigitValidation.Validator());
+            builder.RegisterFullValidator(new ContainsLowerLetterValidation.Validator());
+            builder.RegisterFullValidator(new ContainsUpperLetterValidation.Validator());
 
             var engine = builder.Build();
 
