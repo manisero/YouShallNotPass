@@ -9,20 +9,24 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
     {
         // bool validator func
 
-        public class MinLengthValidationRule : IValidationRule<string, EmptyValidationError>
+        public static class MinLengthValidation
         {
-            public int MinLength { get; set; }
+            public class Rule : IValidationRule<string, EmptyValidationError>
+            {
+                public int MinLength { get; set; }
+            }
+
+            public static readonly Func<string, Rule, bool> Validator
+                = (v, r) => v.Length >= r.MinLength;
         }
 
-        public static readonly MinLengthValidationRule Rule = new MinLengthValidationRule { MinLength = 2};
-
-        private static readonly Func<string, MinLengthValidationRule, bool> BoolValidatorFunc = (v, r) => v.Length >= r.MinLength;
-
+        public static readonly MinLengthValidation.Rule Rule = new MinLengthValidation.Rule { MinLength = 2 };
+        
         [Fact]
         public void value_and_rule_bool_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueAndRuleBoolValidatorFunc(BoolValidatorFunc, new EmptyValidationError());
+            engineBuilder.RegisterValueAndRuleBoolValidatorFunc(MinLengthValidation.Validator, new EmptyValidationError());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", Rule);
@@ -32,28 +36,31 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
 
         // validator func
 
-        public class MinLength2ValidationRule : IValidationRule<string, MinLength2ValidationError>
+        public static class MinLength2Validation
         {
-            public int MinLength { get; set; }
+            public class Rule : IValidationRule<string, Error>
+            {
+                public int MinLength { get; set; }
+            }
+
+            public class Error
+            {
+                public int ActualLength { get; set; }
+            }
+
+            public static readonly Func<string, Rule, Error> Validator
+                = (v, r) => v.Length < r.MinLength
+                    ? new Error { ActualLength = v.Length }
+                    : null;
         }
-
-        public class MinLength2ValidationError
-        {
-            public int ActualLength { get; set; }
-        }
-
-        public static readonly MinLength2ValidationRule Rule2 = new MinLength2ValidationRule { MinLength = 2 };
-
-        private static readonly Func<string, MinLength2ValidationRule, MinLength2ValidationError> ValidatorFunc
-            = (v, r) => v.Length < r.MinLength
-                ? new MinLength2ValidationError { ActualLength = v.Length }
-                : null;
-
+        
+        public static readonly MinLength2Validation.Rule Rule2 = new MinLength2Validation.Rule { MinLength = 2 };
+        
         [Fact]
         public void value_and_rule_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueAndRuleValidatorFunc(ValidatorFunc);
+            engineBuilder.RegisterValueAndRuleValidatorFunc(MinLength2Validation.Validator);
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", Rule2);

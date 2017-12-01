@@ -9,19 +9,22 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
     {
         // bool validator func
 
-        public class NotEmptyValidationRule : IValidationRule<string, EmptyValidationError>
+        public static class NotEmptyValidation
         {
+            public class Rule : IValidationRule<string, EmptyValidationError>
+            {
+            }
+
+            public static readonly Func<string, bool> Validator = x => !string.IsNullOrEmpty(x);
         }
 
-        public static readonly NotEmptyValidationRule NotEmptyRule = new NotEmptyValidationRule();
-
-        private static readonly Func<string, bool> BoolValidatorFunc = x => !string.IsNullOrEmpty(x);
-
+        public static readonly NotEmptyValidation.Rule NotEmptyRule = new NotEmptyValidation.Rule();
+        
         [Fact]
         public void value_only_bool_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueOnlyBoolValidatorFunc<NotEmptyValidationRule, string, EmptyValidationError>(BoolValidatorFunc,
+            engineBuilder.RegisterValueOnlyBoolValidatorFunc<NotEmptyValidation.Rule, string, EmptyValidationError>(NotEmptyValidation.Validator,
                                                                                                                    new EmptyValidationError());
 
             var engine = engineBuilder.Build();
@@ -32,27 +35,30 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
 
         // validator func
 
-        public class EvenLengthValidationRule : IValidationRule<string, EvenLengthValidationError>
+        public static class EvenLengthValidation
         {
+            public class Rule : IValidationRule<string, Error>
+            {
+            }
+
+            public class Error
+            {
+                public int ActualLength { get; set; }
+            }
+
+            public static readonly Func<string, Error> Validator
+                = x => x.Length % 2 != 0
+                    ? new Error { ActualLength = x.Length }
+                    : null;
         }
 
-        public class EvenLengthValidationError
-        {
-            public int ActualLength { get; set; }
-        }
-
-        public static readonly EvenLengthValidationRule EvenLengthRule = new EvenLengthValidationRule();
-
-        private static readonly Func<string, EvenLengthValidationError> ValidatorFunc
-            = x => x.Length % 2 != 0
-                ? new EvenLengthValidationError { ActualLength = x.Length }
-                : null;
-
+        public static readonly EvenLengthValidation.Rule EvenLengthRule = new EvenLengthValidation.Rule();
+        
         [Fact]
         public void value_only_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueOnlyValidatorFunc<EvenLengthValidationRule, string, EvenLengthValidationError>(ValidatorFunc);
+            engineBuilder.RegisterValueOnlyValidatorFunc<EvenLengthValidation.Rule, string, EvenLengthValidation.Error>(EvenLengthValidation.Validator);
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", EvenLengthRule);
