@@ -1,15 +1,21 @@
 ﻿using System;
+using System.Reflection;
 using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
-    internal static class DefaultValidatorsRegistrar
+    internal static partial class DefaultValidatorsRegistrar
     {
-        public static readonly Action<IValidationEngineBuilder> All = x => x.RegisterFullGenericValidator(typeof(AllValidation.Validator<>));
-
         public static void Register(IValidationEngineBuilder builder)
         {
-            All(builder);
+            var registrationFields = typeof(DefaultValidatorsRegistrar).GetFields(BindingFlags.NonPublic | BindingFlags.Static);
+
+            foreach (var field in registrationFields)
+            {
+                var registration = (Action<IValidationEngineBuilder>)field.GetValue(null);
+                registration(builder);
+            }
+
             builder.RegisterFullGenericValidator(typeof(AnyValidation.Validator<>));
             builder.RegisterFullGenericValidator(typeof(AtLeastNValidation.Validator<>));
             builder.RegisterFullGenericValidator(typeof(CollectionValidation.Validator<>));
