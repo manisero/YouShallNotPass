@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -7,16 +6,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
 {
     public class Instance
     {
-        private static readonly AtLeastNValidation.Rule<string> PasswordValidationRule = new AtLeastNValidation.Rule<string>
-        {
-            Rules = new List<IValidationRule<string>>
-            {
-                new ContainsDigitValidationRule(),
-                new ContainsLowerLetterValidationRule(),
-                new ContainsUpperLetterValidationRule()
-            },
-            N = 2
-        };
+        private static readonly AtLeastNValidation.Rule<string> PasswordValidationRule = new ValidationRuleBuilder<string>()
+            .AtLeastN(2,
+                      new ContainsDigitValidationRule(),
+                      new ContainsLowerLetterValidationRule(),
+                      new ContainsUpperLetterValidationRule());
         
         [Theory]
         [InlineData("1aA", true)]

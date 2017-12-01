@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
 
@@ -7,33 +6,29 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
 {
     public class Composition
     {
-        // Password validation
-
-        public class PasswordValidationRule : IValidationRule<string, AtLeastNValidation.Error>
+        public static class PasswordValidation
         {
-            private static readonly AtLeastNValidation.Rule<string> _innerRule = new AtLeastNValidation.Rule<string>
+            public class Rule : IValidationRule<string, AtLeastNValidation.Error>
             {
-                Rules = new List<IValidationRule<string>>
+                private static readonly AtLeastNValidation.Rule<string> _innerRule = new ValidationRuleBuilder<string>()
+                    .AtLeastN(2,
+                              new ContainsDigitValidationRule(),
+                              new ContainsLowerLetterValidationRule(),
+                              new ContainsUpperLetterValidationRule());
+
+                public AtLeastNValidation.Rule<string> InnerRule => _innerRule;
+            }
+
+            public class Validator : IValidator<Rule, string, AtLeastNValidation.Error>
+            {
+                public AtLeastNValidation.Error Validate(string value, Rule rule, ValidationContext context)
                 {
-                    new ContainsDigitValidationRule(),
-                    new ContainsLowerLetterValidationRule(),
-                    new ContainsUpperLetterValidationRule()
-                },
-                N = 2
-            };
+                    var innerValidationResult = context.Engine.Validate<AtLeastNValidation.Rule<string>, string, AtLeastNValidation.Error>(value, rule.InnerRule);
 
-            public AtLeastNValidation.Rule<string> InnerRule => _innerRule;
-        }
-
-        public class PasswordValidator : IValidator<PasswordValidationRule, string, AtLeastNValidation.Error>
-        {
-            public AtLeastNValidation.Error Validate(string value, PasswordValidationRule rule, ValidationContext context)
-            {
-                var innerValidationResult = context.Engine.Validate<AtLeastNValidation.Rule<string>, string, AtLeastNValidation.Error>(value, rule.InnerRule);
-
-                return innerValidationResult.HasError()
-                    ? innerValidationResult.Error
-                    : null;
+                    return innerValidationResult.HasError()
+                        ? innerValidationResult.Error
+                        : null;
+                }
             }
         }
 
@@ -50,11 +45,11 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
             builder.RegisterFullValidator(new ContainsDigitValidator());
             builder.RegisterFullValidator(new ContainsLowerLetterValidator());
             builder.RegisterFullValidator(new ContainsUpperLetterValidator());
-            builder.RegisterFullValidator(new PasswordValidator());
+            builder.RegisterFullValidator(new PasswordValidation.Validator());
 
             var engine = builder.Build();
 
-            var rule = new PasswordValidationRule();
+            var rule = new PasswordValidation.Rule();
 
             var validResult = engine.Validate(password, rule);
 

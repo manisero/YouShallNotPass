@@ -54,6 +54,16 @@ namespace Manisero.YouShallNotPass.Validations
         public static Rule<TValue> AtLeastN<TValue>(
             this ValidationRuleBuilder<TValue> builder,
             int n,
+            params IValidationRule<TValue>[] rules)
+            => new Rule<TValue>
+            {
+                Rules = rules,
+                N = n
+            };
+
+        public static Rule<TValue> AtLeastN<TValue>(
+            this ValidationRuleBuilder<TValue> builder,
+            int n,
             params Func<ValidationRuleBuilder<TValue>, IValidationRule<TValue>>[] rules)
             => new Rule<TValue>
             {

@@ -8,9 +8,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Macro_rules
     public class Inheritance
     {
         // TODO: Currently this scenario is not supported (test will fail). Consider supporting it.
-
-        // Password validation
-
+        
         public class PasswordValidationRule : AtLeastNValidation.Rule<string>
         {
             private static readonly ICollection<IValidationRule<string>> _rules = new List<IValidationRule<string>>
