@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Manisero.YouShallNotPass.Samples.Utils;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
@@ -10,21 +9,24 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
     {
         // UserExists validation
 
-        public class UserExistsValidationRule : IValidationRule<UpdateUserCommand, EmptyValidationError>
-        {
-        }
-
-        public class UserExistsValidator : IValidator<UserExistsValidationRule, UpdateUserCommand, EmptyValidationError>
+        public static class UserExistsValidation
         {
             public const string UserDataKey = "User";
 
-            public EmptyValidationError Validate(UpdateUserCommand value, UserExistsValidationRule rule, ValidationContext context)
+            public class Rule : IValidationRule<UpdateUserCommand, EmptyValidationError>
             {
-                var existingUser = context.Data.GetItemOrDefault<User>(UserDataKey);
+            }
 
-                return existingUser == null
-                    ? EmptyValidationError.Some
-                    : EmptyValidationError.None;
+            public class Validator : IValidator<Rule, UpdateUserCommand, EmptyValidationError>
+            {
+                public EmptyValidationError Validate(UpdateUserCommand value, Rule rule, ValidationContext context)
+                {
+                    var existingUser = context.Data.GetItemOrDefault<User>(UserDataKey);
+
+                    return existingUser == null
+                        ? EmptyValidationError.Some
+                        : EmptyValidationError.None;
+                }
             }
         }
 
@@ -32,7 +34,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
         public void validator_receives_data()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterFullValidator(new UserExistsValidator());
+            builder.RegisterFullValidator(new UserExistsValidation.Validator());
 
             var engine = builder.Build();
 
@@ -45,33 +47,25 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
 
             var data = new ValidationData
             {
-                { UserExistsValidator.UserDataKey, userRepository.Get(command.UserId) }
+                { UserExistsValidation.UserDataKey, userRepository.Get(command.UserId) }
             };
 
-            var result = engine.Validate(command, new UserExistsValidationRule(), data);
+            var result = engine.Validate(command, new UserExistsValidation.Rule(), data);
 
             result.HasError().Should().BeFalse();
         }
 
         // UpdateUserCommand validation rule
 
-        public static readonly IValidationRule<UpdateUserCommand> UpdateUserCommandValidationRule = new ComplexValidation.Rule<UpdateUserCommand>
-        {
-            OverallRule = new UserExistsValidationRule(),
-            MemberRules = new Dictionary<string, IValidationRule>
-            {
-                [nameof(UpdateUserCommand.UserId)] = new MinValidation.Rule<int>
-                {
-                    MinValue = 1
-                }
-            }
-        };
+        public static readonly IValidationRule<UpdateUserCommand> UpdateUserCommandValidationRule = new ValidationRuleBuilder<UpdateUserCommand>()
+            .All(b => b.Member(x => x.UserId, b1 => b1.Min(1)),
+                 _ => new UserExistsValidation.Rule());
 
         [Fact]
         public void validator_receives_data_even_when_it_is_not_root_validator()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterFullValidator(new UserExistsValidator());
+            builder.RegisterFullValidator(new UserExistsValidation.Validator());
 
             var engine = builder.Build();
 
@@ -84,7 +78,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
 
             var data = new ValidationData
             {
-                { UserExistsValidator.UserDataKey, userRepository.Get(command.UserId) }
+                { UserExistsValidation.UserDataKey, userRepository.Get(command.UserId) }
             };
 
             var result = engine.Validate(command, UpdateUserCommandValidationRule, data);

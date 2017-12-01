@@ -15,17 +15,20 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
 
         // UserExists validation
 
-        public class UserExistsValidationRule : IValidationRule<Wrapper, EmptyValidationError>
+        public static class UserExistsValidation
         {
-        }
-
-        public class UserExistsValidator : IValidator<UserExistsValidationRule, Wrapper, EmptyValidationError>
-        {
-            public EmptyValidationError Validate(Wrapper value, UserExistsValidationRule rule, ValidationContext context)
+            public class Rule : IValidationRule<Wrapper, EmptyValidationError>
             {
-                return value.User == null
-                    ? EmptyValidationError.Some
-                    : EmptyValidationError.None;
+            }
+
+            public class Validator : IValidator<Rule, Wrapper, EmptyValidationError>
+            {
+                public EmptyValidationError Validate(Wrapper value, Rule rule, ValidationContext context)
+                {
+                    return value.User == null
+                        ? EmptyValidationError.Some
+                        : EmptyValidationError.None;
+                }
             }
         }
 
@@ -33,7 +36,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
         public void sample()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterFullValidator(new UserExistsValidator());
+            builder.RegisterFullValidator(new UserExistsValidation.Validator());
 
             var engine = builder.Build();
 
@@ -50,7 +53,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
                 User = userRepository.Get(command.UserId)
             };
 
-            var result = engine.Validate(wrapper, new UserExistsValidationRule());
+            var result = engine.Validate(wrapper, new UserExistsValidation.Rule());
 
             result.HasError().Should().BeFalse();
         }
