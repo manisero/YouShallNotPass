@@ -77,7 +77,6 @@
     <Compile Include="Validations\AtLeastNValidation.cs" />
     <Compile Include="Validations\ComplexValidation.cs" />
     <Compile Include="Validations\CollectionValidation.cs" />
-    <Compile Include="Validations\CustomValidation.cs" />
     <Compile Include="Validations\EmailValidation.cs" />
     <Compile Include="Utils\LightLazy.cs" />
     <Compile Include="Validations\GoesWithStepValidation.cs" />

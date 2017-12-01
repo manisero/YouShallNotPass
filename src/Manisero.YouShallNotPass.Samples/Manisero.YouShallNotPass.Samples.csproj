@@ -65,7 +65,6 @@
     <Compile Include="Custom_validations\Creating_validators\Value_only.cs" />
     <Compile Include="Custom_validations\Creating_validators\Full.cs" />
     <Compile Include="Custom_validations\Creating_validators\Full_generic.cs" />
-    <Compile Include="Custom_validations\Using_CustomValidation.cs" />
     <Compile Include="Custom_validation_data\case.cs" />
     <Compile Include="Custom_validation_data\Using_ValidationContext_Data.cs" />
     <Compile Include="Custom_validations\Macro_rules\Instance.cs" />
