@@ -2,7 +2,6 @@
 using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.RuleRegistration;
 using Manisero.YouShallNotPass.Core.ValidatorRegistration;
-using Manisero.YouShallNotPass.Validations;
 using Manisero.YouShallNotPass.Validations.Wrappers;
 
 namespace Manisero.YouShallNotPass
@@ -209,7 +208,7 @@ namespace Manisero.YouShallNotPass
         {
             if (registerDefaultValidators)
             {
-                RegisterDefaultValidators();
+                DefaultValidatorsRegistrar.Register(this);
             }
 
             var validationRulesRegistry = _validationRulesRegistryBuilder.Build();
@@ -217,20 +216,6 @@ namespace Manisero.YouShallNotPass
             var subvalidationEngineFactory = new SubvalidationEngineFactory(validationRulesRegistry, validatorsRegistry);
 
             return new ValidationEngine(subvalidationEngineFactory);
-        }
-
-        private void RegisterDefaultValidators()
-        {
-            RegisterFullGenericValidator(typeof(AllValidation.Validator<>));
-            RegisterFullGenericValidator(typeof(AnyValidation.Validator<>));
-            RegisterFullGenericValidator(typeof(AtLeastNValidation.Validator<>));
-            RegisterFullGenericValidator(typeof(CollectionValidation.Validator<>));
-            RegisterFullValidator(new EmailValidation.Validator());
-            RegisterFullGenericValidator(typeof(MemberValidation.Validator<,>));
-            RegisterFullValidator(new MinLengthValidation.Validator());
-            RegisterFullGenericValidator(typeof(MinValidation.Validator<>));
-            RegisterFullValidator(new NotNullNorWhiteSpaceValidation.Validator());
-            RegisterFullGenericValidator(typeof(NotNullValidation.Validator<>));
         }
     }
 }
