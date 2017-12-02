@@ -29,15 +29,21 @@ namespace Manisero.YouShallNotPass.Validations
             }
         }
 
-        public class MapRuleBuilder<TFrom>
-        {
-            public Rule<TFrom, TTo> Build<TTo>(Func<TFrom, TTo> mapping, IValidationRule<TTo> toRule)
-                => new Rule<TFrom, TTo>
-                {
-                    Mapping = mapping,
-                    ToRule = toRule
-                };
-        }
+        public static Rule<TFrom, TTo> Map<TFrom, TTo>(
+            this ValidationRuleBuilder<TTo> builder,
+            Func<TFrom, TTo> mapping,
+            Func<ValidationRuleBuilder<TTo>, IValidationRule<TTo>> toRule)
+            => builder.Map(mapping, toRule(ValidationRuleBuilder<TTo>.Instance));
+
+        public static Rule<TFrom, TTo> Map<TFrom, TTo>(
+            this ValidationRuleBuilder<TTo> builder,
+            Func<TFrom, TTo> mapping,
+            IValidationRule<TTo> toRule)
+            => new Rule<TFrom, TTo>
+            {
+                Mapping = mapping,
+                ToRule = toRule
+            };
     }
 }
 
