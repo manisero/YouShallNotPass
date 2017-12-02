@@ -10,6 +10,6 @@ using System.Runtime.InteropServices;
 [assembly: Guid("65a5d4a6-0993-4207-98e8-d7a35fc05264")]
 [assembly: AssemblyVersion("0.0.0.0")]
 [assembly: AssemblyFileVersion("0.0.0.0")]
-[assembly: AssemblyInformationalVersion("0.0.11")]
+[assembly: AssemblyInformationalVersion("0.0.12")]
 
 [assembly: InternalsVisibleTo("Manisero.YouShallNotPass.Benchmarks")]
