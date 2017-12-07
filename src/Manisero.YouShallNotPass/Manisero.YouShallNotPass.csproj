@@ -81,6 +81,7 @@
     <Compile Include="Utils\LightLazy.cs" />
     <Compile Include="Validations\GoesWithStepValidation.cs" />
     <Compile Include="Validations\IfValidation.cs" />
+    <Compile Include="Validations\IsEnumValueValidation.cs" />
     <Compile Include="Validations\MapValidation.cs" />
     <Compile Include="Validations\MinValidation.cs" />
     <Compile Include="ValidationEngineBuilder.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Validations\NotEmptyValidation.cs" />
     <Compile Include="Validations\NotNullNorWhiteSpaceValidation.cs" />
     <Compile Include="Validations\MemberValidation.cs" />
+    <Compile Include="Validations\NullValidation.cs" />
     <Compile Include="Validations\StartsWithValidation.cs" />
     <Compile Include="Validations\UniqueValidation.cs" />
     <Compile Include="Validations\Wrappers\FullValidatorWrappers.cs" />
