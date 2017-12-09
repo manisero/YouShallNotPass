@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ErrorCodes.cs" />
+    <Compile Include="FormatterRegistration\DefaultFormattersRegistrar.cs" />
     <Compile Include="Formatters\AllValidation.cs" />
     <Compile Include="Formatters\CollectionValidation.cs" />
     <Compile Include="Formatters\IfValidation.cs" />
