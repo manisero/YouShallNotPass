@@ -23,6 +23,8 @@ namespace Manisero.YouShallNotPass.ErrorMessages.FormatterRegistration
             builder.RegisterEmptyErrorMessage<NotNullValidation.Error>(ErrorCodes.NotNull);
             builder.RegisterEmptyErrorMessage<NotNullNorWhiteSpaceValidation.Error>(ErrorCodes.NotNullNorWhiteSpace);
             builder.RegisterEmptyErrorMessage<NullValidation.Error>(ErrorCodes.Null);
+
+            throw new NotImplementedException("TODO: Register remaining validations.");
         }
     }
 }
