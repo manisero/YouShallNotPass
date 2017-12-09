@@ -1,7 +1,7 @@
 ﻿namespace Manisero.YouShallNotPass.ErrorMessages
 {
-    public interface IValidationErrorMessage<TCode>
+    public interface IValidationErrorMessage
     {
-        TCode Code { get; }
+        string Code { get; }
     }
 }
