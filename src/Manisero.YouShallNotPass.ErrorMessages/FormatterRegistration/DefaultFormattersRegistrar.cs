@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Manisero.YouShallNotPass.ErrorFormatting;
+using Manisero.YouShallNotPass.Validations;
 
 namespace Manisero.YouShallNotPass.ErrorMessages.FormatterRegistration
 {
@@ -16,6 +17,12 @@ namespace Manisero.YouShallNotPass.ErrorMessages.FormatterRegistration
                 var registration = (Action<IValidationErrorFormattingEngineBuilder<IEnumerable<IValidationErrorMessage>>>)field.GetValue(null);
                 registration(builder);
             }
+
+            builder.RegisterEmptyErrorMessage<EmailValidation.Error>(ErrorCodes.Email);
+            builder.RegisterEmptyErrorMessage<IsEnumValueValidation.Error>(ErrorCodes.IsEnumValue);
+            builder.RegisterEmptyErrorMessage<NotNullValidation.Error>(ErrorCodes.NotNull);
+            builder.RegisterEmptyErrorMessage<NotNullNorWhiteSpaceValidation.Error>(ErrorCodes.NotNullNorWhiteSpace);
+            builder.RegisterEmptyErrorMessage<NullValidation.Error>(ErrorCodes.Null);
         }
     }
 }

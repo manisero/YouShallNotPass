@@ -53,6 +53,7 @@
     <Compile Include="Utils\EnumerableExtensios.cs" />
     <Compile Include="Utils\ObjectExtensions.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
+    <Compile Include="ValidationErrorFormattingEngineBuilderExtensions.cs" />
     <Compile Include="ValidationErrorFormattingEngineBuilderFactory.cs" />
     <Compile Include="ValidationErrorMessage.cs" />
     <Compile Include="ValidationErrorsMerging\MergedError.cs" />

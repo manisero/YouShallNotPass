@@ -4,4 +4,9 @@
     {
         string Code { get; }
     }
+
+    public class ValidationErrorMessage : IValidationErrorMessage
+    {
+        public string Code { get; set; }
+    }
 }
