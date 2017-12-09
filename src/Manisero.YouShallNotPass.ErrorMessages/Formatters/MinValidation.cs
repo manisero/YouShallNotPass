@@ -7,7 +7,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Formatters
 {
     public class MinValidationErrorMessage<TValue> : IValidationErrorMessage
     {
-        public string Code => "Min";
+        public string Code => ErrorCodes.Min;
 
         public TValue MinValue { get; set; }
     }

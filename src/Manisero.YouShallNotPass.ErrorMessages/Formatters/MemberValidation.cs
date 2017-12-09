@@ -8,7 +8,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Formatters
 {
     public class MemberValidationErrorMessage : IValidationErrorMessage
     {
-        public string Code => "Member";
+        public string Code => ErrorCodes.Member;
 
         public string MemberName { get; set; }
 

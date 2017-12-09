@@ -8,10 +8,19 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Formatters
 {
     public class CollectionValidationErrorMessage : IValidationErrorMessage
     {
-        public string Code => "Collection";
+        public string Code => ErrorCodes.Collection;
 
         /// <summary>item index -> errors</summary>
         public IDictionary<int, ICollection<IValidationErrorMessage>> Errors { get; set; }
+    }
+
+    public class ItemValidationErrorMessage : IValidationErrorMessage
+    {
+        public string Code => ErrorCodes.Item;
+
+        public int ItemIndex { get; set; }
+
+        public ICollection<IValidationErrorMessage> Errors { get; set; }
     }
 
     public class CollectionValidationErrorFormatter : IValidationErrorFormatter<CollectionValidation.Error,
