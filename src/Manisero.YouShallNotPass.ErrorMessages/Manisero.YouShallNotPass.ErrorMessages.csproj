@@ -40,8 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formatters\AllValidation.cs" />
+    <Compile Include="Formatters\CollectionValidation.cs" />
+    <Compile Include="Formatters\IfValidation.cs" />
+    <Compile Include="Formatters\MapValidation.cs" />
     <Compile Include="Formatters\MemberValidation.cs" />
+    <Compile Include="Formatters\MinValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\EnumerableExtensios.cs" />
     <Compile Include="Utils\ObjectExtensions.cs" />
     <Compile Include="ValidationErrorMessage.cs" />
   </ItemGroup>
