@@ -53,6 +53,7 @@
     <Compile Include="Utils\ObjectExtensions.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="ValidationErrorMessage.cs" />
+    <Compile Include="ValidationErrorsMerging\MergedError.cs" />
     <Compile Include="ValidationErrorsMerging\ValidationErrorsMerger.cs" />
   </ItemGroup>
   <ItemGroup />
