@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Manisero.YouShallNotPass.ErrorFormatting;
+using Manisero.YouShallNotPass.ErrorMessages.Formatters;
 using Manisero.YouShallNotPass.ErrorMessages.Utils;
 using Manisero.YouShallNotPass.Validations;
 
@@ -24,5 +26,14 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Formatters
                 MinValue = error.MinValue
             }.ToEnumerable();
         }
+    }
+}
+
+namespace Manisero.YouShallNotPass.ErrorMessages.FormatterRegistration
+{
+    internal static partial class DefaultFormattersRegistrar
+    {
+        private static readonly Action<IValidationErrorFormattingEngineBuilder<IEnumerable<IValidationErrorMessage>>> Min
+            = x => x.RegisterErrorOnlyGenericFormatter(typeof(MinValidationErrorFormatter<>));
     }
 }

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Manisero.YouShallNotPass.ErrorFormatting;
+using Manisero.YouShallNotPass.ErrorMessages.Formatters;
 using Manisero.YouShallNotPass.ErrorMessages.Utils;
 using Manisero.YouShallNotPass.Validations;
 
@@ -30,5 +32,14 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Formatters
                 Errors = context.Engine.Format(validationResult.Error.Violation).ToArray()
             }.ToEnumerable();
         }
+    }
+}
+
+namespace Manisero.YouShallNotPass.ErrorMessages.FormatterRegistration
+{
+    internal static partial class DefaultFormattersRegistrar
+    {
+        private static readonly Action<IValidationErrorFormattingEngineBuilder<IEnumerable<IValidationErrorMessage>>> Member
+            = x => x.RegisterFullGenericFormatter(typeof(MemberValidationErrorFormatter<,>));
     }
 }
