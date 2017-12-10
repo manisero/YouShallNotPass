@@ -61,6 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Errors_merging\Dictionary_entries\Case.cs" />
+    <Compile Include="Errors_merging\Dictionary_entries\Samples.cs" />
     <Compile Include="Errors_merging\Collection_items\Case.cs" />
     <Compile Include="Errors_merging\Collection_items\Samples.cs" />
     <Compile Include="Errors_merging\Properties\Case.cs" />
