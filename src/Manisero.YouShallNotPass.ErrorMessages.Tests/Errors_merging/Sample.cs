@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Manisero.YouShallNotPass.ErrorMessages.Formatters;
 using Xunit;
 
@@ -7,6 +6,11 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
 {
     public class Sample
     {
+        static Sample()
+        {
+            AssertionOptions.AssertEquivalencyUsing(c => c.RespectingRuntimeTypes());
+        }
+
         private IValidationFacade CreateValidationFacade()
         {
             var validationEngine = new ValidationEngineBuilder()
@@ -45,7 +49,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
                         new ValidationErrorMessage { Code = ErrorCodes.Email }
                     }
                 }
-            }, o => o.RespectingRuntimeTypes());
+            });
         }
 
         [Fact]
@@ -74,7 +78,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
                         new ValidationErrorMessage { Code = ErrorsMergingCase.UserEmailContainsLastNameValidation.ErrorCode }
                     }
                 }
-            }, o => o.RespectingRuntimeTypes());
+            });
         }
     }
 }
