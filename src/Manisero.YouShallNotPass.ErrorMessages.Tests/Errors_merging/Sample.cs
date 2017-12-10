@@ -7,17 +7,19 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
 {
     public class Sample
     {
-        public class CreateUserCommand
+        public class UpdateUserCommand
         {
+            public int UserId { get; set; }
             public string Email { get; set; }
         }
 
-        public static IValidationRule<CreateUserCommand> Rule = new ValidationRuleBuilder<CreateUserCommand>()
+        public static IValidationRule<UpdateUserCommand> Rule = new ValidationRuleBuilder<UpdateUserCommand>()
             .All(b => b.Member(x => x.Email, b1 => b1.MinLength(3)),
                  b => b.Member(x => x.Email, b1 => b1.Email()));
 
-        public static CreateUserCommand Command = new CreateUserCommand
+        public static UpdateUserCommand Command = new UpdateUserCommand
         {
+            UserId = 1,
             Email = "a"
         };
 
@@ -36,7 +38,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
             {
                 new MemberValidationErrorMessage
                 {
-                    MemberName = nameof(CreateUserCommand.Email),
+                    MemberName = nameof(UpdateUserCommand.Email),
                     Errors = new IValidationErrorMessage[]
                     {
                         new MinLengthValidationErrorMessage { MinLength = 3 },
@@ -45,5 +47,11 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
                 }
             });
         }
+
+        // public class UserEmailUniqueValidation
+
+        // TODO: Show mapping Command -> { UserId, Email } as Email, and even this is merged as Email
+        // TODO: Collection merging
+        // TODO: Dictionary merging
     }
 }
