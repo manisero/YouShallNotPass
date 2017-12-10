@@ -9,8 +9,12 @@
         public const string Item = nameof(Item);
         public const string Member = nameof(Member);
         public const string Min = nameof(Min);
+        public const string MinLength = nameof(MinLength);
+        public const string NotEmpty = nameof(NotEmpty);
         public const string NotNull = nameof(NotNull);
         public const string NotNullNorWhiteSpace = nameof(NotNullNorWhiteSpace);
         public const string Null = nameof(Null);
+        public const string StartsWith = nameof(StartsWith);
+        public const string Unique = nameof(Unique);
     }
 }

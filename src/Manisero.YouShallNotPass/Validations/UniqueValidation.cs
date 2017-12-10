@@ -13,7 +13,7 @@ namespace Manisero.YouShallNotPass.Validations
 
         public class Error
         {
-            public ICollection<int> DuplicateItemIds { get; set; }
+            public ICollection<int> DuplicateItemIndices { get; set; }
         }
 
         public class Validator<TItem> : IValidator<Rule<TItem>, IEnumerable<TItem>, Error>
@@ -21,21 +21,21 @@ namespace Manisero.YouShallNotPass.Validations
             public Error Validate(IEnumerable<TItem> value, Rule<TItem> rule, ValidationContext context)
             {
                 var uniqueItems = new HashSet<TItem>();
-                var duplicateItemIds = LightLazy.Create(() => new List<int>());
+                var duplicateItemIndices = LightLazy.Create(() => new List<int>());
                 var index = 0;
 
                 foreach (var item in value)
                 {
                     if (!uniqueItems.Add(item))
                     {
-                        duplicateItemIds.Item.Add(index);
+                        duplicateItemIndices.Item.Add(index);
                     }
 
                     index++;
                 }
 
-                return duplicateItemIds.ItemConstructed
-                    ? new Error { DuplicateItemIds = duplicateItemIds.Item }
+                return duplicateItemIndices.ItemConstructed
+                    ? new Error { DuplicateItemIndices = duplicateItemIndices.Item }
                     : null;
             }
         }

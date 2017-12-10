@@ -87,7 +87,7 @@
     <Compile Include="ValidationEngineBuilder.cs" />
     <Compile Include="ValidationRule.cs" />
     <Compile Include="Utils\TypeExtensions.cs" />
-    <Compile Include="Validations\MinLengthValidationRule.cs" />
+    <Compile Include="Validations\MinLengthValidation.cs" />
     <Compile Include="Validations\NotEmptyValidation.cs" />
     <Compile Include="Validations\NotNullNorWhiteSpaceValidation.cs" />
     <Compile Include="Validations\MemberValidation.cs" />

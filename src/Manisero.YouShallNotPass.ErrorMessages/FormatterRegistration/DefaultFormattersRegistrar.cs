@@ -20,11 +20,10 @@ namespace Manisero.YouShallNotPass.ErrorMessages.FormatterRegistration
 
             builder.RegisterEmptyErrorMessage<EmailValidation.Error>(ErrorCodes.Email);
             builder.RegisterEmptyErrorMessage<IsEnumValueValidation.Error>(ErrorCodes.IsEnumValue);
+            builder.RegisterEmptyErrorMessage<NotEmptyValidation.Error>(ErrorCodes.NotEmpty);
             builder.RegisterEmptyErrorMessage<NotNullValidation.Error>(ErrorCodes.NotNull);
             builder.RegisterEmptyErrorMessage<NotNullNorWhiteSpaceValidation.Error>(ErrorCodes.NotNullNorWhiteSpace);
             builder.RegisterEmptyErrorMessage<NullValidation.Error>(ErrorCodes.Null);
-
-            throw new NotImplementedException("TODO: Register remaining validations.");
         }
     }
 }
