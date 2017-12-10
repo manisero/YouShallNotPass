@@ -76,6 +76,7 @@
     <Compile Include="Validations\AnyValidation.cs" />
     <Compile Include="Validations\AllValidation.cs" />
     <Compile Include="Validations\AtLeastNValidation.cs" />
+    <Compile Include="Validations\DictionaryValidation.cs" />
     <Compile Include="Validations\CollectionValidation.cs" />
     <Compile Include="Validations\EmailValidation.cs" />
     <Compile Include="Utils\LightLazy.cs" />

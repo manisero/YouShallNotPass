@@ -15,10 +15,8 @@ namespace Manisero.YouShallNotPass.Validations
 
         public class Error
         {
-            public static readonly Func<Error> Constructor = () => new Error
-            {
-                Violations = new Dictionary<int, IValidationResult>()
-            };
+            public static Error Create()
+                => new Error { Violations = new Dictionary<int, IValidationResult>() };
 
             /// <summary>item index (only invalid items) -> validation result</summary>
             public IDictionary<int, IValidationResult> Violations { get; set; }
@@ -32,7 +30,7 @@ namespace Manisero.YouShallNotPass.Validations
                 Rule<TItem> rule,
                 ValidationContext context)
             {
-                var error = LightLazy.Create(Error.Constructor);
+                var error = LightLazy.Create(Error.Create);
                 var itemIndex = 0;
 
                 foreach (var item in value)

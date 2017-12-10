@@ -45,6 +45,7 @@
     <Compile Include="Formatters\AtLeastNValidation.cs" />
     <Compile Include="Formatters\AnyValidation.cs" />
     <Compile Include="Formatters\AllValidation.cs" />
+    <Compile Include="Formatters\DictionaryValidation.cs" />
     <Compile Include="Formatters\CollectionValidation.cs" />
     <Compile Include="Formatters\MinLengthValidation.cs" />
     <Compile Include="Formatters\GoesWithStepValidation.cs" />
