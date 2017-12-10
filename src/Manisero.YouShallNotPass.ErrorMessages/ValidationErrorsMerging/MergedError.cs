@@ -9,6 +9,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.ValidationErrorsMerging
         private readonly ICollection<IValidationErrorMessage> _selfErrors = new List<IValidationErrorMessage>();
         private readonly IDictionary<string, MergedError> _memberErrors = new Dictionary<string, MergedError>();
         private readonly IDictionary<int, MergedError> _itemErrors = new Dictionary<int, MergedError>();
+        private readonly IDictionary<object, MergedError> _entryErrors = new Dictionary<object, MergedError>();
 
         public void Add(IValidationErrorMessage error)
         {
@@ -23,6 +24,11 @@ namespace Manisero.YouShallNotPass.ErrorMessages.ValidationErrorsMerging
         public MergedError GetItemError(int itemIndex)
         {
             return _itemErrors.GetOrAdd(itemIndex, _ => new MergedError());
+        }
+
+        public MergedError GetEntryError(object entryKey)
+        {
+            return _entryErrors.GetOrAdd(entryKey, _ => new MergedError());
         }
 
         public IList<IValidationErrorMessage> ToErrorMessages()
@@ -44,6 +50,15 @@ namespace Manisero.YouShallNotPass.ErrorMessages.ValidationErrorsMerging
                 {
                     ItemIndex = itemIndexToError.Key,
                     Errors = itemIndexToError.Value.ToErrorMessages()
+                });
+            }
+
+            foreach (var entryKeyToError in _entryErrors)
+            {
+                result.Add(new EntryValidationErrorMessage
+                {
+                    EntryKey = entryKeyToError.Key,
+                    Errors = entryKeyToError.Value.ToErrorMessages()
                 });
             }
 

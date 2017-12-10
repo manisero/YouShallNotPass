@@ -39,7 +39,17 @@ namespace Manisero.YouShallNotPass.ErrorMessages.ValidationErrorsMerging
                         var itemError = mergedErrorToFill.GetItemError(indexToItemErrorMessage.Key);
                         MergeInto(indexToItemErrorMessage.Value, itemError);
                     }
-                } // TODO: Dictionary
+                }
+                else if (errorMessage.Code.EqualsOrdinalIgnoreCase(ErrorCodes.Dictionary))
+                {
+                    var dictionaryErrorMessage = (DictionaryValidationErrorMessage)errorMessage;
+
+                    foreach (var keyToEntryErrorMessage in dictionaryErrorMessage.Errors)
+                    {
+                        var entryError = mergedErrorToFill.GetEntryError(keyToEntryErrorMessage.Key);
+                        MergeInto(keyToEntryErrorMessage.Value, entryError);
+                    }
+                }
                 else
                 {
                     mergedErrorToFill.Add(errorMessage);
