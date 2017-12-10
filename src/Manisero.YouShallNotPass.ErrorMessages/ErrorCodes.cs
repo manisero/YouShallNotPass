@@ -4,6 +4,7 @@
     {
         public const string Collection = nameof(Collection);
         public const string Email = nameof(Email);
+        public const string GoesWithStep = nameof(GoesWithStep);
         public const string IsEnumValue = nameof(IsEnumValue);
         public const string Item = nameof(Item);
         public const string Member = nameof(Member);

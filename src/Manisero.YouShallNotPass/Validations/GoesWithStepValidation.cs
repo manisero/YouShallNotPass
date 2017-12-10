@@ -13,7 +13,7 @@ namespace Manisero.YouShallNotPass.Validations
 
         public class Error
         {
-            public int FirstInvalidItemId { get; set; }
+            public int FirstInvalidItemIndex { get; set; }
         }
 
         public class Validator : IValidator<Rule, IEnumerable<int>, Error>
@@ -36,7 +36,7 @@ namespace Manisero.YouShallNotPass.Validations
 
                         if (difference != rule.Step)
                         {
-                            return new Error { FirstInvalidItemId = index };
+                            return new Error { FirstInvalidItemIndex = index };
                         }
                     }
 

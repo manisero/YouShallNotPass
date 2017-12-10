@@ -42,8 +42,11 @@
   <ItemGroup>
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="FormatterRegistration\DefaultFormattersRegistrar.cs" />
+    <Compile Include="Formatters\AtLeastNValidation.cs" />
+    <Compile Include="Formatters\AnyValidation.cs" />
     <Compile Include="Formatters\AllValidation.cs" />
     <Compile Include="Formatters\CollectionValidation.cs" />
+    <Compile Include="Formatters\GoesWithStepValidation.cs" />
     <Compile Include="Formatters\IfValidation.cs" />
     <Compile Include="Formatters\MapValidation.cs" />
     <Compile Include="Formatters\MemberValidation.cs" />
