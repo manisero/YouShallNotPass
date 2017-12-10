@@ -53,5 +53,50 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging.Dictionary
                 }
             });
         }
+
+        [Fact]
+        public void merged_error_does_not_contain_rules_violated_by_other_entries()
+        {
+            var validationFacade = CreateValidationFacade();
+
+            var command = new Case.UpdateEmailsCommand
+            {
+                UserIdToEmail = new Dictionary<int, string>
+                {
+                    [1] = "aaaaa",
+                    [2] = "a@a"
+                }
+            };
+
+            var error = validationFacade.Validate(command, Case.Rule);
+            error.Should().NotBeNull("Validation is expected to fail.");
+
+            error.ShouldBeEquivalentTo(new[]
+            {
+                new MemberValidationErrorMessage
+                {
+                    MemberName = nameof(Case.UpdateEmailsCommand.UserIdToEmail),
+                    Errors = new IValidationErrorMessage[]
+                    {
+                        new EntryValidationErrorMessage
+                        {
+                            EntryKey = 1,
+                            Errors = new IValidationErrorMessage[]
+                            {
+                                new ValidationErrorMessage { Code = ErrorCodes.Email }
+                            }
+                        },
+                        new EntryValidationErrorMessage
+                        {
+                            EntryKey = 2,
+                            Errors = new IValidationErrorMessage[]
+                            {
+                                new MinLengthValidationErrorMessage { MinLength = 5 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 }
