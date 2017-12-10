@@ -61,8 +61,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Errors_merging\case.cs" />
-    <Compile Include="Errors_merging\Sample.cs" />
+    <Compile Include="Errors_merging\Collection_items\Case.cs" />
+    <Compile Include="Errors_merging\Collection_items\Samples.cs" />
+    <Compile Include="Errors_merging\Properties\Case.cs" />
+    <Compile Include="Errors_merging\Properties\Samples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

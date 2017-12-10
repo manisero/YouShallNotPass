@@ -2,11 +2,11 @@
 using Manisero.YouShallNotPass.ErrorMessages.Formatters;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
+namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging.Properties
 {
-    public class Sample
+    public class Samples
     {
-        static Sample()
+        static Samples()
         {
             AssertionOptions.AssertEquivalencyUsing(c => c.RespectingRuntimeTypes());
         }
@@ -14,12 +14,12 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
         private IValidationFacade CreateValidationFacade()
         {
             var validationEngine = new ValidationEngineBuilder()
-                .RegisterFullValidator(new ErrorsMergingCase.UserEmailContainsLastNameValidation.Validator())
+                .RegisterFullValidator(new Case.UserEmailContainsLastNameValidation.Validator())
                 .Build();
 
             var formattingEngine = new ValidationErrorFormattingEngineBuilderFactory()
                 .Create()
-                .RegisterEmptyErrorMessage<ErrorsMergingCase.UserEmailContainsLastNameValidation.Error>(ErrorsMergingCase.UserEmailContainsLastNameValidation.ErrorCode)
+                .RegisterEmptyErrorMessage<Case.UserEmailContainsLastNameValidation.Error>(Case.UserEmailContainsLastNameValidation.ErrorCode)
                 .Build();
 
             return new ValidationFacade(validationEngine, formattingEngine);
@@ -30,19 +30,19 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
         {
             var validationFacade = CreateValidationFacade();
 
-            var command = new ErrorsMergingCase.CreateUserCommand
+            var command = new Case.CreateUserCommand
             {
                 Email = "a"
             };
 
-            var error = validationFacade.Validate(command, ErrorsMergingCase.Rule);
+            var error = validationFacade.Validate(command, Case.Rule);
             error.Should().NotBeNull("Validation is expected to fail.");
 
             error.ShouldBeEquivalentTo(new[]
             {
                 new MemberValidationErrorMessage
                 {
-                    MemberName = nameof(ErrorsMergingCase.CreateUserCommand.Email),
+                    MemberName = nameof(Case.CreateUserCommand.Email),
                     Errors = new IValidationErrorMessage[]
                     {
                         new MinLengthValidationErrorMessage { MinLength = 3 },
@@ -57,25 +57,25 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
         {
             var validationFacade = CreateValidationFacade();
 
-            var command = new ErrorsMergingCase.CreateUserCommand
+            var command = new Case.CreateUserCommand
             {
                 Email = "a",
                 LastName = "name"
             };
 
-            var error = validationFacade.Validate(command, ErrorsMergingCase.Rule);
+            var error = validationFacade.Validate(command, Case.Rule);
             error.Should().NotBeNull("Validation is expected to fail.");
 
             error.ShouldBeEquivalentTo(new[]
             {
                 new MemberValidationErrorMessage
                 {
-                    MemberName = nameof(ErrorsMergingCase.CreateUserCommand.Email),
+                    MemberName = nameof(Case.CreateUserCommand.Email),
                     Errors = new IValidationErrorMessage[]
                     {
                         new MinLengthValidationErrorMessage { MinLength = 3 },
                         new ValidationErrorMessage { Code = ErrorCodes.Email },
-                        new ValidationErrorMessage { Code = ErrorsMergingCase.UserEmailContainsLastNameValidation.ErrorCode }
+                        new ValidationErrorMessage { Code = Case.UserEmailContainsLastNameValidation.ErrorCode }
                     }
                 }
             });

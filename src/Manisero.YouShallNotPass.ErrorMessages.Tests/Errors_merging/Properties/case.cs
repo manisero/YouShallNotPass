@@ -1,8 +1,8 @@
 ﻿using Manisero.YouShallNotPass.Validations;
 
-namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
+namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging.Properties
 {
-    public static class ErrorsMergingCase
+    public static class Case
     {
         public class CreateUserCommand
         {
