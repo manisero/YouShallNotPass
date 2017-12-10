@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Manisero.YouShallNotPass.ErrorFormatting;
 using Manisero.YouShallNotPass.ErrorMessages.ValidationErrorsMerging;
 
@@ -7,9 +6,9 @@ namespace Manisero.YouShallNotPass.ErrorMessages
 {
     public interface IValidationFacade
     {
-        ICollection<IValidationErrorMessage> Validate<TValue>(TValue value);
+        IList<IValidationErrorMessage> Validate<TValue>(TValue value);
 
-        ICollection<IValidationErrorMessage> Validate<TValue, TRule>(TValue value, TRule rule)
+        IList<IValidationErrorMessage> Validate<TValue, TRule>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue>;
     }
 
@@ -28,7 +27,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages
             _validationErrorsMerger = new ValidationErrorsMerger();
         }
 
-        public ICollection<IValidationErrorMessage> Validate<TValue>(TValue value)
+        public IList<IValidationErrorMessage> Validate<TValue>(TValue value)
         {
             var validationResult = _validationEngine.TryValidate(value);
 
@@ -37,7 +36,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages
                 : null;
         }
 
-        public ICollection<IValidationErrorMessage> Validate<TValue, TRule>(TValue value, TRule rule)
+        public IList<IValidationErrorMessage> Validate<TValue, TRule>(TValue value, TRule rule)
             where TRule : IValidationRule<TValue>
         {
             var validationResult = _validationEngine.Validate(value, rule);
@@ -47,7 +46,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages
                 : null;
         }
 
-        private ICollection<IValidationErrorMessage> FormatError(IValidationResult violation)
+        private IList<IValidationErrorMessage> FormatError(IValidationResult violation)
         {
             var errorMessages = _validationErrorFormattingEngine.Format(violation);
 

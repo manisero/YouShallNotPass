@@ -25,7 +25,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.ValidationErrorsMerging
             return _itemErrors.GetOrAdd(itemIndex, _ => new MergedError());
         }
 
-        public ICollection<IValidationErrorMessage> ToErrorMessages()
+        public IList<IValidationErrorMessage> ToErrorMessages()
         {
             var result = new List<IValidationErrorMessage>(_selfErrors);
 

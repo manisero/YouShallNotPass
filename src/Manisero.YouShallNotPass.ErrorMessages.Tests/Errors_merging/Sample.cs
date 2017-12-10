@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using Manisero.YouShallNotPass.ErrorMessages.Formatters;
 using Xunit;
 
@@ -33,7 +34,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
             var error = validationFacade.Validate(command, ErrorsMergingCase.Rule);
             error.Should().NotBeNull("Validation is expected to fail.");
 
-            error.ShouldAllBeEquivalentTo(new[]
+            error.ShouldBeEquivalentTo(new[]
             {
                 new MemberValidationErrorMessage
                 {
@@ -44,7 +45,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
                         new ValidationErrorMessage { Code = ErrorCodes.Email }
                     }
                 }
-            });
+            }, o => o.RespectingRuntimeTypes());
         }
 
         [Fact]
@@ -73,7 +74,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
                         new ValidationErrorMessage { Code = ErrorsMergingCase.UserEmailContainsLastNameValidation.ErrorCode }
                     }
                 }
-            });
+            }, o => o.RespectingRuntimeTypes());
         }
     }
 }
