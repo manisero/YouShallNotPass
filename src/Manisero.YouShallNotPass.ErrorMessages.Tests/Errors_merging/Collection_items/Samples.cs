@@ -41,11 +41,53 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging.Collection
                     {
                         new ItemValidationErrorMessage
                         {
-                             Errors = new IValidationErrorMessage[]
-                             {
-                                 new MinLengthValidationErrorMessage { MinLength = 3 },
-                                 new ValidationErrorMessage { Code = ErrorCodes.Email }
-                             }
+                            ItemIndex = 0,
+                            Errors = new IValidationErrorMessage[]
+                            {
+                                new MinLengthValidationErrorMessage { MinLength = 5 },
+                                new ValidationErrorMessage { Code = ErrorCodes.Email }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        [Fact]
+        public void merged_error_does_not_contain_rules_violated_by_other_items()
+        {
+            var validationFacade = CreateValidationFacade();
+
+            var command = new Case.ProcessEmailsCommand
+            {
+                Emails = new[] { "aaaaa", "a@a" }
+            };
+
+            var error = validationFacade.Validate(command, Case.Rule);
+            error.Should().NotBeNull("Validation is expected to fail.");
+
+            error.ShouldBeEquivalentTo(new[]
+            {
+                new MemberValidationErrorMessage
+                {
+                    MemberName = nameof(Case.ProcessEmailsCommand.Emails),
+                    Errors = new IValidationErrorMessage[]
+                    {
+                        new ItemValidationErrorMessage
+                        {
+                            ItemIndex = 0,
+                            Errors = new IValidationErrorMessage[]
+                            {
+                                new ValidationErrorMessage { Code = ErrorCodes.Email }
+                            }
+                        },
+                        new ItemValidationErrorMessage
+                        {
+                            ItemIndex = 1,
+                            Errors = new IValidationErrorMessage[]
+                            {
+                                new MinLengthValidationErrorMessage { MinLength = 5 }
+                            }
                         }
                     }
                 }

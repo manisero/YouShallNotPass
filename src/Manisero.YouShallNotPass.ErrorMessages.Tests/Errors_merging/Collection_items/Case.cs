@@ -17,7 +17,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging.Collection
                      b1 => b1.Map(
                          x => x.AsEnumerable(),
                          b2 => b2.All(
-                             b3 => b3.Collection(b4 => b4.MinLength(3)),
+                             b3 => b3.Collection(b4 => b4.MinLength(5)),
                              b3 => b3.Collection(b4 => b4.Email())))));
     }
 }
