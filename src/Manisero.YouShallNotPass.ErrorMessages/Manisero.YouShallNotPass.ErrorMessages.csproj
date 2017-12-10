@@ -64,6 +64,7 @@
     <Compile Include="ValidationErrorMessage.cs" />
     <Compile Include="ValidationErrorsMerging\MergedError.cs" />
     <Compile Include="ValidationErrorsMerging\ValidationErrorsMerger.cs" />
+    <Compile Include="ValidationFacade.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

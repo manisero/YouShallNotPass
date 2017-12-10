@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Manisero.YouShallNotPass.ErrorMessages.Formatters;
 using Manisero.YouShallNotPass.Validations;
 using Xunit;
@@ -27,14 +26,13 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging
         {
             var validationEngine = new ValidationEngineBuilder().Build();
             var formattingEngine = new ValidationErrorFormattingEngineBuilderFactory().Create().Build();
+            var validationFacade = new ValidationFacade(validationEngine, formattingEngine);
 
-            var validationResult = validationEngine.Validate(Command, Rule);
+            var error = validationFacade.Validate(Command, Rule);
 
-            validationResult.HasError().Should().BeTrue("Validation is expected to fail.");
+            error.Should().NotBeNull("Validation is expected to fail.");
 
-            var errorMessage = formattingEngine.Format(validationResult).ToArray();
-
-            errorMessage.ShouldBeEquivalentTo(new[]
+            error.ShouldBeEquivalentTo(new[]
             {
                 new MemberValidationErrorMessage
                 {

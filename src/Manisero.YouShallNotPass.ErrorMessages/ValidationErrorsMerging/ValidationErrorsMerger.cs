@@ -6,12 +6,12 @@ namespace Manisero.YouShallNotPass.ErrorMessages.ValidationErrorsMerging
 {
     internal interface IValidationErrorsMerger
     {
-        ICollection<IValidationErrorMessage> Merge(ICollection<IValidationErrorMessage> errors);
+        ICollection<IValidationErrorMessage> Merge(IEnumerable<IValidationErrorMessage> errors);
     }
 
     internal class ValidationErrorsMerger : IValidationErrorsMerger
     {
-        public ICollection<IValidationErrorMessage> Merge(ICollection<IValidationErrorMessage> errors)
+        public ICollection<IValidationErrorMessage> Merge(IEnumerable<IValidationErrorMessage> errors)
         {
             var mergedError = new MergedError();
             MergeInto(errors, mergedError);
@@ -19,7 +19,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.ValidationErrorsMerging
             return mergedError.ToErrorMessages();
         }
 
-        private void MergeInto(ICollection<IValidationErrorMessage> errors, MergedError mergedErrorToFill)
+        private void MergeInto(IEnumerable<IValidationErrorMessage> errors, MergedError mergedErrorToFill)
         {
             foreach (var errorMessage in errors)
             {
