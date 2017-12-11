@@ -3,7 +3,7 @@ using FluentAssertions;
 using Manisero.YouShallNotPass.ErrorMessages.Formatters;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging.Dictionary_entries
+namespace Manisero.YouShallNotPass.ErrorMessages.Samples.Errors_merging.Dictionary_entries
 {
     public class Samples
     {

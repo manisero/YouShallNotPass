@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Manisero.YouShallNotPass.ErrorMessages.Tests")]
+[assembly: AssemblyTitle("Manisero.YouShallNotPass.ErrorMessages.Samples")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Manisero.YouShallNotPass.ErrorMessages.Tests")]
+[assembly: AssemblyProduct("Manisero.YouShallNotPass.ErrorMessages.Samples")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("76b727a1-82b3-4576-a334-d708e2468ca9")]
+[assembly: Guid("46939a25-7f78-4229-82c0-4e74f4021326")]
 
 // Version information for an assembly consists of the following four values:
 //

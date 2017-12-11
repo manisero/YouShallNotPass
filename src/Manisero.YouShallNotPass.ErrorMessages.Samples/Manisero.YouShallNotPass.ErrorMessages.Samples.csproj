@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{76B727A1-82B3-4576-A334-D708E2468CA9}</ProjectGuid>
+    <ProjectGuid>{46939A25-7F78-4229-82C0-4E74F4021326}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Manisero.YouShallNotPass.ErrorMessages.Tests</RootNamespace>
-    <AssemblyName>Manisero.YouShallNotPass.ErrorMessages.Tests</AssemblyName>
+    <RootNamespace>Manisero.YouShallNotPass.ErrorMessages.Samples</RootNamespace>
+    <AssemblyName>Manisero.YouShallNotPass.ErrorMessages.Samples</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -61,11 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Errors_merging\Dictionary_entries\Case.cs" />
-    <Compile Include="Errors_merging\Dictionary_entries\Samples.cs" />
     <Compile Include="Errors_merging\Collection_items\Case.cs" />
     <Compile Include="Errors_merging\Collection_items\Samples.cs" />
-    <Compile Include="Errors_merging\Properties\Case.cs" />
+    <Compile Include="Errors_merging\Dictionary_entries\Case.cs" />
+    <Compile Include="Errors_merging\Dictionary_entries\Samples.cs" />
+    <Compile Include="Errors_merging\Properties\case.cs" />
     <Compile Include="Errors_merging\Properties\Samples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using Manisero.YouShallNotPass.Validations;
 
-namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging.Properties
+namespace Manisero.YouShallNotPass.ErrorMessages.Samples.Errors_merging.Properties
 {
     public static class Case
     {

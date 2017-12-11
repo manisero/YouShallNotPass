@@ -2,7 +2,7 @@
 using Manisero.YouShallNotPass.ErrorMessages.Formatters;
 using Xunit;
 
-namespace Manisero.YouShallNotPass.ErrorMessages.Tests.Errors_merging.Collection_items
+namespace Manisero.YouShallNotPass.ErrorMessages.Samples.Errors_merging.Collection_items
 {
     public class Samples
     {
