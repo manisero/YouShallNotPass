@@ -2,7 +2,7 @@
 using Manisero.YouShallNotPass.Core.Engine;
 using Manisero.YouShallNotPass.Core.RuleRegistration;
 using Manisero.YouShallNotPass.Core.ValidatorRegistration;
-using Manisero.YouShallNotPass.Validations.Wrappers;
+using Manisero.YouShallNotPass.Core.ValidatorWrapping;
 
 namespace Manisero.YouShallNotPass
 {

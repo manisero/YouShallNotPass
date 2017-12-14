@@ -2,9 +2,9 @@
 using System.Reflection;
 using Manisero.YouShallNotPass.Utils;
 
-namespace Manisero.YouShallNotPass.Validations.Wrappers
+namespace Manisero.YouShallNotPass.Core.ValidatorWrapping
 {
-    public class ValidatorFactoryWrapper<TRule, TValue, TError> : IValidator<TRule, TValue, TError>
+    internal class ValidatorFactoryWrapper<TRule, TValue, TError> : IValidator<TRule, TValue, TError>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
@@ -23,7 +23,7 @@ namespace Manisero.YouShallNotPass.Validations.Wrappers
         }
     }
 
-    public class ValidatorFactoryWrapper
+    internal class ValidatorFactoryWrapper
     {
         private static readonly Lazy<MethodInfo> CreateInternalGenericMethod = new Lazy<MethodInfo>(
             () => typeof(ValidatorFactoryWrapper).GetMethod(nameof(CreateInternalGeneric),
