@@ -1,5 +1,5 @@
 ﻿using System;
-using Manisero.YouShallNotPass.ErrorFormatting.Formatters;
+using Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterWrapping;
 using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration

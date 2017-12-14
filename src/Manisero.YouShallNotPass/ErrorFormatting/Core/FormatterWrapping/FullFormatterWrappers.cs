@@ -2,9 +2,9 @@
 using System.Reflection;
 using Manisero.YouShallNotPass.Utils;
 
-namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
+namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterWrapping
 {
-    public class FullFormatterFactoryWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
+    internal class FullFormatterFactoryWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
@@ -25,7 +25,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
         }
     }
 
-    public class FullFormatterFactoryWrapper
+    internal class FullFormatterFactoryWrapper
     {
         private static readonly Lazy<MethodInfo> CreateInternalGenericMethod = new Lazy<MethodInfo>(
             () => typeof(FullFormatterFactoryWrapper).GetMethod(nameof(CreateInternalGeneric),

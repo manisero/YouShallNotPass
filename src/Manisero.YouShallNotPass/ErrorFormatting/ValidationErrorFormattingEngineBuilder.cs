@@ -1,7 +1,7 @@
 ﻿using System;
 using Manisero.YouShallNotPass.ErrorFormatting.Core.Engine;
 using Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterRegistration;
-using Manisero.YouShallNotPass.ErrorFormatting.Formatters;
+using Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterWrapping;
 
 namespace Manisero.YouShallNotPass.ErrorFormatting
 {

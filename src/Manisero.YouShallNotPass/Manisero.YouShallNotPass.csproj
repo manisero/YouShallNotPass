@@ -52,10 +52,10 @@
     <Compile Include="ErrorFormatting\Core\FormatterRegistration\ValidationErrorFormattersRegistry.cs" />
     <Compile Include="ErrorFormatting\Core\FormatterRegistration\ValidationErrorFormattersRegistryBuilder.cs" />
     <Compile Include="ErrorFormatting\Core\Engine\ValidationErrorFormattingExecutor.cs" />
-    <Compile Include="ErrorFormatting\Formatters\ErrorRuleAndValueFormatterWrappers.cs" />
-    <Compile Include="ErrorFormatting\Formatters\FullFormatterWrappers.cs" />
+    <Compile Include="ErrorFormatting\Core\FormatterWrapping\ErrorRuleAndValueFormatterWrappers.cs" />
+    <Compile Include="ErrorFormatting\Core\FormatterWrapping\FullFormatterWrappers.cs" />
     <Compile Include="ErrorFormatting\IValidationErrorFormattingEngine.cs" />
-    <Compile Include="ErrorFormatting\Formatters\ErrorOnlyFormatterWrappers.cs" />
+    <Compile Include="ErrorFormatting\Core\FormatterWrapping\ErrorOnlyFormatterWrappers.cs" />
     <Compile Include="ErrorFormatting\ValidationErrorFormatter.cs" />
     <Compile Include="ErrorFormatting\ValidationErrorFormattingContext.cs" />
     <Compile Include="ErrorFormatting\Core\Engine\ValidationErrorFormattingEngine.cs" />

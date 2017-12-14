@@ -2,9 +2,9 @@
 using System.Reflection;
 using Manisero.YouShallNotPass.Utils;
 
-namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
+namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterWrapping
 {
-    public class ErrorOnlyFormatterFuncWrapper<TError, TFormat> : IValidationErrorFormatter<TError, TFormat>
+    internal class ErrorOnlyFormatterFuncWrapper<TError, TFormat> : IValidationErrorFormatter<TError, TFormat>
         where TError : class
     {
         private readonly Func<TError, TFormat> _formatter;
@@ -23,7 +23,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
         }
     }
 
-    public class ErrorOnlyFormatterFuncFactoryWrapper<TError, TFormat> : IValidationErrorFormatter<TError, TFormat>
+    internal class ErrorOnlyFormatterFuncFactoryWrapper<TError, TFormat> : IValidationErrorFormatter<TError, TFormat>
         where TError : class
     {
         private readonly Func<Func<TError, TFormat>> _formatterFactory;
@@ -43,7 +43,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
         }
     }
 
-    public class ErrorOnlyFormatterFactoryWrapper<TError, TFormat> : IValidationErrorFormatter<TError, TFormat>
+    internal class ErrorOnlyFormatterFactoryWrapper<TError, TFormat> : IValidationErrorFormatter<TError, TFormat>
         where TError : class
     {
         private readonly Func<IValidationErrorFormatter<TError, TFormat>> _formatterFactory;
@@ -63,7 +63,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
         }
     }
 
-    public class ErrorOnlyFormatterFactoryWrapper
+    internal class ErrorOnlyFormatterFactoryWrapper
     {
         private static readonly Lazy<MethodInfo> CreateInternalGenericMethod = new Lazy<MethodInfo>(
             () => typeof(ErrorOnlyFormatterFactoryWrapper).GetMethod(nameof(CreateInternalGeneric),
@@ -91,7 +91,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
                 () => (IValidationErrorFormatter<TError, TFormat>)formatterFactory(formatterType));
     }
 
-    public class ErrorOnlyFormatterAsFullFormatterWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
+    internal class ErrorOnlyFormatterAsFullFormatterWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
+namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterWrapping
 {
-    public class ErrorRuleAndValueFormatterWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
+    internal class ErrorRuleAndValueFormatterWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
@@ -22,7 +22,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Formatters
         }
     }
 
-    public class ErrorRuleAndValueFormatterFactoryWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
+    internal class ErrorRuleAndValueFormatterFactoryWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
