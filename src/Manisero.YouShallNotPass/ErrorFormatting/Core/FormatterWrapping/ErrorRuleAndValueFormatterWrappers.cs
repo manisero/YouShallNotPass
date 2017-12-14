@@ -2,13 +2,13 @@
 
 namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterWrapping
 {
-    internal class ErrorRuleAndValueFormatterWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
+    internal class ErrorRuleAndValueFormatterFuncWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
         private readonly Func<TError, TRule, TValue, TFormat> _formatter;
 
-        public ErrorRuleAndValueFormatterWrapper(
+        public ErrorRuleAndValueFormatterFuncWrapper(
             Func<TError, TRule, TValue, TFormat> formatter)
         {
             _formatter = formatter;
@@ -22,13 +22,13 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterWrapping
         }
     }
 
-    internal class ErrorRuleAndValueFormatterFactoryWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
+    internal class ErrorRuleAndValueFormatterFuncFactoryWrapper<TRule, TValue, TError, TFormat> : IValidationErrorFormatter<TRule, TValue, TError, TFormat>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
         private readonly Func<Func<TError, TRule, TValue, TFormat>> _formatterFactory;
 
-        public ErrorRuleAndValueFormatterFactoryWrapper(
+        public ErrorRuleAndValueFormatterFuncFactoryWrapper(
             Func<Func<TError, TRule, TValue, TFormat>> formatterFactory)
         {
             _formatterFactory = formatterFactory;

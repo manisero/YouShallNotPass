@@ -154,7 +154,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var wrapper = new ErrorRuleAndValueFormatterWrapper<TRule, TValue, TError, TFormat>(formatter);
+            var wrapper = new ErrorRuleAndValueFormatterFuncWrapper<TRule, TValue, TError, TFormat>(formatter);
 
             return RegisterFullFormatter(wrapper);
         }
@@ -164,7 +164,7 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            var wrapper = new ErrorRuleAndValueFormatterFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
+            var wrapper = new ErrorRuleAndValueFormatterFuncFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
 
             return RegisterFullFormatter(wrapper);
         }
