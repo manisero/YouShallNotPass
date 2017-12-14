@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Manisero.YouShallNotPass.Samples.Utils;
 using Xunit;
 
@@ -7,7 +6,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
 {
     public class Value_and_rule
     {
-        // bool validator func
+        // value and rule bool validator
 
         public static class MinLengthValidation
         {
@@ -16,8 +15,16 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
                 public int MinLength { get; set; }
             }
 
-            public static readonly Func<string, Rule, bool> Validator
-                = (v, r) => v.Length >= r.MinLength;
+            public class Validator : ValueAndRuleBoolValidator<Rule, string, EmptyValidationError>
+            {
+                public Validator()
+                    : base(EmptyValidationError.Some)
+                {
+                }
+
+                protected override bool Validate(string value, Rule rule)
+                    => value.Length >= rule.MinLength;
+            }
         }
 
         public static readonly MinLengthValidation.Rule Rule = new MinLengthValidation.Rule { MinLength = 2 };
@@ -26,7 +33,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void value_and_rule_bool_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueAndRuleBoolValidatorFunc(MinLengthValidation.Validator, new EmptyValidationError());
+            engineBuilder.RegisterFullValidator(new MinLengthValidation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", Rule);
@@ -34,7 +41,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
             result.HasError().Should().BeTrue();
         }
 
-        // validator func
+        // value and rule validator
 
         public static class MinLength2Validation
         {
@@ -48,10 +55,13 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
                 public int ActualLength { get; set; }
             }
 
-            public static readonly Func<string, Rule, Error> Validator
-                = (v, r) => v.Length < r.MinLength
-                    ? new Error { ActualLength = v.Length }
-                    : null;
+            public class Validator : ValueAndRuleValidator<Rule, string, Error>
+            {
+                protected override Error Validate(string value, Rule rule)
+                    => value.Length < rule.MinLength
+                        ? new Error { ActualLength = value.Length }
+                        : null;
+            }
         }
         
         public static readonly MinLength2Validation.Rule Rule2 = new MinLength2Validation.Rule { MinLength = 2 };
@@ -60,7 +70,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void value_and_rule_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueAndRuleValidatorFunc(MinLength2Validation.Validator);
+            engineBuilder.RegisterFullValidator(new MinLength2Validation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", Rule2);
