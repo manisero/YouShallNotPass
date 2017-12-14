@@ -30,7 +30,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public static readonly MinLengthValidation.Rule Rule = new MinLengthValidation.Rule { MinLength = 2 };
         
         [Fact]
-        public void value_and_rule_bool_validator_func()
+        public void value_and_rule_bool_validator()
         {
             var engineBuilder = new ValidationEngineBuilder();
             engineBuilder.RegisterValidator(new MinLengthValidation.Validator());
@@ -67,7 +67,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public static readonly MinLength2Validation.Rule Rule2 = new MinLength2Validation.Rule { MinLength = 2 };
         
         [Fact]
-        public void value_and_rule_validator_func()
+        public void value_and_rule_validator()
         {
             var engineBuilder = new ValidationEngineBuilder();
             engineBuilder.RegisterValidator(new MinLength2Validation.Validator());

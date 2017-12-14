@@ -28,7 +28,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public static readonly NotEmptyValidation.Rule NotEmptyRule = new NotEmptyValidation.Rule();
         
         [Fact]
-        public void value_only_bool_validator_func()
+        public void value_only_bool_validator()
         {
             var engineBuilder = new ValidationEngineBuilder();
             engineBuilder.RegisterValidator(new NotEmptyValidation.Validator());
@@ -64,7 +64,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public static readonly EvenLengthValidation.Rule EvenLengthRule = new EvenLengthValidation.Rule();
         
         [Fact]
-        public void value_only_validator_func()
+        public void value_only_validator()
         {
             var engineBuilder = new ValidationEngineBuilder();
             engineBuilder.RegisterValidator(new EvenLengthValidation.Validator());
