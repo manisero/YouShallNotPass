@@ -12,19 +12,6 @@ namespace Manisero.YouShallNotPass
 
         IValidationEngineBuilder RegisterValidationRule(Type valueType, IValidationRule rule);
 
-        // Value only validators
-
-        IValidationEngineBuilder RegisterValueOnlyBoolValidatorFunc<TRule, TValue, TError>(
-            Func<TValue, bool> validator,
-            TError errorInstance)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class;
-
-        IValidationEngineBuilder RegisterValueOnlyValidatorFunc<TRule, TValue, TError>(
-            Func<TValue, TError> validator)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class;
-
         // Value and rule validators
 
         IValidationEngineBuilder RegisterValueAndRuleBoolValidatorFunc<TRule, TValue, TError>(
@@ -93,28 +80,6 @@ namespace Manisero.YouShallNotPass
         {
             _validationRulesRegistryBuilder.RegisterRule(valueType, rule);
             return this;
-        }
-
-        // Value only validators
-
-        public IValidationEngineBuilder RegisterValueOnlyBoolValidatorFunc<TRule, TValue, TError>(
-            Func<TValue, bool> validator,
-            TError errorInstance)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var wrapper = new ValueOnlyBoolValidatorFuncWrapper<TRule, TValue, TError>(validator, errorInstance);
-
-            return RegisterFullValidator(wrapper);
-        }
-
-        public IValidationEngineBuilder RegisterValueOnlyValidatorFunc<TRule, TValue, TError>(Func<TValue, TError> validator)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var wrapper = new ValueOnlyValidatorFuncWrapper<TRule, TValue,TError>(validator);
-
-            return RegisterFullValidator(wrapper);
         }
 
         // Value and rule validators

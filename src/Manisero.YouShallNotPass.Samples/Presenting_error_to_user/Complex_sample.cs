@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Manisero.YouShallNotPass.ErrorFormatting;
@@ -29,8 +28,11 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
             {
             }
 
-            public static readonly Func<CreateUserCommand, Error> Validator
-                = _ => new Error();
+            public class Validator : ValueOnlyValidator<Rule, CreateUserCommand, Error>
+            {
+                protected override Error Validate(CreateUserCommand value)
+                    => new Error();
+            }
         }
 
         public static readonly IValidationRule<CreateUserCommand> CreateUserCommandValidationRule = new ValidationRuleBuilder<CreateUserCommand>()
@@ -83,7 +85,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
         [Fact]
         public void sample()
         {
-            var validationEngineBuilder = new ValidationEngineBuilder().RegisterValueOnlyValidatorFunc<CreateUserCommandOverallValidation.Rule, CreateUserCommand, CreateUserCommandOverallValidation.Error>(CreateUserCommandOverallValidation.Validator);
+            var validationEngineBuilder = new ValidationEngineBuilder().RegisterFullValidator(new CreateUserCommandOverallValidation.Validator());
             var validationEngine = validationEngineBuilder.Build();
 
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<IEnumerable<string>>();

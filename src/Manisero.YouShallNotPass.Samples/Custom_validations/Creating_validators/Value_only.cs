@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Manisero.YouShallNotPass.Samples.Utils;
 using Xunit;
 
@@ -7,7 +6,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
 {
     public class Value_only
     {
-        // bool validator func
+        // value only bool validator
 
         public static class NotEmptyValidation
         {
@@ -15,7 +14,15 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
             {
             }
 
-            public static readonly Func<string, bool> Validator = x => !string.IsNullOrEmpty(x);
+            public class Validator : ValueOnlyBoolValidator<Rule, string, EmptyValidationError>
+            {
+                public Validator() : base(EmptyValidationError.Some)
+                {
+                }
+
+                protected override bool Validate(string value)
+                    => !string.IsNullOrEmpty(value);
+            }
         }
 
         public static readonly NotEmptyValidation.Rule NotEmptyRule = new NotEmptyValidation.Rule();
@@ -24,8 +31,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void value_only_bool_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueOnlyBoolValidatorFunc<NotEmptyValidation.Rule, string, EmptyValidationError>(NotEmptyValidation.Validator,
-                                                                                                                   new EmptyValidationError());
+            engineBuilder.RegisterFullValidator(new NotEmptyValidation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate(string.Empty, NotEmptyRule);
@@ -33,7 +39,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
             result.HasError().Should().BeTrue();
         }
 
-        // validator func
+        // value only validator
 
         public static class EvenLengthValidation
         {
@@ -46,10 +52,13 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
                 public int ActualLength { get; set; }
             }
 
-            public static readonly Func<string, Error> Validator
-                = x => x.Length % 2 != 0
-                    ? new Error { ActualLength = x.Length }
-                    : null;
+            public class Validator : ValueOnlyValidator<Rule, string, Error>
+            {
+                protected override Error Validate(string value)
+                    => value.Length % 2 != 0
+                        ? new Error { ActualLength = value.Length }
+                        : null;
+            }
         }
 
         public static readonly EvenLengthValidation.Rule EvenLengthRule = new EvenLengthValidation.Rule();
@@ -58,7 +67,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void value_only_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterValueOnlyValidatorFunc<EvenLengthValidation.Rule, string, EvenLengthValidation.Error>(EvenLengthValidation.Validator);
+            engineBuilder.RegisterFullValidator(new EvenLengthValidation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", EvenLengthRule);
