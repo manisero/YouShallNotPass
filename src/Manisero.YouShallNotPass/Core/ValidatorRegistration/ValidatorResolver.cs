@@ -40,12 +40,12 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 
         private IValidator TryResolveFull(Type ruleType)
         {
-            return _validatorsRegistry.FullValidators.GetValueOrDefault(ruleType);
+            return _validatorsRegistry.Validators.GetValueOrDefault(ruleType);
         }
 
         private IValidator TryResolveFullGeneric(Type ruleType)
         {
-            return _validatorsRegistry.FullGenericValidators.TryResolve(ruleType);
+            return _validatorsRegistry.GenericValidators.TryResolve(ruleType);
         }
     }
 }

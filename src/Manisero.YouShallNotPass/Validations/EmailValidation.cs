@@ -40,6 +40,6 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
     internal static partial class DefaultValidatorsRegistrar
     {
         private static readonly Action<IValidationEngineBuilder> Email
-            = x => x.RegisterFullValidator(new EmailValidation.Validator());
+            = x => x.RegisterValidator(new EmailValidation.Validator());
     }
 }

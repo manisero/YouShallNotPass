@@ -4,13 +4,13 @@ using Manisero.YouShallNotPass.Utils;
 
 namespace Manisero.YouShallNotPass.Validations.Wrappers
 {
-    public class FullValidatorFactoryWrapper<TRule, TValue, TError> : IValidator<TRule, TValue, TError>
+    public class ValidatorFactoryWrapper<TRule, TValue, TError> : IValidator<TRule, TValue, TError>
         where TRule : IValidationRule<TValue, TError>
         where TError : class
     {
         private readonly Func<IValidator<TRule, TValue, TError>> _validatorFactory;
 
-        public FullValidatorFactoryWrapper(
+        public ValidatorFactoryWrapper(
             Func<IValidator<TRule, TValue, TError>> validatorFactory)
         {
             _validatorFactory = validatorFactory;
@@ -23,11 +23,11 @@ namespace Manisero.YouShallNotPass.Validations.Wrappers
         }
     }
 
-    public class FullValidatorFactoryWrapper
+    public class ValidatorFactoryWrapper
     {
         private static readonly Lazy<MethodInfo> CreateInternalGenericMethod = new Lazy<MethodInfo>(
-            () => typeof(FullValidatorFactoryWrapper).GetMethod(nameof(CreateInternalGeneric),
-                                                                BindingFlags.Static | BindingFlags.NonPublic));
+            () => typeof(ValidatorFactoryWrapper).GetMethod(nameof(CreateInternalGeneric),
+                                                            BindingFlags.Static | BindingFlags.NonPublic));
 
         public static IValidator Create(
             Type validatorType,
@@ -44,12 +44,12 @@ namespace Manisero.YouShallNotPass.Validations.Wrappers
                                                                            validatorType, validatorFactory);
         }
 
-        private static FullValidatorFactoryWrapper<TRule, TValue, TError> CreateInternalGeneric<TRule, TValue, TError>(
+        private static ValidatorFactoryWrapper<TRule, TValue, TError> CreateInternalGeneric<TRule, TValue, TError>(
             Type validatorType,
             Func<Type, IValidator> validatorFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
-            => new FullValidatorFactoryWrapper<TRule, TValue, TError>(
+            => new ValidatorFactoryWrapper<TRule, TValue, TError>(
                 () => (IValidator<TRule, TValue, TError>)validatorFactory(validatorType));
     }
 }

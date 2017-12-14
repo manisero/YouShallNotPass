@@ -52,7 +52,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
             var builder = new ValidationEngineBuilder();
 
             // You may want to replace below lambda with your DI Container usage
-            builder.RegisterFullValidatorFactory(() => new UniqueUsernameValidation.Validator(new UserRepository()));
+            builder.RegisterValidatorFactory(() => new UniqueUsernameValidation.Validator(new UserRepository()));
 
             var engine = builder.Build();
 

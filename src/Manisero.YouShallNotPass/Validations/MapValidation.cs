@@ -52,6 +52,6 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
     internal static partial class DefaultValidatorsRegistrar
     {
         private static readonly Action<IValidationEngineBuilder> Map
-            = x => x.RegisterFullGenericValidator(typeof(MapValidation.Validator<,>));
+            = x => x.RegisterGenericValidator(typeof(MapValidation.Validator<,>));
     }
 }

@@ -56,7 +56,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void full_generic_validator_singleton()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullGenericValidator(typeof(AllValidation.Validator<>));
+            engineBuilder.RegisterGenericValidator(typeof(AllValidation.Validator<>));
 
             var engine = engineBuilder.Build();
 
@@ -71,7 +71,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void full_generic_validator_per_resolve()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullGenericValidator(typeof(AllValidation.Validator<>), false);
+            engineBuilder.RegisterGenericValidator(typeof(AllValidation.Validator<>), false);
 
             var engine = engineBuilder.Build();
 
@@ -88,7 +88,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
             var engineBuilder = new ValidationEngineBuilder();
 
             // You may want to replace below lambda with your DI Container usage
-            engineBuilder.RegisterFullGenericValidatorFactory(typeof(AllValidation.Validator<>),
+            engineBuilder.RegisterGenericValidatorFactory(typeof(AllValidation.Validator<>),
                                                               type => (IValidator)Activator.CreateInstance(type));
 
             var engine = engineBuilder.Build();
@@ -106,7 +106,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
             var engineBuilder = new ValidationEngineBuilder();
 
             // You may want to replace below lambda with your DI Container usage
-            engineBuilder.RegisterFullGenericValidatorFactory(typeof(AllValidation.Validator<>),
+            engineBuilder.RegisterGenericValidatorFactory(typeof(AllValidation.Validator<>),
                                                               type => (IValidator)Activator.CreateInstance(type),
                                                               false);
 

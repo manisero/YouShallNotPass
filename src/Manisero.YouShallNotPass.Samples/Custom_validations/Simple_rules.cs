@@ -71,7 +71,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations
         public void sample___ContainsDigit(string value, bool isValid)
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterFullValidator(new ContainsDigitValidation.Validator());
+            builder.RegisterValidator(new ContainsDigitValidation.Validator());
 
             var engine = builder.Build();
             var rule = new ContainsDigitValidation.Rule();

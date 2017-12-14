@@ -95,7 +95,7 @@
     <Compile Include="Validations\NullValidation.cs" />
     <Compile Include="Validations\StartsWithValidation.cs" />
     <Compile Include="Validations\UniqueValidation.cs" />
-    <Compile Include="Validations\Wrappers\FullValidatorWrappers.cs" />
+    <Compile Include="Validations\Wrappers\ValidatorWrappers.cs" />
     <Compile Include="Validator.cs" />
     <Compile Include="ValidationContext.cs" />
     <Compile Include="Core\Engine\ValidationEngine.cs" />

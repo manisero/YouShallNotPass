@@ -85,7 +85,7 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user
         [Fact]
         public void sample()
         {
-            var validationEngineBuilder = new ValidationEngineBuilder().RegisterFullValidator(new CreateUserCommandOverallValidation.Validator());
+            var validationEngineBuilder = new ValidationEngineBuilder().RegisterValidator(new CreateUserCommandOverallValidation.Validator());
             var validationEngine = validationEngineBuilder.Build();
 
             var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<IEnumerable<string>>();

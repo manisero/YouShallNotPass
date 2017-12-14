@@ -33,7 +33,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void value_and_rule_bool_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullValidator(new MinLengthValidation.Validator());
+            engineBuilder.RegisterValidator(new MinLengthValidation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", Rule);
@@ -70,7 +70,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void value_and_rule_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullValidator(new MinLength2Validation.Validator());
+            engineBuilder.RegisterValidator(new MinLength2Validation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", Rule2);

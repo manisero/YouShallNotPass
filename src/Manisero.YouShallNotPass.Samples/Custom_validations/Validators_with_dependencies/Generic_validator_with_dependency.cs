@@ -52,7 +52,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Validators_with_de
             var builder = new ValidationEngineBuilder();
 
             // You should replace below lambda with your DI Container usage
-            builder.RegisterFullGenericValidatorFactory(typeof(IsAllowedValidation.Validator<>),
+            builder.RegisterGenericValidatorFactory(typeof(IsAllowedValidation.Validator<>),
                                                         type => (IValidator)type.GetConstructor(new[] { typeof(IAllowedValuesRepository) })
                                                                                 .Invoke(new object[] { new AllowedValuesRepository() }));
 

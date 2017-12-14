@@ -37,6 +37,6 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
     internal static partial class DefaultValidatorsRegistrar
     {
         private static readonly Action<IValidationEngineBuilder> IsEnumValue
-            = x => x.RegisterFullGenericValidator(typeof(IsEnumValueValidation.Validator<>));
+            = x => x.RegisterGenericValidator(typeof(IsEnumValueValidation.Validator<>));
     }
 }

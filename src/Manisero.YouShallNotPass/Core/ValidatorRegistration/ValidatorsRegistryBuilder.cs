@@ -5,21 +5,21 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 {
     internal interface IValidatorsRegistryBuilder
     {
-        // Full
+        // Register
 
-        void RegisterFullValidator<TRule, TValue, TError>(
+        void RegisterValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
-        void RegisterFullAsyncValidator<TRule, TValue, TError>(
+        void RegisterAsyncValidator<TRule, TValue, TError>(
             IAsyncValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
         /// <summary>Will try to register as both <see cref="IValidator{TRule,TValue,TError}"/> and <see cref="IAsyncValidator{TRule,TValue,TError}"/>.</summary>
         /// <param name="validatorGetter">concrete validator type => validator</param>
-        void RegisterFullGenericValidator(
+        void RegisterGenericValidator(
             Type validatorOpenGenericType, 
             Func<Type, IValidator> validatorGetter);
 
@@ -32,17 +32,17 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
     {
         private readonly ValidatorsRegistry _registry = new ValidatorsRegistry();
 
-        // Full
+        // Register
 
-        public void RegisterFullValidator<TRule, TValue, TError>(
+        public void RegisterValidator<TRule, TValue, TError>(
             IValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
         {
-            _registry.FullValidators.Add(typeof(TRule), validator);
+            _registry.Validators.Add(typeof(TRule), validator);
         }
 
-        public void RegisterFullAsyncValidator<TRule, TValue, TError>(
+        public void RegisterAsyncValidator<TRule, TValue, TError>(
             IAsyncValidator<TRule, TValue, TError> validator)
             where TRule : IValidationRule<TValue, TError>
             where TError : class
@@ -50,7 +50,7 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
             throw new NotImplementedException();
         }
 
-        public void RegisterFullGenericValidator(
+        public void RegisterGenericValidator(
             Type validatorOpenGenericType, 
             Func<Type, IValidator> validatorGetter)
         {
@@ -63,7 +63,7 @@ namespace Manisero.YouShallNotPass.Core.ValidatorRegistration
 
             if (ruleType != null)
             {
-                _registry.FullGenericValidators.Register(ruleType.GetGenericTypeDefinition(),
+                _registry.GenericValidators.Register(ruleType.GetGenericTypeDefinition(),
                                                          validatorOpenGenericType,
                                                          validatorGetter);
             }

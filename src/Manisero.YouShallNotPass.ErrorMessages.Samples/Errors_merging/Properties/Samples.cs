@@ -14,7 +14,7 @@ namespace Manisero.YouShallNotPass.ErrorMessages.Samples.Errors_merging.Properti
         private IValidationFacade CreateValidationFacade()
         {
             var validationEngine = new ValidationEngineBuilder()
-                .RegisterFullValidator(new Case.UserEmailContainsLastNameValidation.Validator())
+                .RegisterValidator(new Case.UserEmailContainsLastNameValidation.Validator())
                 .Build();
 
             var formattingEngine = new ValidationErrorFormattingEngineBuilderFactory()

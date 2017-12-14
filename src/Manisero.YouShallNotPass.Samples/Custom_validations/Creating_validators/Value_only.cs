@@ -31,7 +31,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void value_only_bool_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullValidator(new NotEmptyValidation.Validator());
+            engineBuilder.RegisterValidator(new NotEmptyValidation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate(string.Empty, NotEmptyRule);
@@ -67,7 +67,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validations.Creating_validator
         public void value_only_validator_func()
         {
             var engineBuilder = new ValidationEngineBuilder();
-            engineBuilder.RegisterFullValidator(new EvenLengthValidation.Validator());
+            engineBuilder.RegisterValidator(new EvenLengthValidation.Validator());
 
             var engine = engineBuilder.Build();
             var result = engine.Validate("a", EvenLengthRule);

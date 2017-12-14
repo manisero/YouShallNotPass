@@ -33,7 +33,7 @@ namespace Manisero.YouShallNotPass.Tests.Core
         public void singleton_generic_validator_is_created_only_once()
         {
             var engine = new ValidationEngineBuilder()
-                .RegisterFullGenericValidatorFactory(typeof(Validator<>),
+                .RegisterGenericValidatorFactory(typeof(Validator<>),
                                                      type => (IValidator)Activator.CreateInstance(type))
                 .Build();
 

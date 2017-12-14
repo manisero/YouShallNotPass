@@ -34,7 +34,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
         public void validator_receives_data()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterFullValidator(new UserExistsValidation.Validator());
+            builder.RegisterValidator(new UserExistsValidation.Validator());
 
             var engine = builder.Build();
 
@@ -65,7 +65,7 @@ namespace Manisero.YouShallNotPass.Samples.Custom_validation_data
         public void validator_receives_data_even_when_it_is_not_root_validator()
         {
             var builder = new ValidationEngineBuilder();
-            builder.RegisterFullValidator(new UserExistsValidation.Validator());
+            builder.RegisterValidator(new UserExistsValidation.Validator());
 
             var engine = builder.Build();
 
