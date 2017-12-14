@@ -13,10 +13,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             Func<TError, TFormat> formatter)
             where TError : class;
 
-        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFuncFactory<TError>(
-            Func<Func<TError, TFormat>> formatterFactory)
-            where TError : class;
-
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatter<TError>(
             IValidationErrorFormatter<TError, TFormat> formatter)
             where TError : class;
@@ -40,11 +36,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
 
         IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFunc<TRule, TValue, TError>(
             Func<TError, TRule, TValue, TFormat> formatter)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class;
-
-        IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFuncFactory<TRule, TValue, TError>(
-            Func<Func<TError, TRule, TValue, TFormat>> formatterFactory)
             where TRule : IValidationRule<TValue, TError>
             where TError : class;
 
@@ -92,15 +83,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TError : class
         {
             var wrapper = new ErrorOnlyFormatterFuncWrapper<TError, TFormat>(formatter);
-
-            return RegisterErrorOnlyFormatter(wrapper);
-        }
-
-        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorOnlyFormatterFuncFactory<TError>(
-            Func<Func<TError, TFormat>> formatterFactory)
-            where TError : class
-        {
-            var wrapper = new ErrorOnlyFormatterFuncFactoryWrapper<TError, TFormat>(formatterFactory);
 
             return RegisterErrorOnlyFormatter(wrapper);
         }
@@ -155,16 +137,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting
             where TError : class
         {
             var wrapper = new ErrorRuleAndValueFormatterFuncWrapper<TRule, TValue, TError, TFormat>(formatter);
-
-            return RegisterFullFormatter(wrapper);
-        }
-
-        public IValidationErrorFormattingEngineBuilder<TFormat> RegisterErrorRuleAndValueFormatterFuncFactory<TRule, TValue, TError>(
-            Func<Func<TError, TRule, TValue, TFormat>> formatterFactory)
-            where TRule : IValidationRule<TValue, TError>
-            where TError : class
-        {
-            var wrapper = new ErrorRuleAndValueFormatterFuncFactoryWrapper<TRule, TValue, TError, TFormat>(formatterFactory);
 
             return RegisterFullFormatter(wrapper);
         }

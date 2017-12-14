@@ -23,26 +23,6 @@ namespace Manisero.YouShallNotPass.ErrorFormatting.Core.FormatterWrapping
         }
     }
 
-    internal class ErrorOnlyFormatterFuncFactoryWrapper<TError, TFormat> : IValidationErrorFormatter<TError, TFormat>
-        where TError : class
-    {
-        private readonly Func<Func<TError, TFormat>> _formatterFactory;
-
-        public ErrorOnlyFormatterFuncFactoryWrapper(
-            Func<Func<TError, TFormat>> formatterFactory)
-        {
-            _formatterFactory = formatterFactory;
-        }
-
-        public TFormat Format(
-            TError error,
-            ValidationErrorFormattingContext<TFormat> context)
-        {
-            var formatter = _formatterFactory();
-            return formatter(error);
-        }
-    }
-
     internal class ErrorOnlyFormatterFactoryWrapper<TError, TFormat> : IValidationErrorFormatter<TError, TFormat>
         where TError : class
     {

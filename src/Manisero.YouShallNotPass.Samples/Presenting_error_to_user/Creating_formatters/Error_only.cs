@@ -32,18 +32,6 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
             error.Should().NotBeNull();
         }
 
-        [Fact]
-        public void error_only_formatter_func_factory()
-        {
-            var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
-            formattingEngineBuilder.RegisterErrorOnlyFormatterFuncFactory(() => FormatterFunc);
-
-            var formattingEngine = formattingEngineBuilder.Build();
-            var error = formattingEngine.Format(ValidationResult);
-
-            error.Should().NotBeNull();
-        }
-
         // formatter
 
         public class EmailValidationErrorFormatter : IValidationErrorFormatter<EmailValidation.Error, string>

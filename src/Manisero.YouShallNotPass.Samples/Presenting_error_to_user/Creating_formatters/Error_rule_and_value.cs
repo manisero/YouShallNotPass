@@ -30,17 +30,5 @@ namespace Manisero.YouShallNotPass.Samples.Presenting_error_to_user.Creating_for
 
             error.Should().NotBeNull();
         }
-
-        [Fact]
-        public void error_rule_and_value_formatter_func_factory()
-        {
-            var formattingEngineBuilder = new ValidationErrorFormattingEngineBuilder<string>();
-            formattingEngineBuilder.RegisterErrorRuleAndValueFormatterFuncFactory(() => FormatterFunc);
-
-            var formattingEngine = formattingEngineBuilder.Build();
-            var error = formattingEngine.Format(ValidationResult);
-
-            error.Should().NotBeNull();
-        }
     }
 }
